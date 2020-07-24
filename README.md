@@ -28,7 +28,7 @@ gradient.At(1)
 gradient.Colors(27) // []colorful.Color
 ```
 
-![img](doc/black-to-white.png)
+![img](img/black-to-white.png)
 
 #### Custom Colors
 
@@ -48,7 +48,7 @@ gradient, err := colorgrad.NewGradient().
     Build()
 ```
 
-![img](doc/basic-2.png)
+![img](img/basic-2.png)
 
 #### Using Hex Colors
 
@@ -58,7 +58,7 @@ gradient, err := colgrad.NewGradient().
     Build()
 ```
 
-![img](doc/basic-hex.png)
+![img](img/basic-hex.png)
 
 #### Custom Domain
 
@@ -69,7 +69,7 @@ gradient, err := colgrad.NewGradient().
     Build()
 ```
 
-![img](doc/basic-hex.png)
+![img](img/basic-hex.png)
 
 #### Blending Mode
 
@@ -80,10 +80,8 @@ gradient, err := colgrad.NewGradient().
     Build()
 ```
 
-![img](doc/basic-2.png)
-![img](doc/basic-hex.png)
-![img](doc/basic-2.png)
-![img](doc/basic-hex.png)
+![img](img/basic-2.png)
+![img](img/basic-hex.png)
 
 #### Get Hex Color
 
