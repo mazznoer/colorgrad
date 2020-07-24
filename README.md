@@ -53,7 +53,7 @@ gradient, err := colorgrad.NewGradient().
 #### Using Hex Colors
 
 ```go
-gradient, err := colgrad.NewGradient().
+gradient, err := colorgrad.NewGradient().
     HexColors("#B22222", "#FFD700", "#2E8B57").
     Build()
 ```
@@ -63,7 +63,7 @@ gradient, err := colgrad.NewGradient().
 #### Custom Domain
 
 ```go
-gradient, err := colgrad.NewGradient().
+gradient, err := colorgrad.NewGradient().
     HexColors("#B22222", "#FFD700", "#2E8B57").
     Domain(0, 75, 100).
     Build()
@@ -74,7 +74,7 @@ gradient, err := colgrad.NewGradient().
 #### Blending Mode
 
 ```go
-gradient, err := colgrad.NewGradient().
+gradient, err := colorgrad.NewGradient().
     HexColors("#B22222", "#FFD700", "#2E8B57").
     Mode(colgrad.HCL).
     Build()
