@@ -1,6 +1,7 @@
 package colorgrad
 
 import (
+	"image/color"
 	"math"
 
 	"github.com/lucasb-eyer/go-colorful"
@@ -53,6 +54,16 @@ func linspace(min, max float64, n uint) []float64 {
 
 	for i := range res {
 		res[i] = (min + (float64(i)*d)/l)
+	}
+	return res
+}
+
+// Convert []colorful.Color to []color.Color
+func IntoColors(colors []colorful.Color) []color.Color {
+	res := make([]color.Color, len(colors))
+
+	for i, col := range colors {
+		res[i] = col
 	}
 	return res
 }
