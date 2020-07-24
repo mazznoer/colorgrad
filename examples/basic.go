@@ -2,9 +2,9 @@ package main
 
 import (
     "image"
-    "image/png"
-    "log"
-    "os"
+    //"image/png"
+    //"log"
+    //"os"
     
     "github.com/mazznoer/colorgrad"
 )
@@ -24,12 +24,13 @@ func main() {
             img.Set(x, y, col)
         }
     }
-    file, err := os.Create("gradient.png")
+    _ := img
+    /*file, err := os.Create("gradient.png")
 
     if err != nil {
         log.Fatal(err)
     }
     defer file.Close()
     
-    png.Encode(file, img)
+    png.Encode(file, img)*/
 }
