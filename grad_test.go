@@ -5,7 +5,7 @@ import (
 )
 
 func TestGrad(t *testing.T) {
-    grad := NewGradient().Build()
+    grad, _ := NewGradient().Build()
     colors := grad.Colors(2)
 
     if len(colors) != 3 {
