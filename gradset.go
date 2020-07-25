@@ -105,6 +105,8 @@ func Reds() Gradient {
 }
 
 func Greys() Gradient {
-	grad, _ := NewGradient().Build()
+	grad, _ := NewGradient().
+		HexColors("#ffffff", "#000000").
+		Build()
 	return grad
 }
