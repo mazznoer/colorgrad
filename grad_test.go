@@ -10,16 +10,10 @@ func TestBasic(t *testing.T) {
     colors := grad.Colors(2)
 
     if len(colors) != 2 {
-        t.Errorf("%v", len(colors))
+        t.Errorf("Expected 2, got %v", len(colors))
     }
-
-    if colors[0].Hex() != "#000000" {
-        t.Errorf("%v", colors[0].Hex())
-    }
-
-    if colors[1].Hex() != "#ffffff" {
-        t.Errorf("%v", colors[1].Hex())
-    }
+    testStr(t, colors[0].Hex(), "#000000")
+    testStr(t, colors[1].Hex(), "#ffffff")
 
     grad, _ = NewGradient().
         Colors(
@@ -28,23 +22,15 @@ func TestBasic(t *testing.T) {
             color.RGBA{0,0,255,255},
         ).
         Build()
+
     colors = grad.Colors(3)
 
     if len(colors) != 3 {
         t.Errorf("%v", len(colors))
     }
-
-    if colors[0].Hex() != "#ff0000" {
-        t.Errorf("%v", colors[0].Hex())
-    }
-
-    if colors[1].Hex() != "#ffff00" {
-        t.Errorf("%v", colors[0].Hex())
-    }
-
-    if colors[2].Hex() != "#0000ff" {
-        t.Errorf("%v", colors[1].Hex())
-    }
+    testStr(t, colors[0].Hex(), "#000000")
+    testStr(t, colors[1].Hex(), "#ffff00")
+    testStr(t, colors[2].Hex(), "#0000ff")
 }
 
 func TestDomain(t *testing.T) {
@@ -68,7 +54,7 @@ func TestDomain(t *testing.T) {
 }
 
 func testStr(t *testing.T, result, expected string) {
-    if a != b {
-        t.Errorf("Expected %v, get %v", expected, result)
+    if result != expected {
+        t.Errorf("Expected %v, got %v", expected, result)
     }
 }
