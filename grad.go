@@ -172,6 +172,8 @@ func (self gradientX) Colors(count uint) []colorful.Color {
 	return colors
 }
 
+// Algorithm taken from: https://github.com/gka/chroma.js
+
 func blend_lrgb(a, b colorful.Color, t float64) colorful.Color {
 	return colorful.Color{
 		R: math.Sqrt(math.Pow(a.R, 2)*(1-t) + math.Pow(b.R, 2)*t),
