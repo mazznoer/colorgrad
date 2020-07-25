@@ -102,10 +102,6 @@ for i := 0; i < 100; i++ {
 
 * [colorful](https://github.com/lucasb-eyer/go-colorful)
 
-### Author
-
-* [Mazznoer](https://github.com/mazznoer)
-
 ### Inspirations
 
 * [chroma.js](https://github.com/gka/chroma.js)
