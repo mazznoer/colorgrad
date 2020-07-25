@@ -28,7 +28,7 @@ func TestBasic(t *testing.T) {
     if len(colors) != 3 {
         t.Errorf("%v", len(colors))
     }
-    testStr(t, colors[0].Hex(), "#000000")
+    testStr(t, colors[0].Hex(), "#ff0000")
     testStr(t, colors[1].Hex(), "#ffff00")
     testStr(t, colors[2].Hex(), "#0000ff")
 }
