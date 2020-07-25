@@ -52,12 +52,13 @@ func TestDomain(t *testing.T) {
     testStr(t, grad.At(1.5).Hex(), "#ffff00")
 
     grad, _ = NewGradient().
-        HexColors("#00ff00", "#ff0000", "#ffff00").
-        Domain(15, 25, 63).
+        HexColors("#00ff00", "#ff0000", "#0000ff", "#ffff00").
+        Domain(15, 25, 29, 63).
         Build()
     
     testStr(t, grad.At(15).Hex(), "#00ff00")
     testStr(t, grad.At(25).Hex(), "#ff0000")
+    testStr(t, grad.At(29).Hex(), "#0000ff")
     testStr(t, grad.At(63).Hex(), "#ffff00")
 
     // outside domain
