@@ -4,7 +4,7 @@
 
 Fun & easy way to create _color gradient_ / _color scales_ in __Go__ (__Golang__).
 
-## Usages
+### Usages
 
 #### Basic
 
@@ -21,7 +21,7 @@ if err != nil {
 
 // Get single color at certain position.
 gradient.At(0) // colorful.Color
-gradient.At(0.5)
+gradient.At(0.5).Hex() // hex color string
 gradient.At(1)
 
 // Get n colors evenly spaced across gradient.
@@ -83,14 +83,6 @@ gradient, err := colorgrad.NewGradient().
 ![img](img/basic-2.png)
 ![img](img/basic-hex.png)
 
-#### Get Hex Color
-
-```go
-for _, c := range gradient.Colors(15) {
-    fmt.Println(c.Hex())
-}
-```
-
 #### Random Color from Gradient
 
 ```go
@@ -101,14 +93,19 @@ for i := 0; i < 100; i++ {
 }
 ```
 
-## Online Playground
+### Online Playground
 
 [Try it online](https://play.golang.org/p/7zaL_OQ4Gbf)
 
-## Dependencies
+### Dependencies
 
 * [colorful](https://github.com/lucasb-eyer/go-colorful)
 
-## Author
+### Author
 
 * [Mazznoer](https://github.com/mazznoer)
+
+### Inspirations
+
+* [chroma.js](https://github.com/gka/chroma.js)
+* [d3-scale-chromatic](https://github.com/d3/d3-scale-chromatic/)
