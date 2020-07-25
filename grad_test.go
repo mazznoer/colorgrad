@@ -5,7 +5,7 @@ import (
     "testing"
 )
 
-func TestGrad(t *testing.T) {
+func TestBasic(t *testing.T) {
     grad, _ := NewGradient().Build()
     colors := grad.Colors(2)
 
@@ -44,5 +44,31 @@ func TestGrad(t *testing.T) {
 
     if colors[2].Hex() != "#0000ff" {
         t.Errorf("%v", colors[1].Hex())
+    }
+}
+
+func TestDomain(t *testing.T) {
+    grad, _ := NewGradient().
+        HexColors("#000000", "#ff0000", "#ffffff").
+        Domain(0, 0.75, 1).
+        Build()
+    
+    testStr(t, grad.At(0).Hex(), "#000000")
+    testStr(t, grad.At(0.75).Hex(), "#ff0000")
+    testStr(t, grad.At(1).Hex(), "#ffffff")
+    
+    grad, _ = NewGradient().
+        HexColors("#000000", "#ff0000", "#ffffff").
+        Domain(15, 25, 60).
+        Build()
+    
+    testStr(t, grad.At(15).Hex(), "#000000")
+    testStr(t, grad.At(25).Hex(), "#ff0000")
+    testStr(t, grad.At(60).Hex(), "#ffffff")
+}
+
+func testStr(t *testing.T, result, expected string) {
+    if a != b {
+        t.Errorf("Expected %v, get %v", expected, result)
     }
 }
