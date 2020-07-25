@@ -1,4 +1,4 @@
-# colorgrad
+# colorgrad 🎨
 
 [![go.dev reference](https://img.shields.io/badge/go.dev-reference-007d9c?logo=go&logoColor=white&style=flat-square)](https://pkg.go.dev/github.com/mazznoer/colorgrad?tab=doc)
 
@@ -66,11 +66,11 @@ gradient, err := colorgrad.NewGradient().
 ```go
 gradient, err := colorgrad.NewGradient().
     HexColors("#B22222", "#FFD700", "#2E8B57").
-    Domain(0, 75, 100).
+    Domain(0, 0.75, 1).
     Build()
 ```
 
-![img](img/basic-hex.png)
+![img](img/custom-domain.png)
 
 #### Blending Mode
 
@@ -81,36 +81,73 @@ gradient, err := colorgrad.NewGradient().
     Build()
 ```
 
-![img](img/basic-2.png)
-![img](img/basic-hex.png)
+_... TODO ..._
 
-#### Random Color from Gradient
+#### Random Colors
 
-```go
-import "math/rand"
-
-for i := 0; i < 100; i++ {
-    fmt.Println(gradient.At(rand.Float64()))
-}
-```
+![random-color](img/random-cool.png)
+[Try it online](https://play.golang.org/p/d67x9di4sAF)
 
 ### Preset Gradients
 
 ```go
 grad := colorgrad.Turbo()
 ```
-![img](img/basic-hex.png)
+![img](img/gradient-turbo.png)
+
+```go
+grad := colorgrad.Warm()
+```
+![img](img/gradient-warm.png)
+
+```go
+grad := colorgrad.Cool()
+```
+![img](img/gradient-cool.png)
 
 ```go
 grad := colorgrad.Rainbow()
 ```
-![img](img/basic-hex.png)
+![img](img/gradient-rainbow.png)
 
-<!-- todo -->
+```go
+grad := colorgrad.Sinebow()
+```
+![img](img/gradient-sinebow.png)
+
+```go
+grad := colorgrad.Spectral()
+```
+![img](img/gradient-spectral.png)
+
+```go
+grad := colorgrad.Viridis()
+```
+![img](img/gradient-viridis.png)
+
+```go
+grad := colorgrad.Magma()
+```
+![img](img/gradient-magma.png)
+
+```go
+grad := colorgrad.Plasma()
+```
+![img](img/gradient-plasma.png)
+
+```go
+grad := colorgrad.Inferno()
+```
+![img](img/gradient-inferno.png)
+
+```go
+grad := colorgrad.Cividis()
+```
+![img](img/gradient-cividis.png)
 
 ### Online Playground
 
-[Try it online](https://play.golang.org/p/7zaL_OQ4Gbf)
+[Try it online](https://play.golang.org/p/d67x9di4sAF)
 
 ### Dependencies
 
