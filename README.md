@@ -84,15 +84,10 @@ gradient, err := colorgrad.NewGradient().
 ![img](img/basic-2.png)
 ![img](img/basic-hex.png)
 
-#### Random Color from Gradient
+#### Random Colors
 
-```go
-import "math/rand"
-
-for i := 0; i < 100; i++ {
-    fmt.Println(gradient.At(rand.Float64()))
-}
-```
+![random-color](img/random-cool.png)
+[Try it online](https://play.golang.org/p/d67x9di4sAF)
 
 ### Preset Gradients
 
@@ -110,7 +105,7 @@ grad := colorgrad.Rainbow()
 
 ### Online Playground
 
-[Try it online](https://play.golang.org/p/7zaL_OQ4Gbf)
+[Try it online](https://play.golang.org/p/d67x9di4sAF)
 
 ### Dependencies
 
