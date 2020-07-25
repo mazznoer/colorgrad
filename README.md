@@ -94,6 +94,20 @@ for i := 0; i < 100; i++ {
 }
 ```
 
+### Preset Gradients
+
+```go
+grad := colorgrad.Turbo()
+```
+![img](img/basic-hex.png)
+
+```go
+grad := colorgrad.Rainbow()
+```
+![img](img/basic-hex.png)
+
+<!-- todo -->
+
 ### Online Playground
 
 [Try it online](https://play.golang.org/p/7zaL_OQ4Gbf)
