@@ -66,11 +66,11 @@ gradient, err := colorgrad.NewGradient().
 ```go
 gradient, err := colorgrad.NewGradient().
     HexColors("#B22222", "#FFD700", "#2E8B57").
-    Domain(0, 75, 100).
+    Domain(0, 0.75, 1).
     Build()
 ```
 
-![img](img/basic-hex.png)
+![img](img/custom-domain.png)
 
 #### Blending Mode
 
@@ -81,8 +81,7 @@ gradient, err := colorgrad.NewGradient().
     Build()
 ```
 
-![img](img/basic-2.png)
-![img](img/basic-hex.png)
+__TODO ...__
 
 #### Random Colors
 
@@ -94,14 +93,24 @@ gradient, err := colorgrad.NewGradient().
 ```go
 grad := colorgrad.Turbo()
 ```
-![img](img/basic-hex.png)
+![img](img/gradient-turbo.png)
 
 ```go
 grad := colorgrad.Rainbow()
 ```
-![img](img/basic-hex.png)
+![img](img/gradient-rainbow.png)
 
-<!-- todo -->
+```go
+grad := colorgrad.Spectral()
+```
+![img](img/gradient-spectral.png)
+
+```go
+grad := colorgrad.Viridis()
+```
+![img](img/gradient-viridis.png)
+
+__TODO ...__
 
 ### Online Playground
 
