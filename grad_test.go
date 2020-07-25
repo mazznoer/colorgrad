@@ -45,12 +45,12 @@ func TestDomain(t *testing.T) {
     
     grad, _ = NewGradient().
         HexColors("#000000", "#ff0000", "#ffffff").
-        Domain(15, 25, 60).
+        Domain(15, 25, 63).
         Build()
     
     testStr(t, grad.At(15).Hex(), "#000000")
     testStr(t, grad.At(25).Hex(), "#ff0000")
-    testStr(t, grad.At(60).Hex(), "#ffffff")
+    testStr(t, grad.At(63).Hex(), "#ffffff")
 }
 
 func testStr(t *testing.T, result, expected string) {
