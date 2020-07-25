@@ -6,6 +6,8 @@ import (
 	"github.com/lucasb-eyer/go-colorful"
 )
 
+// Algorithms adapted from: https://github.com/d3/d3-scale-chromatic
+
 const pi_1_3 = math.Pi / 3
 const pi_2_3 = math.Pi * 2 / 3
 
