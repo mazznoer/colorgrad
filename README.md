@@ -81,7 +81,7 @@ gradient, err := colorgrad.NewGradient().
     Build()
 ```
 
-__TODO ...__
+_... TODO ..._
 
 #### Random Colors
 
@@ -96,9 +96,24 @@ grad := colorgrad.Turbo()
 ![img](img/gradient-turbo.png)
 
 ```go
+grad := colorgrad.Warm()
+```
+![img](img/gradient-warm.png)
+
+```go
+grad := colorgrad.Cool()
+```
+![img](img/gradient-cool.png)
+
+```go
 grad := colorgrad.Rainbow()
 ```
 ![img](img/gradient-rainbow.png)
+
+```go
+grad := colorgrad.Sinebow()
+```
+![img](img/gradient-sinebow.png)
 
 ```go
 grad := colorgrad.Spectral()
@@ -110,7 +125,25 @@ grad := colorgrad.Viridis()
 ```
 ![img](img/gradient-viridis.png)
 
-__TODO ...__
+```go
+grad := colorgrad.Magma()
+```
+![img](img/gradient-magma.png)
+
+```go
+grad := colorgrad.Plasma()
+```
+![img](img/gradient-plasma.png)
+
+```go
+grad := colorgrad.Inferno()
+```
+![img](img/gradient-inferno.png)
+
+```go
+grad := colorgrad.Cividis()
+```
+![img](img/gradient-cividis.png)
 
 ### Online Playground
 
