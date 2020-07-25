@@ -26,6 +26,7 @@ gradient.At(1)
 
 // Get n colors evenly spaced across gradient.
 gradient.Colors(27) // []colorful.Color
+colorgrad.IntoColors(gradient.Colors(10)) // []color.Color
 ```
 
 ![img](img/black-to-white.png)
