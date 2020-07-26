@@ -86,6 +86,18 @@ grad, err := colorgrad.NewGradient().
 ```
 ![blend-modes](img/blend-modes.png)
 
+##### [Invalid RGB](https://github.com/lucasb-eyer/go-colorful#blending-colors)
+
+```go
+grad, err := colorgrad.NewGradient().
+    HexColors("#DC143C", "#FFD700", "#4682b4").
+    Mode(colorgrad.HCL).
+    Build()
+
+grad.At(t) // may return invalid RGB color
+grad.At(t).Clamped() // return closest valid RGB
+```
+
 ### Preset Gradients
 
 ```go
