@@ -90,6 +90,12 @@ _... TODO ..._
 
 ### Preset Gradients
 
+```go
+grad := colorgrad.Rainbow()
+grad.At(t) // t in the range 0..1
+grad.Colors(15)
+```
+
 `grad := colorgrad.Turbo()`
 ![img](img/gradient-turbo.png)
 
