@@ -86,7 +86,8 @@ grad, err := colorgrad.NewGradient().
 ```
 ![blend-modes](img/blend-modes.png)
 
-##### [Invalid RGB](https://github.com/lucasb-eyer/go-colorful#blending-colors)
+#### Invalid RGB Color
+Read it [here](https://github.com/lucasb-eyer/go-colorful#blending-colors).
 
 ```go
 grad, err := colorgrad.NewGradient().
@@ -94,9 +95,15 @@ grad, err := colorgrad.NewGradient().
     Mode(colorgrad.HCL).
     Build()
 
-grad.At(t) // may return invalid RGB color
-grad.At(t).Clamped() // return closest valid RGB
+grad.At(t) // might get invalid RGB color
+grad.At(t).Clamped() // return closest valid RGB color
 ```
+
+Without `Clamped()`
+![invalig rgb](img/not-clamped.png)
+
+With `Clamped()`
+![valid rgb](img/clamped.png)
 
 ### Preset Gradients
 
