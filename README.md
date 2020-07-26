@@ -86,7 +86,7 @@ grad, err := colorgrad.NewGradient().
 ```
 ![blend-modes](img/blend-modes.png)
 
-#### Invalid RGB Color
+#### Beware of Invalid RGB Color
 Read it [here](https://github.com/lucasb-eyer/go-colorful#blending-colors).
 
 ```go
@@ -167,11 +167,11 @@ grad.Colors(15)
 ### Random Colors
 
 ![random-color](img/random-cool.png)
-[Try it online](https://play.golang.org/p/d67x9di4sAF)
 
-### Online Playground
+### Go Playground
 
-[Try it online](https://play.golang.org/p/rE8OI50PsQA)
+* [Basic](https://play.golang.org/p/rE8OI50PsQA)
+* [Random colors](https://play.golang.org/p/d67x9di4sAF)
 
 ### Dependencies
 
