@@ -4,6 +4,8 @@
 
 Fun & easy way to create _color gradient_ / _color scales_ in __Go__ (__Golang__).
 
+![color-scale](img/color-scale-1.png)
+
 ### Usages
 
 #### Basic
@@ -76,12 +78,11 @@ grad, err := colorgrad.NewGradient().
 
 ```go
 grad, err := colorgrad.NewGradient().
-    HexColors("#B22222", "#FFD700", "#2E8B57").
-    Mode(colgrad.HCL).
+    HexColors("#ff0", "#008ae5").
+    Mode(colorgrad.LRGB).
     Build()
 ```
-
-_... TODO ..._
+![blend-modes](img/blend-modes.png)
 
 #### Random Colors
 
