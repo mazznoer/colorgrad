@@ -4,6 +4,8 @@
 
 Fun & easy way to create _color gradient_ / _color scales_ in __Go__ (__Golang__).
 
+![color-scale](img/color-scale-1.png)
+
 ### Usages
 
 #### Basic
@@ -13,22 +15,21 @@ import "github.com/mazznoer/colorgrad"
 ```
 
 ```go
-gradient, err := colorgrad.NewGradient().Build()
+grad, err := colorgrad.NewGradient().Build()
 
 if err != nil {
     panic(err)
 }
 
 // Get single color at certain position.
-gradient.At(0) // colorful.Color
-gradient.At(0.5).Hex() // hex color string
-gradient.At(1)
+grad.At(0) // colorful.Color
+grad.At(0.5).Hex() // hex color string
+grad.At(1)
 
 // Get n colors evenly spaced across gradient.
-gradient.Colors(27) // []colorful.Color
-colorgrad.IntoColors(gradient.Colors(10)) // []color.Color
+grad.Colors(27) // []colorful.Color
+colorgrad.IntoColors(grad.Colors(10)) // []color.Color
 ```
-
 ![img](img/black-to-white.png)
 
 #### Custom Colors
@@ -39,7 +40,7 @@ colorgrad.IntoColors(gradient.Colors(10)) // []color.Color
 import "image/color"
 import "github.com/lucasb-eyer/go-colorful"
 
-gradient, err := colorgrad.NewGradient().
+grad, err := colorgrad.NewGradient().
     Colors(
         color.RGBA{255, 0, 255, 255},
         color.Gray{100},
@@ -48,106 +49,110 @@ gradient, err := colorgrad.NewGradient().
     ).
     Build()
 ```
-
 ![img](img/basic-2.png)
 
 #### Using Hex Colors
 
 ```go
-gradient, err := colorgrad.NewGradient().
+grad, err := colorgrad.NewGradient().
     HexColors("#B22222", "#FFD700", "#2E8B57").
     Build()
 ```
-
 ![img](img/basic-hex.png)
 
 #### Custom Domain
 
-```go
-gradient, err := colorgrad.NewGradient().
-    HexColors("#B22222", "#FFD700", "#2E8B57").
-    Domain(0, 0.75, 1).
-    Build()
-```
+By default domain are in the range `0..1`, but you can change it using using the `Domain()` method.
 
-![img](img/custom-domain.png)
+```go
+grad, err := colorgrad.NewGradient().
+    HexColors("#DC143C", "#FFD700", "#4682b4").
+    Domain(15, 47.5, 80).
+    Build()
+
+grad.At(15).Hex() // #DC143C
+grad.At(75)
+grad.At(80).Hex() // #4682b4
+```
+![img](img/color-scale-2.png)
 
 #### Blending Mode
 
 ```go
-gradient, err := colorgrad.NewGradient().
-    HexColors("#B22222", "#FFD700", "#2E8B57").
-    Mode(colgrad.HCL).
+grad, err := colorgrad.NewGradient().
+    HexColors("#ff0", "#008ae5").
+    Mode(colorgrad.LRGB).
     Build()
 ```
-
-_... TODO ..._
-
-#### Random Colors
-
-![random-color](img/random-cool.png)
-[Try it online](https://play.golang.org/p/d67x9di4sAF)
+![blend-modes](img/blend-modes.png)
 
 ### Preset Gradients
 
 ```go
-grad := colorgrad.Turbo()
+grad := colorgrad.Rainbow()
+grad.At(t) // t in the range 0..1
+grad.Colors(15)
 ```
+
+`grad := colorgrad.Turbo()`
 ![img](img/gradient-turbo.png)
 
-```go
-grad := colorgrad.Warm()
-```
+`grad := colorgrad.Warm()`
 ![img](img/gradient-warm.png)
 
-```go
-grad := colorgrad.Cool()
-```
+`grad := colorgrad.Cool()`
 ![img](img/gradient-cool.png)
 
-```go
-grad := colorgrad.Rainbow()
-```
+`grad := colorgrad.Rainbow()`
 ![img](img/gradient-rainbow.png)
 
-```go
-grad := colorgrad.Sinebow()
-```
+`grad := colorgrad.Sinebow()`
 ![img](img/gradient-sinebow.png)
 
-```go
-grad := colorgrad.Spectral()
-```
+`grad := colorgrad.Spectral()`
 ![img](img/gradient-spectral.png)
 
-```go
-grad := colorgrad.Viridis()
-```
+`grad := colorgrad.Viridis()`
 ![img](img/gradient-viridis.png)
 
-```go
-grad := colorgrad.Magma()
-```
+`grad := colorgrad.Magma()`
 ![img](img/gradient-magma.png)
 
-```go
-grad := colorgrad.Plasma()
-```
+`grad := colorgrad.Plasma()`
 ![img](img/gradient-plasma.png)
 
-```go
-grad := colorgrad.Inferno()
-```
+`grad := colorgrad.Inferno()`
 ![img](img/gradient-inferno.png)
 
-```go
-grad := colorgrad.Cividis()
-```
+`grad := colorgrad.Cividis()`
 ![img](img/gradient-cividis.png)
+
+`grad := colorgrad.Blues()`
+![img](img/gradient-blues.png)
+
+`grad := colorgrad.Greens()`
+![img](img/gradient-greens.png)
+
+`grad := colorgrad.Oranges()`
+![img](img/gradient-oranges.png)
+
+`grad := colorgrad.Purples()`
+![img](img/gradient-purples.png)
+
+`grad := colorgrad.Reds()`
+![img](img/gradient-reds.png)
+
+`grad := colorgrad.Greys()`
+![img](img/gradient-greys.png)
+
+### Random Colors
+
+![random-color](img/random-cool.png)
+[Try it online](https://play.golang.org/p/d67x9di4sAF)
 
 ### Online Playground
 
-[Try it online](https://play.golang.org/p/d67x9di4sAF)
+[Try it online](https://play.golang.org/p/rE8OI50PsQA)
 
 ### Dependencies
 
