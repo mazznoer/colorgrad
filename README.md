@@ -30,7 +30,6 @@ grad.At(1)
 grad.Colors(27) // []colorful.Color
 colorgrad.IntoColors(grad.Colors(10)) // []color.Color
 ```
-
 ![img](img/black-to-white.png)
 
 #### Custom Colors
@@ -50,7 +49,6 @@ grad, err := colorgrad.NewGradient().
     ).
     Build()
 ```
-
 ![img](img/basic-2.png)
 
 #### Using Hex Colors
@@ -60,19 +58,17 @@ grad, err := colorgrad.NewGradient().
     HexColors("#B22222", "#FFD700", "#2E8B57").
     Build()
 ```
-
 ![img](img/basic-hex.png)
 
 #### Custom Domain
 
 ```go
 grad, err := colorgrad.NewGradient().
-    HexColors("#B22222", "#FFD700", "#2E8B57").
-    Domain(0, 0.75, 1).
+    HexColors("#DC143C", "#FFD700", "#4682b4").
+    Domain(15, 47.5, 80).
     Build()
 ```
-
-![img](img/custom-domain.png)
+![img](img/color-scale-2.png)
 
 #### Blending Mode
 
