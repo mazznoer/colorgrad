@@ -93,24 +93,16 @@ _... TODO ..._
 `grad := colorgrad.Turbo()`
 ![img](img/gradient-turbo.png)
 
-```go
-grad := colorgrad.Warm()
-```
+`grad := colorgrad.Warm()`
 ![img](img/gradient-warm.png)
 
-```go
-grad := colorgrad.Cool()
-```
+`grad := colorgrad.Cool()`
 ![img](img/gradient-cool.png)
 
-```go
-grad := colorgrad.Rainbow()
-```
+`grad := colorgrad.Rainbow()`
 ![img](img/gradient-rainbow.png)
 
-```go
-grad := colorgrad.Sinebow()
-```
+`grad := colorgrad.Sinebow()`
 ![img](img/gradient-sinebow.png)
 
 ```go
