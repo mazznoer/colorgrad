@@ -6,6 +6,16 @@ Fun & easy way to create _color gradient_ / _color scales_ in __Go__ (__Golang__
 
 ![color-scale](img/color-scale-1.png)
 
+### Index
+
+* [Usages](#usages)
+  - [Basic](#basic)
+  - [Custom Colors](#custom-colors)
+* [Preset Gradients](#preset-gradients)
+* [Random Colors](#random-colors)
+* [Playground](#go-playground)
+* [Dependencies](#dependencies)
+
 ### Usages
 
 #### Basic
@@ -86,6 +96,25 @@ grad, err := colorgrad.NewGradient().
 ```
 ![blend-modes](img/blend-modes.png)
 
+#### Beware of Invalid RGB Color
+Read it [here](https://github.com/lucasb-eyer/go-colorful#blending-colors).
+
+```go
+grad, err := colorgrad.NewGradient().
+    HexColors("#DC143C", "#FFD700", "#4682b4").
+    Mode(colorgrad.HCL).
+    Build()
+
+grad.At(t) // might get invalid RGB color
+grad.At(t).Clamped() // return closest valid RGB color
+```
+
+Without `Clamped()`
+![invalig rgb](img/not-clamped.png)
+
+With `Clamped()`
+![valid rgb](img/clamped.png)
+
 ### Preset Gradients
 
 ```go
@@ -148,11 +177,11 @@ grad.Colors(15)
 ### Random Colors
 
 ![random-color](img/random-cool.png)
-[Try it online](https://play.golang.org/p/d67x9di4sAF)
 
-### Online Playground
+### Go Playground
 
-[Try it online](https://play.golang.org/p/rE8OI50PsQA)
+* [Basic](https://play.golang.org/p/rE8OI50PsQA)
+* [Random colors](https://play.golang.org/p/d67x9di4sAF)
 
 ### Dependencies
 
