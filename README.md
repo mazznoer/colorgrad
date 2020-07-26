@@ -90,9 +90,7 @@ _... TODO ..._
 
 ### Preset Gradients
 
-```go
-grad := colorgrad.Turbo()
-```
+`grad := colorgrad.Turbo()`
 ![img](img/gradient-turbo.png)
 
 ```go
@@ -147,7 +145,7 @@ grad := colorgrad.Cividis()
 
 ### Online Playground
 
-[Try it online](https://play.golang.org/p/d67x9di4sAF)
+[Try it online](https://play.golang.org/p/rE8OI50PsQA)
 
 ### Dependencies
 
