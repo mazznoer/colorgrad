@@ -6,6 +6,16 @@ Fun & easy way to create _color gradient_ / _color scales_ in __Go__ (__Golang__
 
 ![color-scale](img/color-scale-1.png)
 
+### Index
+
+* [Usages](#usages)
+  - [Basic](#basic)
+  - [Custom Colors](#custom-colors)
+* [Preset Gradients](#preset-gradients)
+* [Random Colors](#random-colors)
+* [Playground](#go-playground)
+* [Dependencies](#dependencies)
+
 ### Usages
 
 #### Basic
