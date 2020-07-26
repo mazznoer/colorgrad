@@ -13,20 +13,20 @@ import "github.com/mazznoer/colorgrad"
 ```
 
 ```go
-gradient, err := colorgrad.NewGradient().Build()
+grad, err := colorgrad.NewGradient().Build()
 
 if err != nil {
     panic(err)
 }
 
 // Get single color at certain position.
-gradient.At(0) // colorful.Color
-gradient.At(0.5).Hex() // hex color string
-gradient.At(1)
+grad.At(0) // colorful.Color
+grad.At(0.5).Hex() // hex color string
+grad.At(1)
 
 // Get n colors evenly spaced across gradient.
-gradient.Colors(27) // []colorful.Color
-colorgrad.IntoColors(gradient.Colors(10)) // []color.Color
+grad.Colors(27) // []colorful.Color
+colorgrad.IntoColors(grad.Colors(10)) // []color.Color
 ```
 
 ![img](img/black-to-white.png)
@@ -39,7 +39,7 @@ colorgrad.IntoColors(gradient.Colors(10)) // []color.Color
 import "image/color"
 import "github.com/lucasb-eyer/go-colorful"
 
-gradient, err := colorgrad.NewGradient().
+grad, err := colorgrad.NewGradient().
     Colors(
         color.RGBA{255, 0, 255, 255},
         color.Gray{100},
@@ -54,7 +54,7 @@ gradient, err := colorgrad.NewGradient().
 #### Using Hex Colors
 
 ```go
-gradient, err := colorgrad.NewGradient().
+grad, err := colorgrad.NewGradient().
     HexColors("#B22222", "#FFD700", "#2E8B57").
     Build()
 ```
@@ -64,7 +64,7 @@ gradient, err := colorgrad.NewGradient().
 #### Custom Domain
 
 ```go
-gradient, err := colorgrad.NewGradient().
+grad, err := colorgrad.NewGradient().
     HexColors("#B22222", "#FFD700", "#2E8B57").
     Domain(0, 0.75, 1).
     Build()
@@ -75,7 +75,7 @@ gradient, err := colorgrad.NewGradient().
 #### Blending Mode
 
 ```go
-gradient, err := colorgrad.NewGradient().
+grad, err := colorgrad.NewGradient().
     HexColors("#B22222", "#FFD700", "#2E8B57").
     Mode(colgrad.HCL).
     Build()
