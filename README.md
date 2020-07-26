@@ -84,11 +84,6 @@ grad, err := colorgrad.NewGradient().
 ```
 ![blend-modes](img/blend-modes.png)
 
-#### Random Colors
-
-![random-color](img/random-cool.png)
-[Try it online](https://play.golang.org/p/d67x9di4sAF)
-
 ### Preset Gradients
 
 ```go
@@ -147,6 +142,11 @@ grad.Colors(15)
 
 `grad := colorgrad.Greys()`
 ![img](img/gradient-greys.png)
+
+### Random Colors
+
+![random-color](img/random-cool.png)
+[Try it online](https://play.golang.org/p/d67x9di4sAF)
 
 ### Online Playground
 
