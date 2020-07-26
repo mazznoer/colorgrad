@@ -105,34 +105,22 @@ _... TODO ..._
 `grad := colorgrad.Sinebow()`
 ![img](img/gradient-sinebow.png)
 
-```go
-grad := colorgrad.Spectral()
-```
+`grad := colorgrad.Spectral()`
 ![img](img/gradient-spectral.png)
 
-```go
-grad := colorgrad.Viridis()
-```
+`grad := colorgrad.Viridis()`
 ![img](img/gradient-viridis.png)
 
-```go
-grad := colorgrad.Magma()
-```
+`grad := colorgrad.Magma()`
 ![img](img/gradient-magma.png)
 
-```go
-grad := colorgrad.Plasma()
-```
+`grad := colorgrad.Plasma()`
 ![img](img/gradient-plasma.png)
 
-```go
-grad := colorgrad.Inferno()
-```
+`grad := colorgrad.Inferno()`
 ![img](img/gradient-inferno.png)
 
-```go
-grad := colorgrad.Cividis()
-```
+`grad := colorgrad.Cividis()`
 ![img](img/gradient-cividis.png)
 
 ### Online Playground
