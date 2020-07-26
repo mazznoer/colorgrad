@@ -123,6 +123,24 @@ _... TODO ..._
 `grad := colorgrad.Cividis()`
 ![img](img/gradient-cividis.png)
 
+`grad := colorgrad.Blues()`
+![img](img/gradient-blues.png)
+
+`grad := colorgrad.Greens()`
+![img](img/gradient-greens.png)
+
+`grad := colorgrad.Oranges()`
+![img](img/gradient-oranges.png)
+
+`grad := colorgrad.Purples()`
+![img](img/gradient-purples.png)
+
+`grad := colorgrad.Reds()`
+![img](img/gradient-reds.png)
+
+`grad := colorgrad.Greys()`
+![img](img/gradient-greys.png)
+
 ### Online Playground
 
 [Try it online](https://play.golang.org/p/rE8OI50PsQA)
