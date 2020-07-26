@@ -62,11 +62,17 @@ grad, err := colorgrad.NewGradient().
 
 #### Custom Domain
 
+By default domain are in the range `0..1`, but you can change it using using the `Domain()` method.
+
 ```go
 grad, err := colorgrad.NewGradient().
     HexColors("#DC143C", "#FFD700", "#4682b4").
     Domain(15, 47.5, 80).
     Build()
+
+grad.At(15).Hex() // #DC143C
+grad.At(75)
+grad.At(80).Hex() // #4682b4
 ```
 ![img](img/color-scale-2.png)
 
