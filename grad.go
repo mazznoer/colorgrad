@@ -92,7 +92,7 @@ func (gb *GradientBuilder) Build() (Gradient, error) {
 		w := 1.0 / float64(len(gb.colors)-1)
 		gb.pos = make([]float64, len(gb.colors))
 
-		for i := range self.pos {
+		for i := range gb.pos {
 			gb.pos[i] = float64(i) * w
 		}
 	}
