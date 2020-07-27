@@ -124,25 +124,25 @@ type gradientX struct {
 	mode   BlendMode
 }
 
-func (self gradientX) At(t float64) colorful.Color {
-	if math.IsNaN(t) || t < self.min {
-		return self.colors[0]
+func (gx gradientX) At(t float64) colorful.Color {
+	if math.IsNaN(t) || t < gx.min {
+		return gx.colors[0]
 	}
 
-	if t > self.max {
-		return self.colors[self.count-1]
+	if t > gx.max {
+		return gx.colors[gx.count-1]
 	}
 
-	for i := 0; i < self.count-1; i++ {
-		p1 := self.pos[i]
-		p2 := self.pos[i+1]
+	for i := 0; i < gx.count-1; i++ {
+		p1 := gx.pos[i]
+		p2 := gx.pos[i+1]
 
 		if (p1 <= t) && (t <= p2) {
 			t := (t - p1) / (p2 - p1)
-			a := self.colors[i]
-			b := self.colors[i+1]
+			a := gx.colors[i]
+			b := gx.colors[i+1]
 
-			switch self.mode {
+			switch gx.mode {
 			case HCL:
 				return a.BlendHcl(b, t)
 			case HSV:
@@ -158,16 +158,16 @@ func (self gradientX) At(t float64) colorful.Color {
 			}
 		}
 	}
-	return self.colors[self.count-1]
+	return gx.colors[gx.count-1]
 }
 
-func (self gradientX) Colors(count uint) []colorful.Color {
-	d := self.max - self.min
+func (gx gradientX) Colors(count uint) []colorful.Color {
+	d := gx.max - gx.min
 	l := float64(count - 1)
 	colors := make([]colorful.Color, count)
 
 	for i := range colors {
-		colors[i] = self.At(self.min + (float64(i)*d)/l)
+		colors[i] = gx.At(gx.min + (float64(i)*d)/l)
 	}
 	return colors
 }
