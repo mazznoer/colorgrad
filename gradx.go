@@ -21,28 +21,28 @@ func Classes(grad Gradient, count uint) Gradient {
 	}
 }
 
-func (self classesGrad) At(t float64) colorful.Color {
+func (cg classesGrad) At(t float64) colorful.Color {
 	if math.IsNaN(t) || t < 0 {
-		return self.colors[0]
+		return cg.colors[0]
 	}
 
 	if t > 1 {
-		return self.colors[self.n-1]
+		return cg.colors[cg.n-1]
 	}
 
-	for i := 0; i < self.n; i++ {
-		if (self.pos[i] <= t) && (t <= self.pos[i+1]) {
-			return self.colors[i]
+	for i := 0; i < cg.n; i++ {
+		if (cg.pos[i] <= t) && (t <= cg.pos[i+1]) {
+			return cg.colors[i]
 		}
 	}
-	return self.colors[self.n-1]
+	return cg.colors[cg.n-1]
 }
 
-func (self classesGrad) Colors(count uint) []colorful.Color {
+func (cg classesGrad) Colors(count uint) []colorful.Color {
 	l := float64(count - 1)
 	colors := make([]colorful.Color, count)
 	for i := range colors {
-		colors[i] = self.At(float64(i) / l)
+		colors[i] = cg.At(float64(i) / l)
 	}
 	return colors
 }

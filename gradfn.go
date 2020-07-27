@@ -9,8 +9,8 @@ import (
 // Algorithms adapted from: https://github.com/d3/d3-scale-chromatic
 
 const deg2rad = math.Pi / 180
-const pi_1_3 = math.Pi / 3
-const pi_2_3 = math.Pi * 2 / 3
+const pi1_3 = math.Pi / 3
+const pi2_3 = math.Pi * 2 / 3
 
 // Sinebow
 
@@ -20,20 +20,20 @@ func Sinebow() Gradient {
 	return sinebowGradient{}
 }
 
-func (self sinebowGradient) At(t float64) colorful.Color {
+func (sg sinebowGradient) At(t float64) colorful.Color {
 	t = (0.5 - t) * math.Pi
 	return colorful.Color{
 		R: math.Pow(math.Sin(t), 2),
-		G: math.Pow(math.Sin(t+pi_1_3), 2),
-		B: math.Pow(math.Sin(t+pi_2_3), 2),
+		G: math.Pow(math.Sin(t+pi1_3), 2),
+		B: math.Pow(math.Sin(t+pi2_3), 2),
 	}
 }
 
-func (self sinebowGradient) Colors(count uint) []colorful.Color {
+func (sg sinebowGradient) Colors(count uint) []colorful.Color {
 	l := float64(count - 1)
 	colors := make([]colorful.Color, count)
 	for i := range colors {
-		colors[i] = self.At(float64(i) / l)
+		colors[i] = sg.At(float64(i) / l)
 	}
 	return colors
 }
@@ -46,7 +46,7 @@ func Turbo() Gradient {
 	return turboGradient{}
 }
 
-func (self turboGradient) At(t float64) colorful.Color {
+func (tg turboGradient) At(t float64) colorful.Color {
 	t = math.Max(0, math.Min(1, t))
 	r := math.Round(34.61 + t*(1172.33-t*(10793.56-t*(33300.12-t*(38394.49-t*14825.05)))))
 	g := math.Round(23.31 + t*(557.33+t*(1225.33-t*(3574.96-t*(1073.77+t*707.56)))))
@@ -58,11 +58,11 @@ func (self turboGradient) At(t float64) colorful.Color {
 	}
 }
 
-func (self turboGradient) Colors(count uint) []colorful.Color {
+func (tg turboGradient) Colors(count uint) []colorful.Color {
 	l := float64(count - 1)
 	colors := make([]colorful.Color, count)
 	for i := range colors {
-		colors[i] = self.At(float64(i) / l)
+		colors[i] = tg.At(float64(i) / l)
 	}
 	return colors
 }
@@ -75,7 +75,7 @@ func Cividis() Gradient {
 	return cividisGradient{}
 }
 
-func (self cividisGradient) At(t float64) colorful.Color {
+func (cg cividisGradient) At(t float64) colorful.Color {
 	t = math.Max(0, math.Min(1, t))
 	r := math.Round(-4.54 - t*(35.34-t*(2381.73-t*(6402.7-t*(7024.72-t*2710.57)))))
 	g := math.Round(32.49 + t*(170.73+t*(52.82-t*(131.46-t*(176.58-t*67.37)))))
@@ -87,11 +87,11 @@ func (self cividisGradient) At(t float64) colorful.Color {
 	}
 }
 
-func (self cividisGradient) Colors(count uint) []colorful.Color {
+func (cg cividisGradient) Colors(count uint) []colorful.Color {
 	l := float64(count - 1)
 	colors := make([]colorful.Color, count)
 	for i := range colors {
-		colors[i] = self.At(float64(i) / l)
+		colors[i] = cg.At(float64(i) / l)
 	}
 	return colors
 }
@@ -151,26 +151,26 @@ func Cool() Gradient {
 	}
 }
 
-func (self cubehelixGradient) At(t float64) colorful.Color {
-	return self.start.interpolate(self.end, t).toColorful()
+func (cg cubehelixGradient) At(t float64) colorful.Color {
+	return cg.start.interpolate(cg.end, t).toColorful()
 }
 
-func (self cubehelixGradient) Colors(count uint) []colorful.Color {
+func (cg cubehelixGradient) Colors(count uint) []colorful.Color {
 	l := float64(count - 1)
 	colors := make([]colorful.Color, count)
 	for i := range colors {
-		colors[i] = self.At(float64(i) / l)
+		colors[i] = cg.At(float64(i) / l)
 	}
 	return colors
 }
 
-type rainbow struct{}
+type rainbowGradient struct{}
 
 func Rainbow() Gradient {
-	return rainbow{}
+	return rainbowGradient{}
 }
 
-func (self rainbow) At(t float64) colorful.Color {
+func (rg rainbowGradient) At(t float64) colorful.Color {
 	t = math.Max(0, math.Min(1, t))
 	ts := math.Abs(t - 0.5)
 	return cubehelix{
@@ -180,11 +180,11 @@ func (self rainbow) At(t float64) colorful.Color {
 	}.toColorful()
 }
 
-func (self rainbow) Colors(count uint) []colorful.Color {
+func (rg rainbowGradient) Colors(count uint) []colorful.Color {
 	l := float64(count - 1)
 	colors := make([]colorful.Color, count)
 	for i := range colors {
-		colors[i] = self.At(float64(i) / l)
+		colors[i] = rg.At(float64(i) / l)
 	}
 	return colors
 }
