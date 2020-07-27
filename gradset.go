@@ -1,29 +1,5 @@
 package colorgrad
 
-func Warm() Gradient {
-	colors := []string{"#6e40aa", "#8a3eb2", "#a83cb3", "#c53dad", "#df40a1", "#f4468f", "#ff507a", "#ff5e63", "#ff704e", "#ff843d", "#f89b31", "#e6b32e", "#d2c934", "#bfde43", "#aff05b"}
-	grad, _ := NewGradient().
-		HexColors(colors...).
-		Build()
-	return grad
-}
-
-func Cool() Gradient {
-	colors := []string{"#6e40aa", "#654ec0", "#585fd2", "#4973dd", "#3988e1", "#2b9ede", "#1fb3d3", "#1ac7c2", "#1bd9ac", "#24e695", "#34f07e", "#4df56a", "#6bf75c", "#8cf457", "#aff05b"}
-	grad, _ := NewGradient().
-		HexColors(colors...).
-		Build()
-	return grad
-}
-
-func Rainbow() Gradient {
-	colors := []string{"#6e40aa", "#a83cb3", "#df40a1", "#ff507a", "#ff704e", "#f89b31", "#d2c934", "#aff05b", "#6bf75c", "#34f07e", "#1bd9ac", "#1fb3d3", "#3988e1", "#585fd2", "#6e40aa"}
-	grad, _ := NewGradient().
-		HexColors(colors...).
-		Build()
-	return grad
-}
-
 func Viridis() Gradient {
 	colors := []string{"#440154", "#482777", "#3f4a8a", "#31678e", "#26838f", "#1f9d8a", "#6cce5a", "#b6de2b", "#fee825"}
 	grad, _ := NewGradient().

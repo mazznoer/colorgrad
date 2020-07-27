@@ -135,6 +135,9 @@ grad.Colors(15)
 `grad := colorgrad.Rainbow()`
 ![img](img/gradient-rainbow.png)
 
+`grad := colorgrad.CubehelixDefault()`
+![img](img/gradient-cubehelix-default.png)
+
 `grad := colorgrad.Sinebow()`
 ![img](img/gradient-sinebow.png)
 

@@ -8,6 +8,7 @@ import (
 
 // Algorithms adapted from: https://github.com/d3/d3-scale-chromatic
 
+const deg2rad = math.Pi / 180
 const pi_1_3 = math.Pi / 3
 const pi_2_3 = math.Pi * 2 / 3
 
@@ -87,6 +88,99 @@ func (self cividisGradient) At(t float64) colorful.Color {
 }
 
 func (self cividisGradient) Colors(count uint) []colorful.Color {
+	l := float64(count - 1)
+	colors := make([]colorful.Color, count)
+	for i := range colors {
+		colors[i] = self.At(float64(i) / l)
+	}
+	return colors
+}
+
+// Cubehelix
+
+type cubehelix struct {
+	h, s, l float64
+}
+
+func (c cubehelix) toColorful() colorful.Color {
+	h := (c.h + 120) * deg2rad
+	l := c.l
+	a := c.s * l * (1 - l)
+	cosh := math.Cos(h)
+	sinh := math.Sin(h)
+	r := (l - a*math.Min(0.14861*cosh-1.78277*sinh, 1.0))
+	g := (l - a*math.Min(0.29227*cosh+0.90649*sinh, 1.0))
+	b := l + a*(1.97294*cosh)
+	return colorful.Color{
+		R: clamp01(r),
+		G: clamp01(g),
+		B: clamp01(b),
+	}
+}
+
+func (c cubehelix) interpolate(c2 cubehelix, t float64) cubehelix {
+	return cubehelix{
+		h: c.h + t*(c2.h-c.h),
+		s: c.s + t*(c2.s-c.s),
+		l: c.l + t*(c2.l-c.l),
+	}
+}
+
+type cubehelixGradient struct {
+	start, end cubehelix
+}
+
+func CubehelixDefault() Gradient {
+	return cubehelixGradient{
+		start: cubehelix{300, 0.5, 0.0},
+		end:   cubehelix{-240, 0.5, 1.0},
+	}
+}
+
+func Warm() Gradient {
+	return cubehelixGradient{
+		start: cubehelix{-100, 0.75, 0.35},
+		end:   cubehelix{80, 1.50, 0.8},
+	}
+}
+
+func Cool() Gradient {
+	return cubehelixGradient{
+		start: cubehelix{260, 0.75, 0.35},
+		end:   cubehelix{80, 1.50, 0.8},
+	}
+}
+
+func (self cubehelixGradient) At(t float64) colorful.Color {
+	return self.start.interpolate(self.end, t).toColorful()
+}
+
+func (self cubehelixGradient) Colors(count uint) []colorful.Color {
+	l := float64(count - 1)
+	colors := make([]colorful.Color, count)
+	for i := range colors {
+		colors[i] = self.At(float64(i) / l)
+	}
+	return colors
+}
+
+type rainbow struct{}
+
+func Rainbow() Gradient {
+	return rainbow{}
+}
+
+func (self rainbow) At(t float64) colorful.Color {
+	t = math.Max(0, math.Min(1, t))
+	ts := math.Abs(t - 0.5)
+	return cubehelix{
+		h: 360*t - 100,
+		s: 1.5 - 1.5*ts,
+		l: 0.8 - 0.9*ts,
+	}.toColorful()
+}
+
+func (self rainbow) Colors(count uint) []colorful.Color {
 	l := float64(count - 1)
 	colors := make([]colorful.Color, count)
 	for i := range colors {
