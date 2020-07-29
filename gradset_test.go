@@ -20,6 +20,10 @@ func TestPreset(t *testing.T) {
 }
 
 func testGrad(t *testing.T, grad Gradient, start, end string) {
+	if grad == nil {
+		t.Errorf("Grad is nil")
+	}
+
 	a := grad.At(0).Hex()
 	if a != start {
 		t.Errorf("Expected %v, got %v", start, a)
