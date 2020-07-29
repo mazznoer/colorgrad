@@ -48,7 +48,35 @@ func TestBasic1(t *testing.T) {
 	// Blend mode
 	grad, err = NewGradient().
 		HexColors("#333", "#bbb").
+		Mode(HCL).
+		Build()
+	testStr(t, grad.At(0).Hex(), "#333333")
+	testStr(t, grad.At(1).Hex(), "#bbbbbb")
+
+	grad, err = NewGradient().
+		HexColors("#333", "#bbb").
+		Mode(HSV).
+		Build()
+	testStr(t, grad.At(0).Hex(), "#333333")
+	testStr(t, grad.At(1).Hex(), "#bbbbbb")
+
+	grad, err = NewGradient().
+		HexColors("#333", "#bbb").
+		Mode(LAB).
+		Build()
+	testStr(t, grad.At(0).Hex(), "#333333")
+	testStr(t, grad.At(1).Hex(), "#bbbbbb")
+
+	grad, err = NewGradient().
+		HexColors("#333", "#bbb").
 		Mode(LRGB).
+		Build()
+	testStr(t, grad.At(0).Hex(), "#333333")
+	testStr(t, grad.At(1).Hex(), "#bbbbbb")
+
+	grad, err = NewGradient().
+		HexColors("#333", "#bbb").
+		Mode(LUV).
 		Build()
 	testStr(t, grad.At(0).Hex(), "#333333")
 	testStr(t, grad.At(1).Hex(), "#bbbbbb")
