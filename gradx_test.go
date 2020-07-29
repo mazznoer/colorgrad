@@ -21,9 +21,3 @@ func TestX(t *testing.T) {
 		}
 	}
 }
-
-func testStr(t *testing.T, result, expected string) {
-	if result != expected {
-		t.Errorf("Expected %v, got %v", expected, result)
-	}
-}
