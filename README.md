@@ -171,6 +171,9 @@ grad.Colors(15)
 `grad := colorgrad.Greens()`
 ![img](img/gradient-greens.png)
 
+`grad := colorgrad.Greys()`
+![img](img/gradient-greys.png)
+
 `grad := colorgrad.Oranges()`
 ![img](img/gradient-oranges.png)
 
@@ -180,8 +183,34 @@ grad.Colors(15)
 `grad := colorgrad.Reds()`
 ![img](img/gradient-reds.png)
 
-`grad := colorgrad.Greys()`
-![img](img/gradient-greys.png)
+### Color Scheme
+
+`colorgrad.Scheme.Accent`
+![img](img/scheme-accent.png)
+
+`colorgrad.Scheme.Category10`
+![img](img/scheme-category10.png)
+
+`colorgrad.Scheme.Dark2`
+![img](img/scheme-dark2.png)
+
+`colorgrad.Scheme.Paired`
+![img](img/scheme-paired.png)
+
+`colorgrad.Scheme.Pastel1`
+![img](img/scheme-pastel1.png)
+
+`colorgrad.Scheme.Pastel2`
+![img](img/scheme-pastel2.png)
+
+`colorgrad.Scheme.Set1`
+![img](img/scheme-set1.png)
+
+`colorgrad.Scheme.Set2`
+![img](img/scheme-set2.png)
+
+`colorgrad.Scheme.Set3`
+![img](img/scheme-set3.png)
 
 ### Random Colors
 
