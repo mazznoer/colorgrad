@@ -58,7 +58,7 @@ func linspace(min, max float64, n uint) []float64 {
 	return res
 }
 
-// Convert []colorful.Color to []color.Color
+// IntoColors convert []colorful.Color to []color.Color
 func IntoColors(colors []colorful.Color) []color.Color {
 	res := make([]color.Color, len(colors))
 

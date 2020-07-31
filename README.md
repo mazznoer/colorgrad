@@ -4,9 +4,6 @@
 [![go report](https://goreportcard.com/badge/github.com/mazznoer/colorgrad)](https://goreportcard.com/report/github.com/mazznoer/colorgrad)
 [![Build Status](https://travis-ci.org/mazznoer/colorgrad.svg?branch=master)](https://travis-ci.org/mazznoer/colorgrad)
 [![codecov](https://codecov.io/gh/mazznoer/colorgrad/branch/master/graph/badge.svg)](https://codecov.io/gh/mazznoer/colorgrad)
-<!--
-[![Coverage Status](https://coveralls.io/repos/github/mazznoer/colorgrad/badge.svg?branch=master)](https://coveralls.io/github/mazznoer/colorgrad?branch=master)
--->
 
 Fun & easy way to create _color gradient_ / _color scales_ in __Go__ (__Golang__).
 
@@ -18,6 +15,7 @@ Fun & easy way to create _color gradient_ / _color scales_ in __Go__ (__Golang__
   - [Basic](#basic)
   - [Custom Colors](#custom-colors)
 * [Preset Gradients](#preset-gradients)
+* [Color Scheme](#color-scheme)
 * [Random Colors](#random-colors)
 * [Playground](#go-playground)
 * [Dependencies](#dependencies)
@@ -171,6 +169,9 @@ grad.Colors(15)
 `grad := colorgrad.Greens()`
 ![img](img/gradient-greens.png)
 
+`grad := colorgrad.Greys()`
+![img](img/gradient-greys.png)
+
 `grad := colorgrad.Oranges()`
 ![img](img/gradient-oranges.png)
 
@@ -180,8 +181,42 @@ grad.Colors(15)
 `grad := colorgrad.Reds()`
 ![img](img/gradient-reds.png)
 
-`grad := colorgrad.Greys()`
-![img](img/gradient-greys.png)
+### Color Scheme
+
+It just a slice of colors. But you can create gradient from color scheme.
+
+```go
+grad, err := colorgrad.NewGradient().
+    Colors(colorgrad.Scheme.Set1...).
+    Build()
+```
+
+`colorgrad.Scheme.Accent`
+![img](img/scheme-accent.png)
+
+`colorgrad.Scheme.Category10`
+![img](img/scheme-category10.png)
+
+`colorgrad.Scheme.Dark2`
+![img](img/scheme-dark2.png)
+
+`colorgrad.Scheme.Paired`
+![img](img/scheme-paired.png)
+
+`colorgrad.Scheme.Pastel1`
+![img](img/scheme-pastel1.png)
+
+`colorgrad.Scheme.Pastel2`
+![img](img/scheme-pastel2.png)
+
+`colorgrad.Scheme.Set1`
+![img](img/scheme-set1.png)
+
+`colorgrad.Scheme.Set2`
+![img](img/scheme-set2.png)
+
+`colorgrad.Scheme.Set3`
+![img](img/scheme-set3.png)
 
 ### Random Colors
 
