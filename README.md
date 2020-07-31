@@ -4,9 +4,6 @@
 [![go report](https://goreportcard.com/badge/github.com/mazznoer/colorgrad)](https://goreportcard.com/report/github.com/mazznoer/colorgrad)
 [![Build Status](https://travis-ci.org/mazznoer/colorgrad.svg?branch=master)](https://travis-ci.org/mazznoer/colorgrad)
 [![codecov](https://codecov.io/gh/mazznoer/colorgrad/branch/master/graph/badge.svg)](https://codecov.io/gh/mazznoer/colorgrad)
-<!--
-[![Coverage Status](https://coveralls.io/repos/github/mazznoer/colorgrad/badge.svg?branch=master)](https://coveralls.io/github/mazznoer/colorgrad?branch=master)
--->
 
 Fun & easy way to create _color gradient_ / _color scales_ in __Go__ (__Golang__).
 
@@ -18,6 +15,7 @@ Fun & easy way to create _color gradient_ / _color scales_ in __Go__ (__Golang__
   - [Basic](#basic)
   - [Custom Colors](#custom-colors)
 * [Preset Gradients](#preset-gradients)
+* [Color Scheme](#color-scheme)
 * [Random Colors](#random-colors)
 * [Playground](#go-playground)
 * [Dependencies](#dependencies)
@@ -184,6 +182,14 @@ grad.Colors(15)
 ![img](img/gradient-reds.png)
 
 ### Color Scheme
+
+It just a slice of colors. But you can create gradient from color scheme.
+
+```go
+grad, err := colorgrad.NewGradient().
+    Colors(colorgrad.Scheme.Set1...).
+    Build()
+```
 
 `colorgrad.Scheme.Accent`
 ![img](img/scheme-accent.png)
