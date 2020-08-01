@@ -21,8 +21,8 @@ Fun & easy way to create _color gradient_ / _color scales_ in __Go__ (__Golang__
   - [Hard-Edged Gradient](#hard-edged-gradient)
 * [Preset Gradients](#preset-gradients)
 * [Color Scheme](#color-scheme)
-* [Random Colors](#random-colors)
-* [Playground](#go-playground)
+* [Gallery](#gallery)
+* [Playground](#playground)
 * [Dependencies](#dependencies)
 * [Inspirations](#inspirations)
 
@@ -238,11 +238,15 @@ grad, err := colorgrad.NewGradient().
 `colorgrad.Scheme.Set3`
 ![img](img/scheme-set3.png)
 
-### Random Colors
+### Gallery
 
+Colored noise using hard-edged gradient.
+![noise](img/noise-2.png)
+
+Random colors using `colorgrad.Cool()`.
 ![random-color](img/random-cool.png)
 
-### Go Playground
+### Playground
 
 * [Basic](https://play.golang.org/p/rE8OI50PsQA)
 * [Random colors](https://play.golang.org/p/d67x9di4sAF)
