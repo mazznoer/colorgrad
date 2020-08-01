@@ -14,11 +14,17 @@ Fun & easy way to create _color gradient_ / _color scales_ in __Go__ (__Golang__
 * [Usages](#usages)
   - [Basic](#basic)
   - [Custom Colors](#custom-colors)
+  - [Hex Colors](#using-hex-colors)
+  - [Custom Domain](#custom-domain)
+  - [Blending Mode](#blending-mode)
+  - [Invalid RGB](#beware-of-invalid-rgb-color)
+  - [Hard-Edged Gradient](#hard-edged-gradient)
 * [Preset Gradients](#preset-gradients)
 * [Color Scheme](#color-scheme)
 * [Random Colors](#random-colors)
 * [Playground](#go-playground)
 * [Dependencies](#dependencies)
+* [Inspirations](#inspirations)
 
 ### Usages
 
@@ -118,6 +124,20 @@ Without `Clamped()`
 
 With `Clamped()`
 ![valid rgb](img/clamped.png)
+
+#### Hard-Edged Gradient
+
+```go
+grad1, err := colorgrad.NewGradient().
+    HexColors("#18dbf4", "#f6ff56").
+    Build()
+```
+![img](img/normal-gradient.png)
+
+```go
+grad2 := colorgrad.SharpGradient(grad1, 7)
+```
+![img](img/classes-gradient.png)
 
 ### Preset Gradients
 
