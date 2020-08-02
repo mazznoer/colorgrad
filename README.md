@@ -14,11 +14,17 @@ Fun & easy way to create _color gradient_ / _color scales_ in __Go__ (__Golang__
 * [Usages](#usages)
   - [Basic](#basic)
   - [Custom Colors](#custom-colors)
+  - [Hex Colors](#using-hex-colors)
+  - [Custom Domain](#custom-domain)
+  - [Blending Mode](#blending-mode)
+  - [Invalid RGB](#beware-of-invalid-rgb-color)
+  - [Hard-Edged Gradient](#hard-edged-gradient)
 * [Preset Gradients](#preset-gradients)
 * [Color Scheme](#color-scheme)
-* [Random Colors](#random-colors)
-* [Playground](#go-playground)
+* [Gallery](#gallery)
+* [Playground](#playground)
 * [Dependencies](#dependencies)
+* [Inspirations](#inspirations)
 
 ### Usages
 
@@ -119,6 +125,20 @@ Without `Clamped()`
 With `Clamped()`
 ![valid rgb](img/clamped.png)
 
+#### Hard-Edged Gradient
+
+```go
+grad1, err := colorgrad.NewGradient().
+    HexColors("#18dbf4", "#f6ff56").
+    Build()
+```
+![img](img/normal-gradient.png)
+
+```go
+grad2 := colorgrad.SharpGradient(grad1, 7)
+```
+![img](img/classes-gradient.png)
+
 ### Preset Gradients
 
 ```go
@@ -218,11 +238,15 @@ grad, err := colorgrad.NewGradient().
 `colorgrad.Scheme.Set3`
 ![img](img/scheme-set3.png)
 
-### Random Colors
+### Gallery
 
+Colored noise using hard-edged gradient.
+![noise](img/noise-2.png)
+
+Random colors using `colorgrad.Cool()`.
 ![random-color](img/random-cool.png)
 
-### Go Playground
+### Playground
 
 * [Basic](https://play.golang.org/p/rE8OI50PsQA)
 * [Random colors](https://play.golang.org/p/d67x9di4sAF)

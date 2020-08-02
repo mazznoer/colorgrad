@@ -8,7 +8,7 @@ import (
 
 func TestX(t *testing.T) {
 	grad, _ := NewGradient().Build()
-	grad2 := Classes(grad, 7)
+	grad2 := SharpGradient(grad, 7)
 	testStr(t, grad2.At(0).Hex(), "#000000")
 	testStr(t, grad2.At(1).Hex(), "#ffffff")
 
