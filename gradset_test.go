@@ -5,7 +5,14 @@ import (
 )
 
 func TestPreset(t *testing.T) {
-	// xxx
+	testGrad(t, BrBG(), "#543005", "#003c30")
+	testGrad(t, PRGn(), "#40004b", "#00441b")
+	testGrad(t, PiYG(), "#8e0152", "#276419")
+	testGrad(t, PuOr(), "#7f3b08", "#2d004b")
+	testGrad(t, RdBu(), "#67001f", "#053061")
+	testGrad(t, RdGy(), "#67001f", "#1a1a1a")
+	testGrad(t, RdYlBu(), "#a50026", "#313695")
+	testGrad(t, RdYlGn(), "#a50026", "#006837")
 	testGrad(t, Spectral(), "#9e0142", "#5e4fa2")
 
 	testGrad(t, Blues(), "#f7fbff", "#08306b")
