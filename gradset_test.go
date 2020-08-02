@@ -5,11 +5,8 @@ import (
 )
 
 func TestPreset(t *testing.T) {
-	testGrad(t, Inferno(), "#000004", "#fcffa4")
-	testGrad(t, Magma(), "#000004", "#fcfdbf")
-	testGrad(t, Plasma(), "#0d0887", "#f0f921")
+	// xxx
 	testGrad(t, Spectral(), "#9e0142", "#5e4fa2")
-	testGrad(t, Viridis(), "#440154", "#fee825")
 
 	testGrad(t, Blues(), "#f7fbff", "#08306b")
 	testGrad(t, Greens(), "#f7fcf5", "#00441b")
@@ -17,6 +14,11 @@ func TestPreset(t *testing.T) {
 	testGrad(t, Oranges(), "#fff5eb", "#7f2704")
 	testGrad(t, Purples(), "#fcfbfd", "#3f007d")
 	testGrad(t, Reds(), "#fff5f0", "#67000d")
+
+	testGrad(t, Viridis(), "#440154", "#fee825")
+	testGrad(t, Inferno(), "#000004", "#fcffa4")
+	testGrad(t, Magma(), "#000004", "#fcfdbf")
+	testGrad(t, Plasma(), "#0d0887", "#f0f921")
 }
 
 func testGrad(t *testing.T, grad Gradient, start, end string) {
