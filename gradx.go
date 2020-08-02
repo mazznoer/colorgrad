@@ -7,42 +7,42 @@ import (
 	"github.com/lucasb-eyer/go-colorful"
 )
 
-type classesGrad struct {
+type sharpGradient struct {
 	colors []colorful.Color
 	pos    []float64
 	n      int
 }
 
-func Classes(grad Gradient, count uint) Gradient {
-	return classesGrad{
+func SharpGradient(grad Gradient, count uint) Gradient {
+	return sharpGradient{
 		colors: grad.Colors(count),
 		pos:    linspace(0, 1, count+1),
 		n:      int(count),
 	}
 }
 
-func (cg classesGrad) At(t float64) colorful.Color {
+func (sg sharpGradient) At(t float64) colorful.Color {
 	if math.IsNaN(t) || t < 0 {
-		return cg.colors[0]
+		return sg.colors[0]
 	}
 
 	if t > 1 {
-		return cg.colors[cg.n-1]
+		return sg.colors[sg.n-1]
 	}
 
-	for i := 0; i < cg.n; i++ {
-		if (cg.pos[i] <= t) && (t <= cg.pos[i+1]) {
-			return cg.colors[i]
+	for i := 0; i < sg.n; i++ {
+		if (sg.pos[i] <= t) && (t <= sg.pos[i+1]) {
+			return sg.colors[i]
 		}
 	}
-	return cg.colors[cg.n-1]
+	return sg.colors[sg.n-1]
 }
 
-func (cg classesGrad) Colors(count uint) []colorful.Color {
+func (sg sharpGradient) Colors(count uint) []colorful.Color {
 	l := float64(count - 1)
 	colors := make([]colorful.Color, count)
 	for i := range colors {
-		colors[i] = cg.At(float64(i) / l)
+		colors[i] = sg.At(float64(i) / l)
 	}
 	return colors
 }
