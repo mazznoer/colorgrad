@@ -84,8 +84,13 @@ grad, err := colorgrad.NewGradient().
 
 #### Custom Domain
 
-By default domain are in the range `0..1`, but you can change it using using the `Domain()` method.
-
+<!--By default domain are in the range `0..1`, but you can change it using using the `Domain()` method.
+-->
+```go
+grad, err := colorgrad.NewGradient().
+    HexColors("#DC143C", "#FFD700", "#4682b4").
+    Build()
+```
 ![img](img/color-scale-1.png)
 
 ```go
@@ -252,10 +257,10 @@ grad, err := colorgrad.NewGradient().
 
 ### Gallery
 
-Colored noise using hard-edged gradient.
+Noise + hard-edged gradient
 ![noise](img/noise-2.png)
 
-Random colors using `colorgrad.Cool()`.
+Random `cool` colors
 ![random-color](img/random-cool.png)
 
 ### Playground
