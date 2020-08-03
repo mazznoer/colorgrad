@@ -62,39 +62,51 @@ import "github.com/lucasb-eyer/go-colorful"
 
 grad, err := colorgrad.NewGradient().
     Colors(
-        color.RGBA{255, 0, 255, 255},
-        color.Gray{100},
-        color.White,
-        colorful.Hsv(210, 1, 0.8),
+        color.RGBA{0, 206, 209, 255},
+        color.RGBA{255, 105, 180, 255},
+        colorful.Color{R: 0.274, G: 0.5, B: 0.7},
+        colorful.Hsv(50, 1, 1),
+        colorful.Hsv(348, 0.9, 0.8),
     ).
+    Mode(colorgrad.HCL).
     Build()
 ```
-![img](img/basic-2.png)
+![img](img/custom-colors.png)
 
 #### Using Hex Colors
 
 ```go
 grad, err := colorgrad.NewGradient().
-    HexColors("#B22222", "#FFD700", "#2E8B57").
+    HexColors("#FFD700", "#00BFFF", "#FFD700").
     Build()
 ```
-![img](img/basic-hex.png)
+![img](img/hex-colors.png)
 
 #### Custom Domain
 
 By default domain are in the range `0..1`, but you can change it using using the `Domain()` method.
 
+![img](img/color-scale-1.png)
+
 ```go
 grad, err := colorgrad.NewGradient().
     HexColors("#DC143C", "#FFD700", "#4682b4").
-    Domain(15, 47.5, 80).
+    Domain(0, 0.35, 1).
+    Build()
+```
+![img](img/color-scale-2.png)
+
+```go
+grad, err := colorgrad.NewGradient().
+    HexColors("#DC143C", "#FFD700", "#4682b4").
+    Domain(15, 60, 80).
     Build()
 
 grad.At(15).Hex() // #DC143C
 grad.At(75)
 grad.At(80).Hex() // #4682b4
 ```
-![img](img/color-scale-2.png)
+![img](img/color-scale-3.png)
 
 #### Blending Mode
 
