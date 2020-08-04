@@ -157,7 +157,7 @@ grad2 := colorgrad.SharpGradient(grad1, 7)
 ```
 ![img](img/classes-gradient.png)
 
-Note: Result gradient from `SharpGradient` will always in range `0..1`.
+Note: Result gradient from `SharpGradient()` will always in range `0..1`.
 
 ### Preset Gradients
 
@@ -255,13 +255,13 @@ grad.Colors(15)
 
 ### Color Scheme
 
-It just a slice of colors. But you can create gradient from color scheme.
+<!--It just a slice of colors. But you can create gradient from color scheme.
 
 ```go
 grad, err := colorgrad.NewGradient().
     Colors(colorgrad.Scheme.Set1...).
     Build()
-```
+```-->
 
 `colorgrad.Scheme.Accent`
 ![img](img/scheme-accent.png)
