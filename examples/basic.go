@@ -10,7 +10,7 @@ import (
 
 func main() {
 	grad, _ := colorgrad.NewGradient().Build()
-	w := 900
+	w := 800
 	h := 90
 	fw := float64(w)
 
