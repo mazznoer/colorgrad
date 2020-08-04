@@ -84,8 +84,6 @@ grad, err := colorgrad.NewGradient().
 
 #### Custom Domain
 
-<!--By default domain are in the range `0..1`, but you can change it using using the `Domain()` method.
--->
 ```go
 grad, err := colorgrad.NewGradient().
     HexColors("#DC143C", "#FFD700", "#4682b4").
@@ -157,7 +155,7 @@ grad2 := colorgrad.SharpGradient(grad1, 7)
 ```
 ![img](img/classes-gradient.png)
 
-Note: Result gradient from `SharpGradient()` will always in range `0..1`.
+Note: Result gradient from `SharpGradient()` will always in the range `0..1`.
 
 ### Preset Gradients
 
@@ -255,14 +253,6 @@ grad.Colors(15)
 
 ### Color Scheme
 
-<!--It just a slice of colors. But you can create gradient from color scheme.
-
-```go
-grad, err := colorgrad.NewGradient().
-    Colors(colorgrad.Scheme.Set1...).
-    Build()
-```-->
-
 `colorgrad.Scheme.Accent`
 ![img](img/scheme-accent.png)
 
@@ -295,7 +285,7 @@ grad, err := colorgrad.NewGradient().
 Noise + hard-edged gradient
 ![noise](img/noise-2.png)
 
-Random `cool` colors
+Random _cool_ colors
 ![random-color](img/random-cool.png)
 
 ### Playground
