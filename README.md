@@ -221,6 +221,21 @@ grad.Colors(15)
 `grad := colorgrad.Turbo()`
 ![img](img/gradient-turbo.png)
 
+`grad := colorgrad.Viridis()`
+![img](img/gradient-viridis.png)
+
+`grad := colorgrad.Inferno()`
+![img](img/gradient-inferno.png)
+
+`grad := colorgrad.Magma()`
+![img](img/gradient-magma.png)
+
+`grad := colorgrad.Plasma()`
+![img](img/gradient-plasma.png)
+
+`grad := colorgrad.Cividis()`
+![img](img/gradient-cividis.png)
+
 `grad := colorgrad.Warm()`
 ![img](img/gradient-warm.png)
 
@@ -229,21 +244,6 @@ grad.Colors(15)
 
 `grad := colorgrad.CubehelixDefault()`
 ![img](img/gradient-cubehelix-default.png)
-
-`grad := colorgrad.Viridis()`
-![img](img/gradient-viridis.png)
-
-`grad := colorgrad.Magma()`
-![img](img/gradient-magma.png)
-
-`grad := colorgrad.Plasma()`
-![img](img/gradient-plasma.png)
-
-`grad := colorgrad.Inferno()`
-![img](img/gradient-inferno.png)
-
-`grad := colorgrad.Cividis()`
-![img](img/gradient-cividis.png)
 
 #### Cyclical
 
