@@ -51,7 +51,6 @@ func linspace(min, max float64, n uint) []float64 {
 	d := max - min
 	l := float64(n - 1)
 	res := make([]float64, n)
-
 	for i := range res {
 		res[i] = (min + (float64(i)*d)/l)
 	}
@@ -61,7 +60,6 @@ func linspace(min, max float64, n uint) []float64 {
 // IntoColors convert []colorful.Color to []color.Color
 func IntoColors(colors []colorful.Color) []color.Color {
 	res := make([]color.Color, len(colors))
-
 	for i, col := range colors {
 		res[i] = col
 	}

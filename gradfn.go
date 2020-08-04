@@ -126,6 +126,8 @@ func (c cubehelix) interpolate(c2 cubehelix, t float64) cubehelix {
 	}
 }
 
+// Cubehelix gradient
+
 type cubehelixGradient struct {
 	start, end cubehelix
 }
@@ -163,6 +165,8 @@ func (cg cubehelixGradient) Colors(count uint) []colorful.Color {
 	}
 	return colors
 }
+
+// Rainbow
 
 type rainbowGradient struct{}
 

@@ -62,39 +62,54 @@ import "github.com/lucasb-eyer/go-colorful"
 
 grad, err := colorgrad.NewGradient().
     Colors(
-        color.RGBA{255, 0, 255, 255},
-        color.Gray{100},
-        color.White,
-        colorful.Hsv(210, 1, 0.8),
+        color.RGBA{0, 206, 209, 255},
+        color.RGBA{255, 105, 180, 255},
+        colorful.Color{R: 0.274, G: 0.5, B: 0.7},
+        colorful.Hsv(50, 1, 1),
+        colorful.Hsv(348, 0.9, 0.8),
     ).
+    Mode(colorgrad.HCL).
     Build()
 ```
-![img](img/basic-2.png)
+![img](img/custom-colors.png)
 
 #### Using Hex Colors
 
 ```go
 grad, err := colorgrad.NewGradient().
-    HexColors("#B22222", "#FFD700", "#2E8B57").
+    HexColors("#FFD700", "#00BFFF", "#FFD700").
     Build()
 ```
-![img](img/basic-hex.png)
+![img](img/hex-colors.png)
 
 #### Custom Domain
-
-By default domain are in the range `0..1`, but you can change it using using the `Domain()` method.
 
 ```go
 grad, err := colorgrad.NewGradient().
     HexColors("#DC143C", "#FFD700", "#4682b4").
-    Domain(15, 47.5, 80).
+    Build()
+```
+![img](img/color-scale-1.png)
+
+```go
+grad, err := colorgrad.NewGradient().
+    HexColors("#DC143C", "#FFD700", "#4682b4").
+    Domain(0, 0.35, 1).
+    Build()
+```
+![img](img/color-scale-2.png)
+
+```go
+grad, err := colorgrad.NewGradient().
+    HexColors("#DC143C", "#FFD700", "#4682b4").
+    Domain(15, 60, 80).
     Build()
 
 grad.At(15).Hex() // #DC143C
 grad.At(75)
 grad.At(80).Hex() // #4682b4
 ```
-![img](img/color-scale-2.png)
+![img](img/color-scale-3.png)
 
 #### Blending Mode
 
@@ -130,6 +145,7 @@ With `Clamped()`
 ```go
 grad1, err := colorgrad.NewGradient().
     HexColors("#18dbf4", "#f6ff56").
+    Domain(0, 100).
     Build()
 ```
 ![img](img/normal-gradient.png)
@@ -139,6 +155,8 @@ grad2 := colorgrad.SharpGradient(grad1, 7)
 ```
 ![img](img/classes-gradient.png)
 
+Note: Result gradient from `SharpGradient()` will always in the range `0..1`.
+
 ### Preset Gradients
 
 ```go
@@ -147,69 +165,93 @@ grad.At(t) // t in the range 0..1
 grad.Colors(15)
 ```
 
-`grad := colorgrad.Turbo()`
-![img](img/gradient-turbo.png)
+#### Diverging
 
-`grad := colorgrad.Warm()`
-![img](img/gradient-warm.png)
+`colorgrad.BrBG()`
+![img](img/gradient-BrBG.png)
 
-`grad := colorgrad.Cool()`
-![img](img/gradient-cool.png)
+`colorgrad.PRGn()`
+![img](img/gradient-PRGn.png)
 
-`grad := colorgrad.Rainbow()`
-![img](img/gradient-rainbow.png)
+`colorgrad.PiYG()`
+![img](img/gradient-PiYG.png)
 
-`grad := colorgrad.CubehelixDefault()`
-![img](img/gradient-cubehelix-default.png)
+`colorgrad.PuOr()`
+![img](img/gradient-PuOr.png)
 
-`grad := colorgrad.Sinebow()`
-![img](img/gradient-sinebow.png)
+`colorgrad.RdBu()`
+![img](img/gradient-RdBu.png)
 
-`grad := colorgrad.Spectral()`
+`colorgrad.RdGy()`
+![img](img/gradient-RdGy.png)
+
+`colorgrad.RdYlBu()`
+![img](img/gradient-RdYlBu.png)
+
+`colorgrad.RdYlGn()`
+![img](img/gradient-RdYlGn.png)
+
+`colorgrad.Spectral()`
 ![img](img/gradient-spectral.png)
 
-`grad := colorgrad.Viridis()`
-![img](img/gradient-viridis.png)
+#### Sequential (Single Hue)
 
-`grad := colorgrad.Magma()`
-![img](img/gradient-magma.png)
-
-`grad := colorgrad.Plasma()`
-![img](img/gradient-plasma.png)
-
-`grad := colorgrad.Inferno()`
-![img](img/gradient-inferno.png)
-
-`grad := colorgrad.Cividis()`
-![img](img/gradient-cividis.png)
-
-`grad := colorgrad.Blues()`
+`colorgrad.Blues()`
 ![img](img/gradient-blues.png)
 
-`grad := colorgrad.Greens()`
+`colorgrad.Greens()`
 ![img](img/gradient-greens.png)
 
-`grad := colorgrad.Greys()`
+`colorgrad.Greys()`
 ![img](img/gradient-greys.png)
 
-`grad := colorgrad.Oranges()`
+`colorgrad.Oranges()`
 ![img](img/gradient-oranges.png)
 
-`grad := colorgrad.Purples()`
+`colorgrad.Purples()`
 ![img](img/gradient-purples.png)
 
-`grad := colorgrad.Reds()`
+`colorgrad.Reds()`
 ![img](img/gradient-reds.png)
 
+#### Sequential (Multi-Hue)
+
+`colorgrad.Turbo()`
+![img](img/gradient-turbo.png)
+
+`colorgrad.Viridis()`
+![img](img/gradient-viridis.png)
+
+`colorgrad.Inferno()`
+![img](img/gradient-inferno.png)
+
+`colorgrad.Magma()`
+![img](img/gradient-magma.png)
+
+`colorgrad.Plasma()`
+![img](img/gradient-plasma.png)
+
+`colorgrad.Cividis()`
+![img](img/gradient-cividis.png)
+
+`colorgrad.Warm()`
+![img](img/gradient-warm.png)
+
+`colorgrad.Cool()`
+![img](img/gradient-cool.png)
+
+`colorgrad.CubehelixDefault()`
+![img](img/gradient-cubehelix-default.png)
+
+#### Cyclical
+
+`colorgrad.Rainbow()`
+![img](img/gradient-rainbow.png)
+
+`colorgrad.Sinebow()`
+![img](img/gradient-sinebow.png)
+
 ### Color Scheme
-
-It just a slice of colors. But you can create gradient from color scheme.
-
-```go
-grad, err := colorgrad.NewGradient().
-    Colors(colorgrad.Scheme.Set1...).
-    Build()
-```
 
 `colorgrad.Scheme.Accent`
 ![img](img/scheme-accent.png)
@@ -240,10 +282,10 @@ grad, err := colorgrad.NewGradient().
 
 ### Gallery
 
-Colored noise using hard-edged gradient.
+Noise + hard-edged gradient
 ![noise](img/noise-2.png)
 
-Random colors using `colorgrad.Cool()`.
+Random _cool_ colors
 ![random-color](img/random-cool.png)
 
 ### Playground
