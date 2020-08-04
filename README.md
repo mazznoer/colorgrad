@@ -167,88 +167,88 @@ grad.Colors(15)
 
 #### Diverging
 
-`grad := colorgrad.BrBG()`
+`colorgrad.BrBG()`
 ![img](img/gradient-BrBG.png)
 
-`grad := colorgrad.PRGn()`
+`colorgrad.PRGn()`
 ![img](img/gradient-PRGn.png)
 
-`grad := colorgrad.PiYG()`
+`colorgrad.PiYG()`
 ![img](img/gradient-PiYG.png)
 
-`grad := colorgrad.PuOr()`
+`colorgrad.PuOr()`
 ![img](img/gradient-PuOr.png)
 
-`grad := colorgrad.RdBu()`
+`colorgrad.RdBu()`
 ![img](img/gradient-RdBu.png)
 
-`grad := colorgrad.RdGy()`
+`colorgrad.RdGy()`
 ![img](img/gradient-RdGy.png)
 
-`grad := colorgrad.RdYlBu()`
+`colorgrad.RdYlBu()`
 ![img](img/gradient-RdYlBu.png)
 
-`grad := colorgrad.RdYlGn()`
+`colorgrad.RdYlGn()`
 ![img](img/gradient-RdYlGn.png)
 
-`grad := colorgrad.Spectral()`
+`colorgrad.Spectral()`
 ![img](img/gradient-spectral.png)
 
 #### Sequential (Single Hue)
 
-`grad := colorgrad.Blues()`
+`colorgrad.Blues()`
 ![img](img/gradient-blues.png)
 
-`grad := colorgrad.Greens()`
+`colorgrad.Greens()`
 ![img](img/gradient-greens.png)
 
-`grad := colorgrad.Greys()`
+`colorgrad.Greys()`
 ![img](img/gradient-greys.png)
 
-`grad := colorgrad.Oranges()`
+`colorgrad.Oranges()`
 ![img](img/gradient-oranges.png)
 
-`grad := colorgrad.Purples()`
+`colorgrad.Purples()`
 ![img](img/gradient-purples.png)
 
-`grad := colorgrad.Reds()`
+`colorgrad.Reds()`
 ![img](img/gradient-reds.png)
 
 #### Sequential (Multi-Hue)
 
-`grad := colorgrad.Turbo()`
+`colorgrad.Turbo()`
 ![img](img/gradient-turbo.png)
 
-`grad := colorgrad.Viridis()`
+`colorgrad.Viridis()`
 ![img](img/gradient-viridis.png)
 
-`grad := colorgrad.Inferno()`
+`colorgrad.Inferno()`
 ![img](img/gradient-inferno.png)
 
-`grad := colorgrad.Magma()`
+`colorgrad.Magma()`
 ![img](img/gradient-magma.png)
 
-`grad := colorgrad.Plasma()`
+`colorgrad.Plasma()`
 ![img](img/gradient-plasma.png)
 
-`grad := colorgrad.Cividis()`
+`colorgrad.Cividis()`
 ![img](img/gradient-cividis.png)
 
-`grad := colorgrad.Warm()`
+`colorgrad.Warm()`
 ![img](img/gradient-warm.png)
 
-`grad := colorgrad.Cool()`
+`colorgrad.Cool()`
 ![img](img/gradient-cool.png)
 
-`grad := colorgrad.CubehelixDefault()`
+`colorgrad.CubehelixDefault()`
 ![img](img/gradient-cubehelix-default.png)
 
 #### Cyclical
 
-`grad := colorgrad.Rainbow()`
+`colorgrad.Rainbow()`
 ![img](img/gradient-rainbow.png)
 
-`grad := colorgrad.Sinebow()`
+`colorgrad.Sinebow()`
 ![img](img/gradient-sinebow.png)
 
 ### Color Scheme
