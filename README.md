@@ -147,6 +147,7 @@ With `Clamped()`
 ```go
 grad1, err := colorgrad.NewGradient().
     HexColors("#18dbf4", "#f6ff56").
+    Domain(0, 100).
     Build()
 ```
 ![img](img/normal-gradient.png)
@@ -155,6 +156,8 @@ grad1, err := colorgrad.NewGradient().
 grad2 := colorgrad.SharpGradient(grad1, 7)
 ```
 ![img](img/classes-gradient.png)
+
+Note: Result gradient from `SharpGradient` will always in range `0..1`.
 
 ### Preset Gradients
 
