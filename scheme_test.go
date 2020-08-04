@@ -25,7 +25,7 @@ func testScheme(t *testing.T, colors []color.Color) {
 		Build()
 
 	if grad == nil {
-		t.Error("Grad is nil")
+		t.Error("grad is nil")
 	}
 
 	c1, _ := colorful.MakeColor(colors[0])
