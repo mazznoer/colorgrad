@@ -10,8 +10,8 @@ import (
 
 func main() {
 	grad, _ := colorgrad.NewGradient().Build()
-	w := 850
-	h := 85
+	w := 800
+	h := 80
 	fw := float64(w)
 
 	img := image.NewRGBA(image.Rect(0, 0, w, h))
