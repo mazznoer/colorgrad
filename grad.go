@@ -4,8 +4,10 @@ import (
 	"fmt"
 	"image/color"
 	"math"
+	"strings"
 
 	"github.com/lucasb-eyer/go-colorful"
+	"golang.org/x/image/colornames"
 )
 
 type BlendMode int
@@ -53,11 +55,19 @@ func (gb *GradientBuilder) HexColors(hexColors ...string) *GradientBuilder {
 	colors := []colorful.Color{}
 
 	for _, v := range hexColors {
-		c, err := colorful.Hex(v)
-		if err != nil {
-			continue
+		var col colorful.Color
+		c1, ok := colornames.Map[strings.ToLower(v)]
+		if ok {
+			c, _ := colorful.MakeColor(c1)
+			col = c
+		} else {
+			c, err := colorful.Hex(v)
+			if err != nil {
+				continue
+			}
+			col = c
 		}
-		colors = append(colors, c)
+		colors = append(colors, col)
 	}
 	gb.colors = colors
 	return gb
