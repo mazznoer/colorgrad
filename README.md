@@ -85,6 +85,8 @@ grad, err := colorgrad.NewGradient().
 
 #### Named Colors
 
+We can also use named colors as defined in the SVG 1.1 spec.
+
 ```go
 grad, err := colorgrad.NewGradient().
     HexColors("gold", "hotpink", "darkturquoise").
