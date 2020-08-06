@@ -15,6 +15,7 @@ Fun & easy way to create _color gradient_ / _color scales_ in __Go__ (__Golang__
   - [Basic](#basic)
   - [Custom Colors](#custom-colors)
   - [Hex Colors](#using-hex-colors)
+  - [Named Colors](#named-colors)
   - [Custom Domain](#custom-domain)
   - [Blending Mode](#blending-mode)
   - [Invalid RGB](#beware-of-invalid-rgb-color)
@@ -81,6 +82,15 @@ grad, err := colorgrad.NewGradient().
     Build()
 ```
 ![img](img/hex-colors.png)
+
+#### Named Colors
+
+```go
+grad, err := colorgrad.NewGradient().
+    HexColors("gold", "hotpink", "darkturquoise").
+    Build()
+```
+![img](img/named-colors.png)
 
 #### Custom Domain
 
