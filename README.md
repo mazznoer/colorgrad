@@ -78,7 +78,7 @@ grad, err := colorgrad.NewGradient().
 
 ```go
 grad, err := colorgrad.NewGradient().
-    HexColors("#FFD700", "#00BFFF", "#FFD700").
+    HtmlColors("#FFD700", "#00BFFF", "#FFD700").
     Build()
 ```
 ![img](img/hex-colors.png)
@@ -89,7 +89,7 @@ We can also use named colors as defined in the SVG 1.1 spec.
 
 ```go
 grad, err := colorgrad.NewGradient().
-    HexColors("gold", "hotpink", "darkturquoise").
+    HtmlColors("gold", "hotpink", "darkturquoise").
     Build()
 ```
 ![img](img/named-colors.png)
@@ -98,14 +98,14 @@ grad, err := colorgrad.NewGradient().
 
 ```go
 grad, err := colorgrad.NewGradient().
-    HexColors("#DC143C", "#FFD700", "#4682b4").
+    HtmlColors("#DC143C", "#FFD700", "#4682b4").
     Build()
 ```
 ![img](img/color-scale-1.png)
 
 ```go
 grad, err := colorgrad.NewGradient().
-    HexColors("#DC143C", "#FFD700", "#4682b4").
+    HtmlColors("#DC143C", "#FFD700", "#4682b4").
     Domain(0, 0.35, 1).
     Build()
 ```
@@ -113,7 +113,7 @@ grad, err := colorgrad.NewGradient().
 
 ```go
 grad, err := colorgrad.NewGradient().
-    HexColors("#DC143C", "#FFD700", "#4682b4").
+    HtmlColors("#DC143C", "#FFD700", "#4682b4").
     Domain(15, 60, 80).
     Build()
 
@@ -127,7 +127,7 @@ grad.At(80).Hex() // #4682b4
 
 ```go
 grad, err := colorgrad.NewGradient().
-    HexColors("#ff0", "#008ae5").
+    HtmlColors("#ff0", "#008ae5").
     Mode(colorgrad.LRGB).
     Build()
 ```
@@ -138,7 +138,7 @@ Read it [here](https://github.com/lucasb-eyer/go-colorful#blending-colors).
 
 ```go
 grad, err := colorgrad.NewGradient().
-    HexColors("#DC143C", "#FFD700", "#4682b4").
+    HtmlColors("#DC143C", "#FFD700", "#4682b4").
     Mode(colorgrad.HCL).
     Build()
 
@@ -156,7 +156,7 @@ With `Clamped()`
 
 ```go
 grad1, err := colorgrad.NewGradient().
-    HexColors("#18dbf4", "#f6ff56").
+    HtmlColors("#18dbf4", "#f6ff56").
     Domain(0, 100).
     Build()
 ```
