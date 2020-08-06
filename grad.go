@@ -50,10 +50,10 @@ func (gb *GradientBuilder) Colors(colors ...color.Color) *GradientBuilder {
 	return gb
 }
 
-func (gb *GradientBuilder) HexColors(hexColors ...string) *GradientBuilder {
+func (gb *GradientBuilder) HtmlColors(htmlColors ...string) *GradientBuilder {
 	colors := []colorful.Color{}
 
-	for _, v := range hexColors {
+	for _, v := range htmlColors {
 		var col colorful.Color
 		c1, ok := colornames[strings.ToLower(v)]
 		if ok {
