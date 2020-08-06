@@ -7,7 +7,6 @@ import (
 	"strings"
 
 	"github.com/lucasb-eyer/go-colorful"
-	"golang.org/x/image/colornames"
 )
 
 type BlendMode int
@@ -56,7 +55,7 @@ func (gb *GradientBuilder) HexColors(hexColors ...string) *GradientBuilder {
 
 	for _, v := range hexColors {
 		var col colorful.Color
-		c1, ok := colornames.Map[strings.ToLower(v)]
+		c1, ok := colornames[strings.ToLower(v)]
 		if ok {
 			c, _ := colorful.MakeColor(c1)
 			col = c
