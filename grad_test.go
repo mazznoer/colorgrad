@@ -45,6 +45,16 @@ func TestBasic1(t *testing.T) {
 	testStr(t, grad.At(0).Hex(), "#333333")
 	testStr(t, grad.At(1).Hex(), "#bbbbbb")
 
+	// Color names
+	grad, err = NewGradient().
+		HexColors("tomato", "skyblue", "gold", "springgreen").
+		Build()
+	colors := grad.Colors(4)
+	testStr(t, colors[0].Hex(), "#ff6347")
+	testStr(t, colors[1].Hex(), "#87ceeb")
+	testStr(t, colors[2].Hex(), "#ffd700")
+	testStr(t, colors[3].Hex(), "#00ff7f")
+
 	// Blend mode
 	grad, err = NewGradient().
 		HexColors("#333", "#bbb").
