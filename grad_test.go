@@ -38,12 +38,16 @@ func TestBasic1(t *testing.T) {
 		t.Errorf("grad should nil")
 	}
 
-	// Invalid hex color
+	// Invalid HTML colors
 	grad, err = NewGradient().
-		HtmlColors("#ffg", "#333", "#bbb").
+		HtmlColors("#777", "bloodred", "#bbb", "#zzz").
 		Build()
-	testStr(t, grad.At(0).Hex(), "#333333")
-	testStr(t, grad.At(1).Hex(), "#bbbbbb")
+	if err == nil {
+		t.Errorf("It should error")
+	}
+	if grad != nil {
+		t.Errorf("grad should nil")
+	}
 
 	// Named colors
 	grad, err = NewGradient().
