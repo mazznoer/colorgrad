@@ -42,13 +42,15 @@ if err != nil {
     panic(err)
 }
 
+dmin, dmax := grad.Domain()
+
 // Get single color at certain position.
-grad.At(0) // colorful.Color
-grad.At(0.5).Hex() // hex color string
-grad.At(1)
+// t in the range dmin..dmax (default to 0..1)
+c1 := grad.At(t) // colorful.Color
+c2 := grad.At(t).Hex() // hex color string
 
 // Get n colors evenly spaced across gradient.
-grad.Colors(17) // []colorful.Color
+colors := grad.Colors(17) // []colorful.Color
 ```
 ![img](img/black-to-white.png)
 
@@ -170,8 +172,10 @@ grad2 := grad1.Sharp(7)
 
 ```go
 grad := colorgrad.Rainbow()
-grad.At(t) // t in the range 0..1
-grad.Colors(15)
+dmin, dmax := grad.Domain()
+c := grad.At(t) // t in the range 0..1
+colors := grad.Colors(5)
+grad2 := grad.Sharp(13)
 ```
 
 #### Diverging
