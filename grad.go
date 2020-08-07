@@ -20,12 +20,73 @@ const (
 	RGB
 )
 
+type gradientBase interface {
+	// Get color at certain position
+	At(float64) colorful.Color
+}
+
 type Gradient interface {
 	// Get color at certain position
 	At(float64) colorful.Color
 
 	// Get n colors evenly spaced across gradient
 	Colors(uint) []colorful.Color
+
+	// Get n colors evenly spaced across gradient
+	Colors2(uint) []color.Color // todo: rename
+
+	// Get the gradient domain
+	Domain() (float64, float64)
+
+	// Return a new sharp gradient
+	Sharp(uint) Gradient
+}
+
+type gradient struct {
+	grad gradientBase
+	min  float64
+	max  float64
+}
+
+func (g gradient) At(t float64) colorful.Color {
+	return g.grad.At(t)
+}
+
+func (g gradient) Colors(count uint) []colorful.Color {
+	d := g.max - g.min
+	l := float64(count - 1)
+	colors := make([]colorful.Color, count)
+	for i := range colors {
+		colors[i] = g.grad.At(g.min + (float64(i)*d)/l)
+	}
+	return colors
+}
+
+func (g gradient) Colors2(count uint) []color.Color {
+	colors := make([]color.Color, count)
+	for i, col := range g.Colors(count) {
+		colors[i] = col
+	}
+	return colors
+}
+
+func (g gradient) Domain() (float64, float64) {
+	return g.min, g.max
+}
+
+func (g gradient) Sharp(n uint) Gradient {
+	gradbase := sharpGradient{
+		colors: g.Colors(n),
+		pos:    linspace(g.min, g.max, n+1),
+		n:      int(n),
+		min:    g.min,
+		max:    g.max,
+	}
+	return gradient{
+		grad: gradbase,
+		min:  g.min,
+		max:  g.max,
+	}
 }
 
 type GradientBuilder struct {
@@ -114,13 +175,19 @@ func (gb *GradientBuilder) Build() (Gradient, error) {
 
 	//fmt.Printf("Pos: %v Colors: %v Mode: %v\n", gb.pos, gb.colors, gb.mode)
 
-	return gradientX{
+	gradbase := gradientX{
 		colors: gb.colors,
 		pos:    gb.pos,
 		min:    gb.pos[0],
 		max:    gb.pos[len(gb.pos)-1],
 		count:  len(gb.colors),
 		mode:   gb.mode,
+	}
+
+	return gradient{
+		grad: gradbase,
+		min:  gb.pos[0],
+		max:  gb.pos[len(gb.pos)-1],
 	}, nil
 }
 
@@ -170,15 +237,39 @@ func (gx gradientX) At(t float64) colorful.Color {
 	return gx.colors[gx.count-1]
 }
 
-func (gx gradientX) Colors(count uint) []colorful.Color {
-	d := gx.max - gx.min
-	l := float64(count - 1)
-	colors := make([]colorful.Color, count)
+type sharpGradient struct {
+	colors []colorful.Color
+	pos    []float64
+	n      int
+	min    float64
+	max    float64
+}
 
-	for i := range colors {
-		colors[i] = gx.At(gx.min + (float64(i)*d)/l)
+func (sg sharpGradient) At(t float64) colorful.Color {
+	if math.IsNaN(t) || t < sg.min {
+		return sg.colors[0]
 	}
-	return colors
+
+	if t > sg.max {
+		return sg.colors[sg.n-1]
+	}
+
+	for i := 0; i < sg.n; i++ {
+		if (sg.pos[i] <= t) && (t <= sg.pos[i+1]) {
+			return sg.colors[i]
+		}
+	}
+	return sg.colors[sg.n-1]
+}
+
+func linspace(min, max float64, n uint) []float64 {
+	d := max - min
+	l := float64(n - 1)
+	res := make([]float64, n)
+	for i := range res {
+		res[i] = (min + (float64(i)*d)/l)
+	}
+	return res
 }
 
 // Algorithm taken from: https://github.com/gka/chroma.js
