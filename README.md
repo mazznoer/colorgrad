@@ -302,7 +302,7 @@ Random _cool_ colors
 
 ### Playground
 
-* [Basic](https://play.golang.org/p/rE8OI50PsQA)
+* [Basic](https://play.golang.org/p/ib8mw_gM0oD)
 * [Random colors](https://play.golang.org/p/d67x9di4sAF)
 
 ### Dependencies
