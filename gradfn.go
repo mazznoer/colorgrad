@@ -17,7 +17,11 @@ const pi2_3 = math.Pi * 2 / 3
 type sinebowGradient struct{}
 
 func Sinebow() Gradient {
-	return sinebowGradient{}
+	return gradient{
+		grad: sinebowGradient{},
+		min:  0,
+		max:  1,
+	}
 }
 
 func (sg sinebowGradient) At(t float64) colorful.Color {
@@ -29,21 +33,16 @@ func (sg sinebowGradient) At(t float64) colorful.Color {
 	}
 }
 
-func (sg sinebowGradient) Colors(count uint) []colorful.Color {
-	l := float64(count - 1)
-	colors := make([]colorful.Color, count)
-	for i := range colors {
-		colors[i] = sg.At(float64(i) / l)
-	}
-	return colors
-}
-
 // Turbo
 
 type turboGradient struct{}
 
 func Turbo() Gradient {
-	return turboGradient{}
+	return gradient{
+		grad: turboGradient{},
+		min:  0,
+		max:  1,
+	}
 }
 
 func (tg turboGradient) At(t float64) colorful.Color {
@@ -58,21 +57,16 @@ func (tg turboGradient) At(t float64) colorful.Color {
 	}
 }
 
-func (tg turboGradient) Colors(count uint) []colorful.Color {
-	l := float64(count - 1)
-	colors := make([]colorful.Color, count)
-	for i := range colors {
-		colors[i] = tg.At(float64(i) / l)
-	}
-	return colors
-}
-
 // Cividis
 
 type cividisGradient struct{}
 
 func Cividis() Gradient {
-	return cividisGradient{}
+	return gradient{
+		grad: cividisGradient{},
+		min:  0,
+		max:  1,
+	}
 }
 
 func (cg cividisGradient) At(t float64) colorful.Color {
@@ -85,15 +79,6 @@ func (cg cividisGradient) At(t float64) colorful.Color {
 		G: clamp01(g / 255),
 		B: clamp01(b / 255),
 	}
-}
-
-func (cg cividisGradient) Colors(count uint) []colorful.Color {
-	l := float64(count - 1)
-	colors := make([]colorful.Color, count)
-	for i := range colors {
-		colors[i] = cg.At(float64(i) / l)
-	}
-	return colors
 }
 
 // Cubehelix
@@ -133,23 +118,38 @@ type cubehelixGradient struct {
 }
 
 func CubehelixDefault() Gradient {
-	return cubehelixGradient{
+	gradbase := cubehelixGradient{
 		start: cubehelix{300, 0.5, 0.0},
 		end:   cubehelix{-240, 0.5, 1.0},
+	}
+	return gradient{
+		grad: gradbase,
+		min:  0,
+		max:  1,
 	}
 }
 
 func Warm() Gradient {
-	return cubehelixGradient{
+	gradbase := cubehelixGradient{
 		start: cubehelix{-100, 0.75, 0.35},
 		end:   cubehelix{80, 1.50, 0.8},
+	}
+	return gradient{
+		grad: gradbase,
+		min:  0,
+		max:  1,
 	}
 }
 
 func Cool() Gradient {
-	return cubehelixGradient{
+	gradbase := cubehelixGradient{
 		start: cubehelix{260, 0.75, 0.35},
 		end:   cubehelix{80, 1.50, 0.8},
+	}
+	return gradient{
+		grad: gradbase,
+		min:  0,
+		max:  1,
 	}
 }
 
@@ -157,21 +157,16 @@ func (cg cubehelixGradient) At(t float64) colorful.Color {
 	return cg.start.interpolate(cg.end, t).toColorful()
 }
 
-func (cg cubehelixGradient) Colors(count uint) []colorful.Color {
-	l := float64(count - 1)
-	colors := make([]colorful.Color, count)
-	for i := range colors {
-		colors[i] = cg.At(float64(i) / l)
-	}
-	return colors
-}
-
 // Rainbow
 
 type rainbowGradient struct{}
 
 func Rainbow() Gradient {
-	return rainbowGradient{}
+	return gradient{
+		grad: rainbowGradient{},
+		min:  0,
+		max:  1,
+	}
 }
 
 func (rg rainbowGradient) At(t float64) colorful.Color {
@@ -182,15 +177,6 @@ func (rg rainbowGradient) At(t float64) colorful.Color {
 		s: 1.5 - 1.5*ts,
 		l: 0.8 - 0.9*ts,
 	}.toColorful()
-}
-
-func (rg rainbowGradient) Colors(count uint) []colorful.Color {
-	l := float64(count - 1)
-	colors := make([]colorful.Color, count)
-	for i := range colors {
-		colors[i] = rg.At(float64(i) / l)
-	}
-	return colors
 }
 
 func clamp01(t float64) float64 {
