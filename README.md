@@ -48,8 +48,7 @@ grad.At(0.5).Hex() // hex color string
 grad.At(1)
 
 // Get n colors evenly spaced across gradient.
-grad.Colors(27) // []colorful.Color
-colorgrad.IntoColors(grad.Colors(10)) // []color.Color
+grad.Colors(17) // []colorful.Color
 ```
 ![img](img/black-to-white.png)
 
@@ -163,11 +162,9 @@ grad1, err := colorgrad.NewGradient().
 ![img](img/normal-gradient.png)
 
 ```go
-grad2 := colorgrad.SharpGradient(grad1, 7)
+grad2 := grad1.Sharp(7)
 ```
 ![img](img/classes-gradient.png)
-
-Note: Result gradient from `SharpGradient()` will always in the range `0..1`.
 
 ### Preset Gradients
 
