@@ -131,9 +131,11 @@ func (gb *GradientBuilder) HtmlColors(htmlColors ...string) *GradientBuilder {
 		}
 		colors = append(colors, col)
 	}
+
 	if len(invalidColors) > 0 {
 		gb.invalidHtmlColors = invalidColors
 	}
+
 	gb.colors = colors
 	return gb
 }
