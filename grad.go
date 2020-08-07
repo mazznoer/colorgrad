@@ -166,7 +166,7 @@ func (gb *GradientBuilder) Build() (Gradient, error) {
 	}
 
 	if len(gb.pos) > 0 && len(gb.pos) != len(gb.colors) {
-		return nil, fmt.Errorf("Domain count not equal colors count")
+		return nil, fmt.Errorf("Domain's count (if domain is specified) must equal colors' count")
 	}
 
 	if len(gb.pos) == 0 {
@@ -180,7 +180,7 @@ func (gb *GradientBuilder) Build() (Gradient, error) {
 
 	for i := 0; i < len(gb.pos)-1; i++ {
 		if gb.pos[i] > gb.pos[i+1] {
-			return nil, fmt.Errorf("Domain is wrong")
+			return nil, fmt.Errorf("Domain number %v (%v) is bigger than the next domain (%v)", i, gb.pos[i], gb.pos[i+1])
 		}
 	}
 
