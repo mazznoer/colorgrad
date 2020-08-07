@@ -45,7 +45,7 @@ func TestBasic1(t *testing.T) {
 	testStr(t, grad.At(0).Hex(), "#333333")
 	testStr(t, grad.At(1).Hex(), "#bbbbbb")
 
-	// Color names
+	// Named colors
 	grad, err = NewGradient().
 		HtmlColors("tomato", "skyblue", "gold", "springgreen").
 		Build()
