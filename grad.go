@@ -90,9 +90,10 @@ func (g gradient) Sharp(n uint) Gradient {
 }
 
 type GradientBuilder struct {
-	colors []colorful.Color
-	pos    []float64
-	mode   BlendMode
+	colors            []colorful.Color
+	pos               []float64
+	mode              BlendMode
+	invalidHtmlColors []string
 }
 
 func NewGradient() *GradientBuilder {
@@ -103,7 +104,6 @@ func NewGradient() *GradientBuilder {
 
 func (gb *GradientBuilder) Colors(colors ...color.Color) *GradientBuilder {
 	gb.colors = make([]colorful.Color, len(colors))
-
 	for i, v := range colors {
 		c, _ := colorful.MakeColor(v)
 		gb.colors[i] = c
@@ -113,6 +113,7 @@ func (gb *GradientBuilder) Colors(colors ...color.Color) *GradientBuilder {
 
 func (gb *GradientBuilder) HtmlColors(htmlColors ...string) *GradientBuilder {
 	colors := []colorful.Color{}
+	invalidColors := []string{}
 
 	for _, v := range htmlColors {
 		var col colorful.Color
@@ -123,11 +124,15 @@ func (gb *GradientBuilder) HtmlColors(htmlColors ...string) *GradientBuilder {
 		} else {
 			c, err := colorful.Hex(v)
 			if err != nil {
+				invalidColors = append(invalidColors, v)
 				continue
 			}
 			col = c
 		}
 		colors = append(colors, col)
+	}
+	if len(invalidColors) > 0 {
+		gb.invalidHtmlColors = invalidColors
 	}
 	gb.colors = colors
 	return gb
@@ -144,6 +149,10 @@ func (gb *GradientBuilder) Mode(mode BlendMode) *GradientBuilder {
 }
 
 func (gb *GradientBuilder) Build() (Gradient, error) {
+	if gb.invalidHtmlColors != nil {
+		return nil, fmt.Errorf("Invalid HTML colors: %v", gb.invalidHtmlColors)
+	}
+
 	if len(gb.colors) == 0 {
 		// Default colors
 		gb.colors = []colorful.Color{
@@ -172,8 +181,6 @@ func (gb *GradientBuilder) Build() (Gradient, error) {
 			return nil, fmt.Errorf("Domain is wrong")
 		}
 	}
-
-	//fmt.Printf("Pos: %v Colors: %v Mode: %v\n", gb.pos, gb.colors, gb.mode)
 
 	gradbase := gradientX{
 		colors: gb.colors,
