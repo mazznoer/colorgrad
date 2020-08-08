@@ -1,156 +1,153 @@
 package colorgrad
 
-import "image/color"
+import "github.com/lucasb-eyer/go-colorful"
 
-// Copied from golang.org/x/image/colornames
-
-// Map contains named colors defined in the SVG 1.1 spec.
-var colornames = map[string]color.RGBA{
-	"aliceblue":            color.RGBA{0xf0, 0xf8, 0xff, 0xff}, // rgb(240, 248, 255)
-	"antiquewhite":         color.RGBA{0xfa, 0xeb, 0xd7, 0xff}, // rgb(250, 235, 215)
-	"aqua":                 color.RGBA{0x00, 0xff, 0xff, 0xff}, // rgb(0, 255, 255)
-	"aquamarine":           color.RGBA{0x7f, 0xff, 0xd4, 0xff}, // rgb(127, 255, 212)
-	"azure":                color.RGBA{0xf0, 0xff, 0xff, 0xff}, // rgb(240, 255, 255)
-	"beige":                color.RGBA{0xf5, 0xf5, 0xdc, 0xff}, // rgb(245, 245, 220)
-	"bisque":               color.RGBA{0xff, 0xe4, 0xc4, 0xff}, // rgb(255, 228, 196)
-	"black":                color.RGBA{0x00, 0x00, 0x00, 0xff}, // rgb(0, 0, 0)
-	"blanchedalmond":       color.RGBA{0xff, 0xeb, 0xcd, 0xff}, // rgb(255, 235, 205)
-	"blue":                 color.RGBA{0x00, 0x00, 0xff, 0xff}, // rgb(0, 0, 255)
-	"blueviolet":           color.RGBA{0x8a, 0x2b, 0xe2, 0xff}, // rgb(138, 43, 226)
-	"brown":                color.RGBA{0xa5, 0x2a, 0x2a, 0xff}, // rgb(165, 42, 42)
-	"burlywood":            color.RGBA{0xde, 0xb8, 0x87, 0xff}, // rgb(222, 184, 135)
-	"cadetblue":            color.RGBA{0x5f, 0x9e, 0xa0, 0xff}, // rgb(95, 158, 160)
-	"chartreuse":           color.RGBA{0x7f, 0xff, 0x00, 0xff}, // rgb(127, 255, 0)
-	"chocolate":            color.RGBA{0xd2, 0x69, 0x1e, 0xff}, // rgb(210, 105, 30)
-	"coral":                color.RGBA{0xff, 0x7f, 0x50, 0xff}, // rgb(255, 127, 80)
-	"cornflowerblue":       color.RGBA{0x64, 0x95, 0xed, 0xff}, // rgb(100, 149, 237)
-	"cornsilk":             color.RGBA{0xff, 0xf8, 0xdc, 0xff}, // rgb(255, 248, 220)
-	"crimson":              color.RGBA{0xdc, 0x14, 0x3c, 0xff}, // rgb(220, 20, 60)
-	"cyan":                 color.RGBA{0x00, 0xff, 0xff, 0xff}, // rgb(0, 255, 255)
-	"darkblue":             color.RGBA{0x00, 0x00, 0x8b, 0xff}, // rgb(0, 0, 139)
-	"darkcyan":             color.RGBA{0x00, 0x8b, 0x8b, 0xff}, // rgb(0, 139, 139)
-	"darkgoldenrod":        color.RGBA{0xb8, 0x86, 0x0b, 0xff}, // rgb(184, 134, 11)
-	"darkgray":             color.RGBA{0xa9, 0xa9, 0xa9, 0xff}, // rgb(169, 169, 169)
-	"darkgreen":            color.RGBA{0x00, 0x64, 0x00, 0xff}, // rgb(0, 100, 0)
-	"darkgrey":             color.RGBA{0xa9, 0xa9, 0xa9, 0xff}, // rgb(169, 169, 169)
-	"darkkhaki":            color.RGBA{0xbd, 0xb7, 0x6b, 0xff}, // rgb(189, 183, 107)
-	"darkmagenta":          color.RGBA{0x8b, 0x00, 0x8b, 0xff}, // rgb(139, 0, 139)
-	"darkolivegreen":       color.RGBA{0x55, 0x6b, 0x2f, 0xff}, // rgb(85, 107, 47)
-	"darkorange":           color.RGBA{0xff, 0x8c, 0x00, 0xff}, // rgb(255, 140, 0)
-	"darkorchid":           color.RGBA{0x99, 0x32, 0xcc, 0xff}, // rgb(153, 50, 204)
-	"darkred":              color.RGBA{0x8b, 0x00, 0x00, 0xff}, // rgb(139, 0, 0)
-	"darksalmon":           color.RGBA{0xe9, 0x96, 0x7a, 0xff}, // rgb(233, 150, 122)
-	"darkseagreen":         color.RGBA{0x8f, 0xbc, 0x8f, 0xff}, // rgb(143, 188, 143)
-	"darkslateblue":        color.RGBA{0x48, 0x3d, 0x8b, 0xff}, // rgb(72, 61, 139)
-	"darkslategray":        color.RGBA{0x2f, 0x4f, 0x4f, 0xff}, // rgb(47, 79, 79)
-	"darkslategrey":        color.RGBA{0x2f, 0x4f, 0x4f, 0xff}, // rgb(47, 79, 79)
-	"darkturquoise":        color.RGBA{0x00, 0xce, 0xd1, 0xff}, // rgb(0, 206, 209)
-	"darkviolet":           color.RGBA{0x94, 0x00, 0xd3, 0xff}, // rgb(148, 0, 211)
-	"deeppink":             color.RGBA{0xff, 0x14, 0x93, 0xff}, // rgb(255, 20, 147)
-	"deepskyblue":          color.RGBA{0x00, 0xbf, 0xff, 0xff}, // rgb(0, 191, 255)
-	"dimgray":              color.RGBA{0x69, 0x69, 0x69, 0xff}, // rgb(105, 105, 105)
-	"dimgrey":              color.RGBA{0x69, 0x69, 0x69, 0xff}, // rgb(105, 105, 105)
-	"dodgerblue":           color.RGBA{0x1e, 0x90, 0xff, 0xff}, // rgb(30, 144, 255)
-	"firebrick":            color.RGBA{0xb2, 0x22, 0x22, 0xff}, // rgb(178, 34, 34)
-	"floralwhite":          color.RGBA{0xff, 0xfa, 0xf0, 0xff}, // rgb(255, 250, 240)
-	"forestgreen":          color.RGBA{0x22, 0x8b, 0x22, 0xff}, // rgb(34, 139, 34)
-	"fuchsia":              color.RGBA{0xff, 0x00, 0xff, 0xff}, // rgb(255, 0, 255)
-	"gainsboro":            color.RGBA{0xdc, 0xdc, 0xdc, 0xff}, // rgb(220, 220, 220)
-	"ghostwhite":           color.RGBA{0xf8, 0xf8, 0xff, 0xff}, // rgb(248, 248, 255)
-	"gold":                 color.RGBA{0xff, 0xd7, 0x00, 0xff}, // rgb(255, 215, 0)
-	"goldenrod":            color.RGBA{0xda, 0xa5, 0x20, 0xff}, // rgb(218, 165, 32)
-	"gray":                 color.RGBA{0x80, 0x80, 0x80, 0xff}, // rgb(128, 128, 128)
-	"green":                color.RGBA{0x00, 0x80, 0x00, 0xff}, // rgb(0, 128, 0)
-	"greenyellow":          color.RGBA{0xad, 0xff, 0x2f, 0xff}, // rgb(173, 255, 47)
-	"grey":                 color.RGBA{0x80, 0x80, 0x80, 0xff}, // rgb(128, 128, 128)
-	"honeydew":             color.RGBA{0xf0, 0xff, 0xf0, 0xff}, // rgb(240, 255, 240)
-	"hotpink":              color.RGBA{0xff, 0x69, 0xb4, 0xff}, // rgb(255, 105, 180)
-	"indianred":            color.RGBA{0xcd, 0x5c, 0x5c, 0xff}, // rgb(205, 92, 92)
-	"indigo":               color.RGBA{0x4b, 0x00, 0x82, 0xff}, // rgb(75, 0, 130)
-	"ivory":                color.RGBA{0xff, 0xff, 0xf0, 0xff}, // rgb(255, 255, 240)
-	"khaki":                color.RGBA{0xf0, 0xe6, 0x8c, 0xff}, // rgb(240, 230, 140)
-	"lavender":             color.RGBA{0xe6, 0xe6, 0xfa, 0xff}, // rgb(230, 230, 250)
-	"lavenderblush":        color.RGBA{0xff, 0xf0, 0xf5, 0xff}, // rgb(255, 240, 245)
-	"lawngreen":            color.RGBA{0x7c, 0xfc, 0x00, 0xff}, // rgb(124, 252, 0)
-	"lemonchiffon":         color.RGBA{0xff, 0xfa, 0xcd, 0xff}, // rgb(255, 250, 205)
-	"lightblue":            color.RGBA{0xad, 0xd8, 0xe6, 0xff}, // rgb(173, 216, 230)
-	"lightcoral":           color.RGBA{0xf0, 0x80, 0x80, 0xff}, // rgb(240, 128, 128)
-	"lightcyan":            color.RGBA{0xe0, 0xff, 0xff, 0xff}, // rgb(224, 255, 255)
-	"lightgoldenrodyellow": color.RGBA{0xfa, 0xfa, 0xd2, 0xff}, // rgb(250, 250, 210)
-	"lightgray":            color.RGBA{0xd3, 0xd3, 0xd3, 0xff}, // rgb(211, 211, 211)
-	"lightgreen":           color.RGBA{0x90, 0xee, 0x90, 0xff}, // rgb(144, 238, 144)
-	"lightgrey":            color.RGBA{0xd3, 0xd3, 0xd3, 0xff}, // rgb(211, 211, 211)
-	"lightpink":            color.RGBA{0xff, 0xb6, 0xc1, 0xff}, // rgb(255, 182, 193)
-	"lightsalmon":          color.RGBA{0xff, 0xa0, 0x7a, 0xff}, // rgb(255, 160, 122)
-	"lightseagreen":        color.RGBA{0x20, 0xb2, 0xaa, 0xff}, // rgb(32, 178, 170)
-	"lightskyblue":         color.RGBA{0x87, 0xce, 0xfa, 0xff}, // rgb(135, 206, 250)
-	"lightslategray":       color.RGBA{0x77, 0x88, 0x99, 0xff}, // rgb(119, 136, 153)
-	"lightslategrey":       color.RGBA{0x77, 0x88, 0x99, 0xff}, // rgb(119, 136, 153)
-	"lightsteelblue":       color.RGBA{0xb0, 0xc4, 0xde, 0xff}, // rgb(176, 196, 222)
-	"lightyellow":          color.RGBA{0xff, 0xff, 0xe0, 0xff}, // rgb(255, 255, 224)
-	"lime":                 color.RGBA{0x00, 0xff, 0x00, 0xff}, // rgb(0, 255, 0)
-	"limegreen":            color.RGBA{0x32, 0xcd, 0x32, 0xff}, // rgb(50, 205, 50)
-	"linen":                color.RGBA{0xfa, 0xf0, 0xe6, 0xff}, // rgb(250, 240, 230)
-	"magenta":              color.RGBA{0xff, 0x00, 0xff, 0xff}, // rgb(255, 0, 255)
-	"maroon":               color.RGBA{0x80, 0x00, 0x00, 0xff}, // rgb(128, 0, 0)
-	"mediumaquamarine":     color.RGBA{0x66, 0xcd, 0xaa, 0xff}, // rgb(102, 205, 170)
-	"mediumblue":           color.RGBA{0x00, 0x00, 0xcd, 0xff}, // rgb(0, 0, 205)
-	"mediumorchid":         color.RGBA{0xba, 0x55, 0xd3, 0xff}, // rgb(186, 85, 211)
-	"mediumpurple":         color.RGBA{0x93, 0x70, 0xdb, 0xff}, // rgb(147, 112, 219)
-	"mediumseagreen":       color.RGBA{0x3c, 0xb3, 0x71, 0xff}, // rgb(60, 179, 113)
-	"mediumslateblue":      color.RGBA{0x7b, 0x68, 0xee, 0xff}, // rgb(123, 104, 238)
-	"mediumspringgreen":    color.RGBA{0x00, 0xfa, 0x9a, 0xff}, // rgb(0, 250, 154)
-	"mediumturquoise":      color.RGBA{0x48, 0xd1, 0xcc, 0xff}, // rgb(72, 209, 204)
-	"mediumvioletred":      color.RGBA{0xc7, 0x15, 0x85, 0xff}, // rgb(199, 21, 133)
-	"midnightblue":         color.RGBA{0x19, 0x19, 0x70, 0xff}, // rgb(25, 25, 112)
-	"mintcream":            color.RGBA{0xf5, 0xff, 0xfa, 0xff}, // rgb(245, 255, 250)
-	"mistyrose":            color.RGBA{0xff, 0xe4, 0xe1, 0xff}, // rgb(255, 228, 225)
-	"moccasin":             color.RGBA{0xff, 0xe4, 0xb5, 0xff}, // rgb(255, 228, 181)
-	"navajowhite":          color.RGBA{0xff, 0xde, 0xad, 0xff}, // rgb(255, 222, 173)
-	"navy":                 color.RGBA{0x00, 0x00, 0x80, 0xff}, // rgb(0, 0, 128)
-	"oldlace":              color.RGBA{0xfd, 0xf5, 0xe6, 0xff}, // rgb(253, 245, 230)
-	"olive":                color.RGBA{0x80, 0x80, 0x00, 0xff}, // rgb(128, 128, 0)
-	"olivedrab":            color.RGBA{0x6b, 0x8e, 0x23, 0xff}, // rgb(107, 142, 35)
-	"orange":               color.RGBA{0xff, 0xa5, 0x00, 0xff}, // rgb(255, 165, 0)
-	"orangered":            color.RGBA{0xff, 0x45, 0x00, 0xff}, // rgb(255, 69, 0)
-	"orchid":               color.RGBA{0xda, 0x70, 0xd6, 0xff}, // rgb(218, 112, 214)
-	"palegoldenrod":        color.RGBA{0xee, 0xe8, 0xaa, 0xff}, // rgb(238, 232, 170)
-	"palegreen":            color.RGBA{0x98, 0xfb, 0x98, 0xff}, // rgb(152, 251, 152)
-	"paleturquoise":        color.RGBA{0xaf, 0xee, 0xee, 0xff}, // rgb(175, 238, 238)
-	"palevioletred":        color.RGBA{0xdb, 0x70, 0x93, 0xff}, // rgb(219, 112, 147)
-	"papayawhip":           color.RGBA{0xff, 0xef, 0xd5, 0xff}, // rgb(255, 239, 213)
-	"peachpuff":            color.RGBA{0xff, 0xda, 0xb9, 0xff}, // rgb(255, 218, 185)
-	"peru":                 color.RGBA{0xcd, 0x85, 0x3f, 0xff}, // rgb(205, 133, 63)
-	"pink":                 color.RGBA{0xff, 0xc0, 0xcb, 0xff}, // rgb(255, 192, 203)
-	"plum":                 color.RGBA{0xdd, 0xa0, 0xdd, 0xff}, // rgb(221, 160, 221)
-	"powderblue":           color.RGBA{0xb0, 0xe0, 0xe6, 0xff}, // rgb(176, 224, 230)
-	"purple":               color.RGBA{0x80, 0x00, 0x80, 0xff}, // rgb(128, 0, 128)
-	"red":                  color.RGBA{0xff, 0x00, 0x00, 0xff}, // rgb(255, 0, 0)
-	"rosybrown":            color.RGBA{0xbc, 0x8f, 0x8f, 0xff}, // rgb(188, 143, 143)
-	"royalblue":            color.RGBA{0x41, 0x69, 0xe1, 0xff}, // rgb(65, 105, 225)
-	"saddlebrown":          color.RGBA{0x8b, 0x45, 0x13, 0xff}, // rgb(139, 69, 19)
-	"salmon":               color.RGBA{0xfa, 0x80, 0x72, 0xff}, // rgb(250, 128, 114)
-	"sandybrown":           color.RGBA{0xf4, 0xa4, 0x60, 0xff}, // rgb(244, 164, 96)
-	"seagreen":             color.RGBA{0x2e, 0x8b, 0x57, 0xff}, // rgb(46, 139, 87)
-	"seashell":             color.RGBA{0xff, 0xf5, 0xee, 0xff}, // rgb(255, 245, 238)
-	"sienna":               color.RGBA{0xa0, 0x52, 0x2d, 0xff}, // rgb(160, 82, 45)
-	"silver":               color.RGBA{0xc0, 0xc0, 0xc0, 0xff}, // rgb(192, 192, 192)
-	"skyblue":              color.RGBA{0x87, 0xce, 0xeb, 0xff}, // rgb(135, 206, 235)
-	"slateblue":            color.RGBA{0x6a, 0x5a, 0xcd, 0xff}, // rgb(106, 90, 205)
-	"slategray":            color.RGBA{0x70, 0x80, 0x90, 0xff}, // rgb(112, 128, 144)
-	"slategrey":            color.RGBA{0x70, 0x80, 0x90, 0xff}, // rgb(112, 128, 144)
-	"snow":                 color.RGBA{0xff, 0xfa, 0xfa, 0xff}, // rgb(255, 250, 250)
-	"springgreen":          color.RGBA{0x00, 0xff, 0x7f, 0xff}, // rgb(0, 255, 127)
-	"steelblue":            color.RGBA{0x46, 0x82, 0xb4, 0xff}, // rgb(70, 130, 180)
-	"tan":                  color.RGBA{0xd2, 0xb4, 0x8c, 0xff}, // rgb(210, 180, 140)
-	"teal":                 color.RGBA{0x00, 0x80, 0x80, 0xff}, // rgb(0, 128, 128)
-	"thistle":              color.RGBA{0xd8, 0xbf, 0xd8, 0xff}, // rgb(216, 191, 216)
-	"tomato":               color.RGBA{0xff, 0x63, 0x47, 0xff}, // rgb(255, 99, 71)
-	"turquoise":            color.RGBA{0x40, 0xe0, 0xd0, 0xff}, // rgb(64, 224, 208)
-	"violet":               color.RGBA{0xee, 0x82, 0xee, 0xff}, // rgb(238, 130, 238)
-	"wheat":                color.RGBA{0xf5, 0xde, 0xb3, 0xff}, // rgb(245, 222, 179)
-	"white":                color.RGBA{0xff, 0xff, 0xff, 0xff}, // rgb(255, 255, 255)
-	"whitesmoke":           color.RGBA{0xf5, 0xf5, 0xf5, 0xff}, // rgb(245, 245, 245)
-	"yellow":               color.RGBA{0xff, 0xff, 0x00, 0xff}, // rgb(255, 255, 0)
-	"yellowgreen":          color.RGBA{0x9a, 0xcd, 0x32, 0xff}, // rgb(154, 205, 50)
+var colornames = map[string]colorful.Color{
+	"aliceblue":            {R: 0.9411764705882353, G: 0.9725490196078431, B: 1},
+	"antiquewhite":         {R: 0.9803921568627451, G: 0.9215686274509803, B: 0.8431372549019608},
+	"aqua":                 {R: 0, G: 1, B: 1},
+	"aquamarine":           {R: 0.4980392156862745, G: 1, B: 0.8313725490196079},
+	"azure":                {R: 0.9411764705882353, G: 1, B: 1},
+	"beige":                {R: 0.9607843137254902, G: 0.9607843137254902, B: 0.8627450980392157},
+	"bisque":               {R: 1, G: 0.8941176470588236, B: 0.7686274509803922},
+	"black":                {R: 0, G: 0, B: 0},
+	"blanchedalmond":       {R: 1, G: 0.9215686274509803, B: 0.803921568627451},
+	"blue":                 {R: 0, G: 0, B: 1},
+	"blueviolet":           {R: 0.5411764705882353, G: 0.16862745098039217, B: 0.8862745098039215},
+	"brown":                {R: 0.6470588235294118, G: 0.16470588235294117, B: 0.16470588235294117},
+	"burlywood":            {R: 0.8705882352941177, G: 0.7215686274509804, B: 0.5294117647058824},
+	"cadetblue":            {R: 0.37254901960784315, G: 0.6196078431372549, B: 0.6274509803921569},
+	"chartreuse":           {R: 0.4980392156862745, G: 1, B: 0},
+	"chocolate":            {R: 0.8235294117647058, G: 0.4117647058823529, B: 0.11764705882352941},
+	"coral":                {R: 1, G: 0.4980392156862745, B: 0.3137254901960784},
+	"cornflowerblue":       {R: 0.39215686274509803, G: 0.5843137254901961, B: 0.9294117647058824},
+	"cornsilk":             {R: 1, G: 0.9725490196078431, B: 0.8627450980392157},
+	"crimson":              {R: 0.8627450980392157, G: 0.0784313725490196, B: 0.23529411764705882},
+	"cyan":                 {R: 0, G: 1, B: 1},
+	"darkblue":             {R: 0, G: 0, B: 0.5450980392156862},
+	"darkcyan":             {R: 0, G: 0.5450980392156862, B: 0.5450980392156862},
+	"darkgoldenrod":        {R: 0.7215686274509804, G: 0.5254901960784314, B: 0.043137254901960784},
+	"darkgray":             {R: 0.6627450980392157, G: 0.6627450980392157, B: 0.6627450980392157},
+	"darkgreen":            {R: 0, G: 0.39215686274509803, B: 0},
+	"darkgrey":             {R: 0.6627450980392157, G: 0.6627450980392157, B: 0.6627450980392157},
+	"darkkhaki":            {R: 0.7411764705882353, G: 0.7176470588235294, B: 0.4196078431372549},
+	"darkmagenta":          {R: 0.5450980392156862, G: 0, B: 0.5450980392156862},
+	"darkolivegreen":       {R: 0.3333333333333333, G: 0.4196078431372549, B: 0.1843137254901961},
+	"darkorange":           {R: 1, G: 0.5490196078431373, B: 0},
+	"darkorchid":           {R: 0.6, G: 0.19607843137254902, B: 0.8},
+	"darkred":              {R: 0.5450980392156862, G: 0, B: 0},
+	"darksalmon":           {R: 0.9137254901960784, G: 0.5882352941176471, B: 0.47843137254901963},
+	"darkseagreen":         {R: 0.5607843137254902, G: 0.7372549019607844, B: 0.5607843137254902},
+	"darkslateblue":        {R: 0.2823529411764706, G: 0.23921568627450981, B: 0.5450980392156862},
+	"darkslategray":        {R: 0.1843137254901961, G: 0.30980392156862746, B: 0.30980392156862746},
+	"darkslategrey":        {R: 0.1843137254901961, G: 0.30980392156862746, B: 0.30980392156862746},
+	"darkturquoise":        {R: 0, G: 0.807843137254902, B: 0.8196078431372549},
+	"darkviolet":           {R: 0.5803921568627451, G: 0, B: 0.8274509803921568},
+	"deeppink":             {R: 1, G: 0.0784313725490196, B: 0.5764705882352941},
+	"deepskyblue":          {R: 0, G: 0.7490196078431373, B: 1},
+	"dimgray":              {R: 0.4117647058823529, G: 0.4117647058823529, B: 0.4117647058823529},
+	"dimgrey":              {R: 0.4117647058823529, G: 0.4117647058823529, B: 0.4117647058823529},
+	"dodgerblue":           {R: 0.11764705882352941, G: 0.5647058823529412, B: 1},
+	"firebrick":            {R: 0.6980392156862745, G: 0.13333333333333333, B: 0.13333333333333333},
+	"floralwhite":          {R: 1, G: 0.9803921568627451, B: 0.9411764705882353},
+	"forestgreen":          {R: 0.13333333333333333, G: 0.5450980392156862, B: 0.13333333333333333},
+	"fuchsia":              {R: 1, G: 0, B: 1},
+	"gainsboro":            {R: 0.8627450980392157, G: 0.8627450980392157, B: 0.8627450980392157},
+	"ghostwhite":           {R: 0.9725490196078431, G: 0.9725490196078431, B: 1},
+	"gold":                 {R: 1, G: 0.8431372549019608, B: 0},
+	"goldenrod":            {R: 0.8549019607843137, G: 0.6470588235294118, B: 0.12549019607843137},
+	"gray":                 {R: 0.5019607843137255, G: 0.5019607843137255, B: 0.5019607843137255},
+	"green":                {R: 0, G: 0.5019607843137255, B: 0},
+	"greenyellow":          {R: 0.6784313725490196, G: 1, B: 0.1843137254901961},
+	"grey":                 {R: 0.5019607843137255, G: 0.5019607843137255, B: 0.5019607843137255},
+	"honeydew":             {R: 0.9411764705882353, G: 1, B: 0.9411764705882353},
+	"hotpink":              {R: 1, G: 0.4117647058823529, B: 0.7058823529411765},
+	"indianred":            {R: 0.803921568627451, G: 0.3607843137254902, B: 0.3607843137254902},
+	"indigo":               {R: 0.29411764705882354, G: 0, B: 0.5098039215686274},
+	"ivory":                {R: 1, G: 1, B: 0.9411764705882353},
+	"khaki":                {R: 0.9411764705882353, G: 0.9019607843137255, B: 0.5490196078431373},
+	"lavender":             {R: 0.9019607843137255, G: 0.9019607843137255, B: 0.9803921568627451},
+	"lavenderblush":        {R: 1, G: 0.9411764705882353, B: 0.9607843137254902},
+	"lawngreen":            {R: 0.48627450980392156, G: 0.9882352941176471, B: 0},
+	"lemonchiffon":         {R: 1, G: 0.9803921568627451, B: 0.803921568627451},
+	"lightblue":            {R: 0.6784313725490196, G: 0.8470588235294118, B: 0.9019607843137255},
+	"lightcoral":           {R: 0.9411764705882353, G: 0.5019607843137255, B: 0.5019607843137255},
+	"lightcyan":            {R: 0.8784313725490196, G: 1, B: 1},
+	"lightgoldenrodyellow": {R: 0.9803921568627451, G: 0.9803921568627451, B: 0.8235294117647058},
+	"lightgray":            {R: 0.8274509803921568, G: 0.8274509803921568, B: 0.8274509803921568},
+	"lightgreen":           {R: 0.5647058823529412, G: 0.9333333333333333, B: 0.5647058823529412},
+	"lightgrey":            {R: 0.8274509803921568, G: 0.8274509803921568, B: 0.8274509803921568},
+	"lightpink":            {R: 1, G: 0.7137254901960784, B: 0.7568627450980392},
+	"lightsalmon":          {R: 1, G: 0.6274509803921569, B: 0.47843137254901963},
+	"lightseagreen":        {R: 0.12549019607843137, G: 0.6980392156862745, B: 0.6666666666666666},
+	"lightskyblue":         {R: 0.5294117647058824, G: 0.807843137254902, B: 0.9803921568627451},
+	"lightslategray":       {R: 0.4666666666666667, G: 0.5333333333333333, B: 0.6},
+	"lightslategrey":       {R: 0.4666666666666667, G: 0.5333333333333333, B: 0.6},
+	"lightsteelblue":       {R: 0.6901960784313725, G: 0.7686274509803922, B: 0.8705882352941177},
+	"lightyellow":          {R: 1, G: 1, B: 0.8784313725490196},
+	"lime":                 {R: 0, G: 1, B: 0},
+	"limegreen":            {R: 0.19607843137254902, G: 0.803921568627451, B: 0.19607843137254902},
+	"linen":                {R: 0.9803921568627451, G: 0.9411764705882353, B: 0.9019607843137255},
+	"magenta":              {R: 1, G: 0, B: 1},
+	"maroon":               {R: 0.5019607843137255, G: 0, B: 0},
+	"mediumaquamarine":     {R: 0.4, G: 0.803921568627451, B: 0.6666666666666666},
+	"mediumblue":           {R: 0, G: 0, B: 0.803921568627451},
+	"mediumorchid":         {R: 0.7294117647058823, G: 0.3333333333333333, B: 0.8274509803921568},
+	"mediumpurple":         {R: 0.5764705882352941, G: 0.4392156862745098, B: 0.8588235294117647},
+	"mediumseagreen":       {R: 0.23529411764705882, G: 0.7019607843137254, B: 0.44313725490196076},
+	"mediumslateblue":      {R: 0.4823529411764706, G: 0.40784313725490196, B: 0.9333333333333333},
+	"mediumspringgreen":    {R: 0, G: 0.9803921568627451, B: 0.6039215686274509},
+	"mediumturquoise":      {R: 0.2823529411764706, G: 0.8196078431372549, B: 0.8},
+	"mediumvioletred":      {R: 0.7803921568627451, G: 0.08235294117647059, B: 0.5215686274509804},
+	"midnightblue":         {R: 0.09803921568627451, G: 0.09803921568627451, B: 0.4392156862745098},
+	"mintcream":            {R: 0.9607843137254902, G: 1, B: 0.9803921568627451},
+	"mistyrose":            {R: 1, G: 0.8941176470588236, B: 0.8823529411764706},
+	"moccasin":             {R: 1, G: 0.8941176470588236, B: 0.7098039215686275},
+	"navajowhite":          {R: 1, G: 0.8705882352941177, B: 0.6784313725490196},
+	"navy":                 {R: 0, G: 0, B: 0.5019607843137255},
+	"oldlace":              {R: 0.9921568627450981, G: 0.9607843137254902, B: 0.9019607843137255},
+	"olive":                {R: 0.5019607843137255, G: 0.5019607843137255, B: 0},
+	"olivedrab":            {R: 0.4196078431372549, G: 0.5568627450980392, B: 0.13725490196078433},
+	"orange":               {R: 1, G: 0.6470588235294118, B: 0},
+	"orangered":            {R: 1, G: 0.27058823529411763, B: 0},
+	"orchid":               {R: 0.8549019607843137, G: 0.4392156862745098, B: 0.8392156862745098},
+	"palegoldenrod":        {R: 0.9333333333333333, G: 0.9098039215686274, B: 0.6666666666666666},
+	"palegreen":            {R: 0.596078431372549, G: 0.984313725490196, B: 0.596078431372549},
+	"paleturquoise":        {R: 0.6862745098039216, G: 0.9333333333333333, B: 0.9333333333333333},
+	"palevioletred":        {R: 0.8588235294117647, G: 0.4392156862745098, B: 0.5764705882352941},
+	"papayawhip":           {R: 1, G: 0.9372549019607843, B: 0.8352941176470589},
+	"peachpuff":            {R: 1, G: 0.8549019607843137, B: 0.7254901960784313},
+	"peru":                 {R: 0.803921568627451, G: 0.5215686274509804, B: 0.24705882352941178},
+	"pink":                 {R: 1, G: 0.7529411764705882, B: 0.796078431372549},
+	"plum":                 {R: 0.8666666666666667, G: 0.6274509803921569, B: 0.8666666666666667},
+	"powderblue":           {R: 0.6901960784313725, G: 0.8784313725490196, B: 0.9019607843137255},
+	"purple":               {R: 0.5019607843137255, G: 0, B: 0.5019607843137255},
+	"red":                  {R: 1, G: 0, B: 0},
+	"rosybrown":            {R: 0.7372549019607844, G: 0.5607843137254902, B: 0.5607843137254902},
+	"royalblue":            {R: 0.2549019607843137, G: 0.4117647058823529, B: 0.8823529411764706},
+	"saddlebrown":          {R: 0.5450980392156862, G: 0.27058823529411763, B: 0.07450980392156863},
+	"salmon":               {R: 0.9803921568627451, G: 0.5019607843137255, B: 0.4470588235294118},
+	"sandybrown":           {R: 0.9568627450980393, G: 0.6431372549019608, B: 0.3764705882352941},
+	"seagreen":             {R: 0.1803921568627451, G: 0.5450980392156862, B: 0.3411764705882353},
+	"seashell":             {R: 1, G: 0.9607843137254902, B: 0.9333333333333333},
+	"sienna":               {R: 0.6274509803921569, G: 0.3215686274509804, B: 0.17647058823529413},
+	"silver":               {R: 0.7529411764705882, G: 0.7529411764705882, B: 0.7529411764705882},
+	"skyblue":              {R: 0.5294117647058824, G: 0.807843137254902, B: 0.9215686274509803},
+	"slateblue":            {R: 0.41568627450980394, G: 0.35294117647058826, B: 0.803921568627451},
+	"slategray":            {R: 0.4392156862745098, G: 0.5019607843137255, B: 0.5647058823529412},
+	"slategrey":            {R: 0.4392156862745098, G: 0.5019607843137255, B: 0.5647058823529412},
+	"snow":                 {R: 1, G: 0.9803921568627451, B: 0.9803921568627451},
+	"springgreen":          {R: 0, G: 1, B: 0.4980392156862745},
+	"steelblue":            {R: 0.27450980392156865, G: 0.5098039215686274, B: 0.7058823529411765},
+	"tan":                  {R: 0.8235294117647058, G: 0.7058823529411765, B: 0.5490196078431373},
+	"teal":                 {R: 0, G: 0.5019607843137255, B: 0.5019607843137255},
+	"thistle":              {R: 0.8470588235294118, G: 0.7490196078431373, B: 0.8470588235294118},
+	"tomato":               {R: 1, G: 0.38823529411764707, B: 0.2784313725490196},
+	"turquoise":            {R: 0.25098039215686274, G: 0.8784313725490196, B: 0.8156862745098039},
+	"violet":               {R: 0.9333333333333333, G: 0.5098039215686274, B: 0.9333333333333333},
+	"wheat":                {R: 0.9607843137254902, G: 0.8705882352941177, B: 0.7019607843137254},
+	"white":                {R: 1, G: 1, B: 1},
+	"whitesmoke":           {R: 0.9607843137254902, G: 0.9607843137254902, B: 0.9607843137254902},
+	"yellow":               {R: 1, G: 1, B: 0},
+	"yellowgreen":          {R: 0.6039215686274509, G: 0.803921568627451, B: 0.19607843137254902},
 }
