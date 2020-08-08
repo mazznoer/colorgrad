@@ -183,8 +183,8 @@ func TestSharp(t *testing.T) {
 
 func TestGetColors(t *testing.T) {
 	grad, _ := NewGradient().Build()
-	colors1 := grad.Colors(5)  // []colorful.Color
-	colors2 := grad.Colors2(5) // []color.Color
+	colors1 := grad.Colors(5)   // []colorful.Color
+	colors2 := grad.GoColors(5) // []color.Color
 
 	for i, c2 := range colors2 {
 		var c1 color.Color = colors1[i]
