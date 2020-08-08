@@ -11,7 +11,7 @@ import (
 func main() {
 	grad, _ := colorgrad.NewGradient().Build()
 	w := 900
-	h := 80
+	h := 90
 	fw := float64(w)
 
 	img := image.NewRGBA(image.Rect(0, 0, w, h))
