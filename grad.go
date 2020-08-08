@@ -117,9 +117,8 @@ func (gb *GradientBuilder) HtmlColors(htmlColors ...string) *GradientBuilder {
 
 	for _, v := range htmlColors {
 		var col colorful.Color
-		c1, ok := colornames[strings.ToLower(v)]
+		c, ok := colornames[strings.ToLower(v)]
 		if ok {
-			c, _ := colorful.MakeColor(c1)
 			col = c
 		} else {
 			c, err := colorful.Hex(v)
