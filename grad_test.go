@@ -94,6 +94,13 @@ func TestBasic1(t *testing.T) {
 		Build()
 	testStr(t, grad.At(0).Hex(), "#333333")
 	testStr(t, grad.At(1).Hex(), "#bbbbbb")
+
+	grad, err = NewGradient().
+		HtmlColors("#333", "#bbb").
+		Mode(RGB).
+		Build()
+	testStr(t, grad.At(0).Hex(), "#333333")
+	testStr(t, grad.At(1).Hex(), "#bbbbbb")
 }
 
 func TestBasic2(t *testing.T) {
