@@ -165,6 +165,8 @@ grad1, err := colorgrad.NewGradient().
 
 ```go
 grad2 := grad1.Sharp(7)
+
+dmin, dmax := grad2.Domain() // 0, 100 -- same as original gradient
 ```
 ![img](img/classes-gradient.png)
 
@@ -173,7 +175,6 @@ grad2 := grad1.Sharp(7)
 ```go
 grad := colorgrad.Rainbow()
 
-dmin, dmax := grad.Domain()
 c := grad.At(t) // t in the range 0..1
 colors := grad.Colors(5)
 
