@@ -33,9 +33,9 @@ type Gradient interface {
 	Colors(uint) []colorful.Color
 
 	// Get n colors evenly spaced across gradient
-	Colors2(uint) []color.Color // todo: rename
+	GoColors(uint) []color.Color
 
-	// Get the gradient domain
+	// Get the gradient domain min and max
 	Domain() (float64, float64)
 
 	// Return a new sharp gradient
@@ -62,7 +62,7 @@ func (g gradient) Colors(count uint) []colorful.Color {
 	return colors
 }
 
-func (g gradient) Colors2(count uint) []color.Color {
+func (g gradient) GoColors(count uint) []color.Color {
 	colors := make([]color.Color, count)
 	for i, col := range g.Colors(count) {
 		colors[i] = col
