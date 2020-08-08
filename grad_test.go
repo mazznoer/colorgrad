@@ -11,6 +11,10 @@ func TestBasic1(t *testing.T) {
 	grad, err := NewGradient().
 		Colors(color.RGBA{0, 255, 0, 255}).
 		Build()
+	dmin, dmax := grad.Domain()
+	if dmin != 0 || dmax != 1 {
+		t.Errorf("Domain got: (%v, %v), expected: (0, 1)", dmin, dmax)
+	}
 	testStr(t, grad.At(0).Hex(), "#00ff00")
 	testStr(t, grad.At(1).Hex(), "#00ff00")
 
