@@ -30,15 +30,15 @@ type Gradient interface {
 	At(float64) colorful.Color
 
 	// Get n colors evenly spaced across gradient
-	Colors(uint) []colorful.Color
+	ColorfulColors(uint) []colorful.Color
 
 	// Get n colors evenly spaced across gradient
-	GoColors(uint) []color.Color
+	Colors(uint) []color.Color
 
 	// Get the gradient domain min and max
 	Domain() (float64, float64)
 
-	// Return a new sharp gradient
+	// Return a new hard-edge gradient
 	Sharp(uint) Gradient
 }
 
@@ -52,7 +52,7 @@ func (g gradient) At(t float64) colorful.Color {
 	return g.grad.At(t)
 }
 
-func (g gradient) Colors(count uint) []colorful.Color {
+func (g gradient) ColorfulColors(count uint) []colorful.Color {
 	d := g.max - g.min
 	l := float64(count - 1)
 	colors := make([]colorful.Color, count)
@@ -62,9 +62,9 @@ func (g gradient) Colors(count uint) []colorful.Color {
 	return colors
 }
 
-func (g gradient) GoColors(count uint) []color.Color {
+func (g gradient) Colors(count uint) []color.Color {
 	colors := make([]color.Color, count)
-	for i, col := range g.Colors(count) {
+	for i, col := range g.ColorfulColors(count) {
 		colors[i] = col
 	}
 	return colors
@@ -76,7 +76,7 @@ func (g gradient) Domain() (float64, float64) {
 
 func (g gradient) Sharp(n uint) Gradient {
 	gradbase := sharpGradient{
-		colors: g.Colors(n),
+		colors: g.ColorfulColors(n),
 		pos:    linspace(g.min, g.max, n+1),
 		n:      int(n),
 		min:    g.min,
