@@ -53,7 +53,7 @@ func TestBasic1(t *testing.T) {
 	grad, err = NewGradient().
 		HtmlColors("tomato", "skyblue", "gold", "springgreen").
 		Build()
-	colors := grad.Colors(4)
+	colors := grad.ColorfulColors(4)
 	testStr(t, colors[0].Hex(), "#ff6347")
 	testStr(t, colors[1].Hex(), "#87ceeb")
 	testStr(t, colors[2].Hex(), "#ffd700")
@@ -105,7 +105,7 @@ func TestBasic1(t *testing.T) {
 
 func TestBasic2(t *testing.T) {
 	grad, _ := NewGradient().Build()
-	colors := grad.Colors(2)
+	colors := grad.ColorfulColors(2)
 
 	if len(colors) != 2 {
 		t.Errorf("Expected 2, got %v", len(colors))
@@ -122,7 +122,7 @@ func TestBasic2(t *testing.T) {
 			color.RGBA{0, 0, 255, 255},
 		).
 		Build()
-	colors = grad.Colors(3)
+	colors = grad.ColorfulColors(3)
 
 	if len(colors) != 3 {
 		t.Errorf("Expected 3, got %v", len(colors))
@@ -173,7 +173,7 @@ func TestSharp(t *testing.T) {
 	testStr(t, grad2.At(-0.01).Hex(), "#000000")
 	testStr(t, grad2.At(1.01).Hex(), "#ffffff")
 
-	colors := grad2.Colors(7)
+	colors := grad2.ColorfulColors(7)
 	if len(colors) != 7 {
 		t.Errorf("Expected 7, got %v", len(colors))
 	}
@@ -183,8 +183,8 @@ func TestSharp(t *testing.T) {
 
 func TestGetColors(t *testing.T) {
 	grad, _ := NewGradient().Build()
-	colors1 := grad.Colors(5)   // []colorful.Color
-	colors2 := grad.GoColors(5) // []color.Color
+	colors1 := grad.ColorfulColors(5) // []colorful.Color
+	colors2 := grad.Colors(5)         // []color.Color
 
 	for i, c2 := range colors2 {
 		var c1 color.Color = colors1[i]
