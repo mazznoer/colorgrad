@@ -48,6 +48,7 @@ dmin, dmax := grad.Domain()
 // t in the range dmin..dmax (default to 0..1)
 c1 := grad.At(t)       // colorful.Color
 c2 := grad.At(t).Hex() // hex color string
+var c3 color.Color = grad.At(t) // color.Color
 
 // Get n colors evenly spaced across gradient.
 colors1 := grad.ColorfulColors(9) // []colorful.Color
