@@ -46,11 +46,12 @@ dmin, dmax := grad.Domain()
 
 // Get single color at certain position.
 // t in the range dmin..dmax (default to 0..1)
-c1 := grad.At(t) // colorful.Color
+c1 := grad.At(t)       // colorful.Color
 c2 := grad.At(t).Hex() // hex color string
 
 // Get n colors evenly spaced across gradient.
-colors := grad.Colors(17) // []colorful.Color
+colors1 := grad.ColorfulColors(9) // []colorful.Color
+colors2 := grad.Colors(23)        // []color.Color
 ```
 ![img](img/black-to-white.png)
 
@@ -176,8 +177,8 @@ dmin, dmax := grad2.Domain() // 0, 100 -- same as original gradient
 grad := colorgrad.Rainbow()
 
 c := grad.At(t) // t in the range 0..1
-colors := grad.Colors(5)
-
+colors1 := grad.ColorfulColors(5)
+colors2 := grad.Colors(17)
 grad2 := grad.Sharp(13)
 ```
 
