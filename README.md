@@ -42,14 +42,17 @@ if err != nil {
     panic(err)
 }
 
+dmin, dmax := grad.Domain()
+
 // Get single color at certain position.
-grad.At(0) // colorful.Color
-grad.At(0.5).Hex() // hex color string
-grad.At(1)
+// t in the range dmin..dmax (default to 0..1)
+c1 := grad.At(t)       // colorful.Color
+c2 := grad.At(t).Hex() // hex color string
+var c3 color.Color = grad.At(t) // color.Color
 
 // Get n colors evenly spaced across gradient.
-grad.Colors(27) // []colorful.Color
-colorgrad.IntoColors(grad.Colors(10)) // []color.Color
+colors1 := grad.ColorfulColors(9) // []colorful.Color
+colors2 := grad.Colors(23)        // []color.Color
 ```
 ![img](img/black-to-white.png)
 
@@ -163,18 +166,21 @@ grad1, err := colorgrad.NewGradient().
 ![img](img/normal-gradient.png)
 
 ```go
-grad2 := colorgrad.SharpGradient(grad1, 7)
+grad2 := grad1.Sharp(7)
+
+dmin, dmax := grad2.Domain() // 0, 100 -- same as original gradient
 ```
 ![img](img/classes-gradient.png)
-
-Note: Result gradient from `SharpGradient()` will always in the range `0..1`.
 
 ### Preset Gradients
 
 ```go
 grad := colorgrad.Rainbow()
-grad.At(t) // t in the range 0..1
-grad.Colors(15)
+
+c := grad.At(t) // t in the range 0..1
+colors1 := grad.ColorfulColors(5)
+colors2 := grad.Colors(17)
+grad2 := grad.Sharp(13)
 ```
 
 #### Diverging

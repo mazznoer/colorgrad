@@ -4,7 +4,7 @@ import (
 	"testing"
 )
 
-func TestFn(t *testing.T) {
+func TestGradientFn(t *testing.T) {
 	testFn(t, Cividis())
 	testFn(t, Sinebow())
 	testFn(t, Turbo())
@@ -13,6 +13,16 @@ func TestFn(t *testing.T) {
 	testFn(t, Cool())
 	testFn(t, Warm())
 	testFn(t, Rainbow())
+}
+
+func TestCyclicalGradient(t *testing.T) {
+	var grad Gradient
+
+	grad = Rainbow()
+	testStr(t, grad.At(0).Hex(), grad.At(1).Hex())
+
+	grad = Sinebow()
+	testStr(t, grad.At(0).Hex(), grad.At(1).Hex())
 }
 
 func testFn(t *testing.T, grad Gradient) {
