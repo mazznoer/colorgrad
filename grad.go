@@ -213,9 +213,9 @@ func (gx gradientX) At(t float64) colorful.Color {
 		return gx.colors[0]
 	}
 
-	if t > gx.max {
-		return gx.colors[gx.count-1]
-	}
+	//if t > gx.max {
+	//	return gx.colors[gx.count-1]
+	//}
 
 	for i := 0; i < gx.count-1; i++ {
 		p1 := gx.pos[i]
@@ -258,9 +258,9 @@ func (sg sharpGradient) At(t float64) colorful.Color {
 		return sg.colors[0]
 	}
 
-	if t > sg.max {
-		return sg.colors[sg.n-1]
-	}
+	//if t > sg.max {
+	//	return sg.colors[sg.n-1]
+	//}
 
 	for i := 0; i < sg.n; i++ {
 		if (sg.pos[i] <= t) && (t <= sg.pos[i+1]) {
