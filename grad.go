@@ -57,7 +57,7 @@ func (g gradient) ColorfulColors(count uint) []colorful.Color {
 	l := float64(count - 1)
 	colors := make([]colorful.Color, count)
 	for i := range colors {
-		colors[i] = g.grad.At(g.min + (float64(i)*d)/l)
+		colors[i] = g.grad.At(g.min + (float64(i)*d)/l).Clamped()
 	}
 	return colors
 }
