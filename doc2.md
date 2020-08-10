@@ -9,7 +9,7 @@ Fun & easy way to create _color gradient_ / _color scales_ in __Go__ (__Golang__
 
 ![color-scale](img/color-scale-1.png)
 <!--
-### Index
+## Index
 
 * [Usages](#usages)
   - [Basic](#basic)
@@ -42,7 +42,7 @@ colors2 := grad.Colors(17)
 grad2 := grad.Sharp(13)
 ```
 -->
-### Diverging
+#### Diverging
 
 `colorgrad.BrBG()`
 ![img](img/gradient-BrBG.png)
@@ -128,7 +128,7 @@ grad2 := grad.Sharp(13)
 `colorgrad.Sinebow()`
 ![img](img/gradient-sinebow.png)
 
-### Custom Gradient
+## Custom Gradient
 
 #### Basic
 
@@ -194,7 +194,7 @@ grad, err := colorgrad.NewGradient().
 ```
 ![img](img/named-colors.png)
 
-#### Custom Domain
+#### Custom Domain & Color Position
 
 ```go
 grad, err := colorgrad.NewGradient().
@@ -252,7 +252,7 @@ Without `Clamped()`
 With `Clamped()`
 ![valid rgb](img/clamped.png)
 
-### Gradient Methods
+## Gradient Methods
 
 _TODO_
 
@@ -273,7 +273,7 @@ dmin, dmax := grad2.Domain() // 0, 100 -- same as original gradient
 ```
 ![img](img/classes-gradient.png)
 
-### Color Scheme
+## Color Scheme
 
 `colorgrad.Scheme.Accent`
 ![img](img/scheme-accent.png)
@@ -302,7 +302,7 @@ dmin, dmax := grad2.Domain() // 0, 100 -- same as original gradient
 `colorgrad.Scheme.Set3`
 ![img](img/scheme-set3.png)
 
-### Gallery
+## Gallery
 
 Noise + hard-edged gradient
 ![noise](img/noise-2.png)
@@ -310,16 +310,16 @@ Noise + hard-edged gradient
 Random _cool_ colors
 ![random-color](img/random-cool.png)
 
-### Playground
+## Playground
 
 * [Basic](https://play.golang.org/p/qoUQvzOkceg)
 * [Random colors](https://play.golang.org/p/d67x9di4sAF)
 
-### Dependencies
+## Dependencies
 
 * [colorful](https://github.com/lucasb-eyer/go-colorful)
 
-### Inspirations
+## Inspirations
 
 * [chroma.js](https://github.com/gka/chroma.js)
 * [d3-scale-chromatic](https://github.com/d3/d3-scale-chromatic/)
