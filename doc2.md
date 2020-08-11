@@ -274,6 +274,11 @@ dmin, dmax := grad2.Domain() // 0, 100 -- same as original gradient
 ```
 ![img](img/classes-gradient.png)
 
+```go
+grad := colorgrad.Spectral().Sharp(19)
+```
+![img](img/spectral-sharp.png)
+
 ## Color Scheme
 
 `colorgrad.Scheme.Accent`
