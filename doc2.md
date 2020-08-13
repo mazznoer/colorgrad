@@ -348,3 +348,4 @@ Random _cool_ colors
 
 * [chroma.js](https://github.com/gka/chroma.js)
 * [d3-scale-chromatic](https://github.com/d3/d3-scale-chromatic/)
+* colorful's [gradientgen.go](https://github.com/lucasb-eyer/go-colorful/blob/master/doc/gradientgen/gradientgen.go)
