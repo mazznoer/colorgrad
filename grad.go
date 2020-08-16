@@ -163,7 +163,7 @@ func (gb *GradientBuilder) Build() (Gradient, error) {
 	}
 
 	if gb.invalidHtmlColors != nil {
-		return zgrad, fmt.Errorf("Invalid HTML colors: %v", gb.invalidHtmlColors)
+		return zgrad, fmt.Errorf("Invalid HTML colors: %q", gb.invalidHtmlColors)
 	}
 
 	if len(gb.colors) == 0 {
