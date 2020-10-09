@@ -29,8 +29,8 @@ func TestPreset(t *testing.T) {
 }
 
 func testGrad(t *testing.T, grad Gradient, start, end string) {
-	if grad == nil {
-		t.Errorf("Grad is nil")
+	if isZeroGradient(grad) {
+		t.Errorf("Grad is zeroGradient")
 	}
 
 	a := grad.At(0).Hex()

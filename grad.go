@@ -89,6 +89,12 @@ func (g gradient) Sharp(n uint) Gradient {
 	}
 }
 
+type zeroGradient struct{}
+
+func (zg zeroGradient) At(t float64) colorful.Color {
+	return colorful.Color{R: 0, G: 0, B: 0}
+}
+
 type GradientBuilder struct {
 	colors            []colorful.Color
 	pos               []float64
@@ -150,22 +156,28 @@ func (gb *GradientBuilder) Mode(mode BlendMode) *GradientBuilder {
 }
 
 func (gb *GradientBuilder) Build() (Gradient, error) {
+	zgrad := gradient{
+		grad: zeroGradient{},
+		min:  0,
+		max:  1,
+	}
+
 	if gb.invalidHtmlColors != nil {
-		return nil, fmt.Errorf("Invalid HTML colors: %v", gb.invalidHtmlColors)
+		return zgrad, fmt.Errorf("Invalid HTML colors: %q", gb.invalidHtmlColors)
 	}
 
 	if len(gb.colors) == 0 {
 		// Default colors
 		gb.colors = []colorful.Color{
-			colorful.Hsv(0, 0, 0), // black
-			colorful.Hsv(0, 0, 1), // white
+			colorful.Color{R: 0, G: 0, B: 0}, // black
+			colorful.Color{R: 1, G: 1, B: 1}, // white
 		}
 	} else if len(gb.colors) == 1 {
 		gb.colors = append(gb.colors, gb.colors[0])
 	}
 
 	if len(gb.pos) > 0 && len(gb.pos) != len(gb.colors) {
-		return nil, fmt.Errorf("Domain's count (if domain is specified) must equal colors' count")
+		return zgrad, fmt.Errorf("Domain's count (if domain is specified) must equal colors' count")
 	}
 
 	if len(gb.pos) == 0 {
@@ -179,7 +191,7 @@ func (gb *GradientBuilder) Build() (Gradient, error) {
 
 	for i := 0; i < len(gb.pos)-1; i++ {
 		if gb.pos[i] > gb.pos[i+1] {
-			return nil, fmt.Errorf("Domain number %v (%v) is bigger than the next domain (%v)", i, gb.pos[i], gb.pos[i+1])
+			return zgrad, fmt.Errorf("Domain number %v (%v) is bigger than the next domain (%v)", i+1, gb.pos[i], gb.pos[i+1])
 		}
 	}
 

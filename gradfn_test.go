@@ -26,6 +26,10 @@ func TestCyclicalGradient(t *testing.T) {
 }
 
 func testFn(t *testing.T, grad Gradient) {
+	if isZeroGradient(grad) {
+		t.Error("grad is zeroGradient")
+	}
+
 	n := len(grad.Colors(9))
 	if n != 9 {
 		t.Errorf("Expected 9, got %v", n)

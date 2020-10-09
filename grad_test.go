@@ -4,6 +4,8 @@ import (
 	"image/color"
 	"math"
 	"testing"
+
+	"github.com/lucasb-eyer/go-colorful"
 )
 
 func TestBasic1(t *testing.T) {
@@ -26,8 +28,8 @@ func TestBasic1(t *testing.T) {
 	if err == nil {
 		t.Errorf("It should error")
 	}
-	if grad != nil {
-		t.Errorf("grad should nil")
+	if !isZeroGradient(grad) {
+		t.Errorf("It should zeroGradient")
 	}
 
 	// Wrong domain
@@ -38,8 +40,8 @@ func TestBasic1(t *testing.T) {
 	if err == nil {
 		t.Errorf("It should error")
 	}
-	if grad != nil {
-		t.Errorf("grad should nil")
+	if !isZeroGradient(grad) {
+		t.Errorf("It should zeroGradient")
 	}
 
 	// Invalid HTML colors
@@ -49,8 +51,8 @@ func TestBasic1(t *testing.T) {
 	if err == nil {
 		t.Errorf("It should error")
 	}
-	if grad != nil {
-		t.Errorf("grad should nil")
+	if !isZeroGradient(grad) {
+		t.Errorf("It should zeroGradient")
 	}
 
 	// Named colors
@@ -202,4 +204,19 @@ func testStr(t *testing.T, result, expected string) {
 	if result != expected {
 		t.Errorf("Expected %v, got %v", expected, result)
 	}
+}
+
+func isZeroGradient(grad Gradient) bool {
+	dmin, dmax := grad.Domain()
+	if dmin != 0 || dmax != 1 {
+		return false
+	}
+	colors := grad.ColorfulColors(13)
+	black := colorful.Color{R: 0, G: 0, B: 0}
+	for _, col := range colors {
+		if col != black {
+			return false
+		}
+	}
+	return true
 }

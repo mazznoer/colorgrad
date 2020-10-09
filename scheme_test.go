@@ -20,12 +20,12 @@ func TestScheme(t *testing.T) {
 }
 
 func testScheme(t *testing.T, colors []color.Color) {
-	grad, _ := NewGradient().
+	grad, err := NewGradient().
 		Colors(colors...).
 		Build()
 
-	if grad == nil {
-		t.Error("grad is nil")
+	if err != nil {
+		t.Error("err should nil")
 	}
 
 	c1, _ := colorful.MakeColor(colors[0])
