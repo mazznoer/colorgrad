@@ -4,6 +4,8 @@ import (
 	"image/color"
 	"math"
 	"testing"
+
+	"github.com/lucasb-eyer/go-colorful"
 )
 
 func TestBasic1(t *testing.T) {
