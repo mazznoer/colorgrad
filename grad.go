@@ -169,8 +169,8 @@ func (gb *GradientBuilder) Build() (Gradient, error) {
 	if len(gb.colors) == 0 {
 		// Default colors
 		gb.colors = []colorful.Color{
-			colorful.Color{R: 0, G: 0, B: 0}, // black
-			colorful.Color{R: 1, G: 1, B: 1}, // white
+			{R: 0, G: 0, B: 0}, // black
+			{R: 1, G: 1, B: 1}, // white
 		}
 	} else if len(gb.colors) == 1 {
 		gb.colors = append(gb.colors, gb.colors[0])

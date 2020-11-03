@@ -1,8 +1,9 @@
 # colorgrad 🎨
 
 [![go.dev reference](https://img.shields.io/badge/go.dev-reference-007d9c?logo=go&logoColor=white&style=flat-square)](https://pkg.go.dev/github.com/mazznoer/colorgrad?tab=doc)
-[![go report](https://goreportcard.com/badge/github.com/mazznoer/colorgrad)](https://goreportcard.com/report/github.com/mazznoer/colorgrad)
 [![Build Status](https://travis-ci.org/mazznoer/colorgrad.svg?branch=master)](https://travis-ci.org/mazznoer/colorgrad)
+[![Build Status](https://github.com/mazznoer/colorgrad/workflows/Go/badge.svg)](https://github.com/mazznoer/colorgrad/actions)
+[![go report](https://goreportcard.com/badge/github.com/mazznoer/colorgrad)](https://goreportcard.com/report/github.com/mazznoer/colorgrad)
 [![codecov](https://codecov.io/gh/mazznoer/colorgrad/branch/master/graph/badge.svg)](https://codecov.io/gh/mazznoer/colorgrad)
 
 Fun & easy way to create _color gradient_ / _color scales_ in __Go__ (__Golang__).
@@ -186,88 +187,88 @@ grad2 := grad.Sharp(13)
 #### Diverging
 
 `colorgrad.BrBG()`
-![img](img/gradient-BrBG.png)
+![img](doc/images/preset/BrBG.png)
 
 `colorgrad.PRGn()`
-![img](img/gradient-PRGn.png)
+![img](doc/images/preset/PRGn.png)
 
 `colorgrad.PiYG()`
-![img](img/gradient-PiYG.png)
+![img](doc/images/preset/PiYG.png)
 
 `colorgrad.PuOr()`
-![img](img/gradient-PuOr.png)
+![img](doc/images/preset/PuOr.png)
 
 `colorgrad.RdBu()`
-![img](img/gradient-RdBu.png)
+![img](doc/images/preset/RdBu.png)
 
 `colorgrad.RdGy()`
-![img](img/gradient-RdGy.png)
+![img](doc/images/preset/RdGy.png)
 
 `colorgrad.RdYlBu()`
-![img](img/gradient-RdYlBu.png)
+![img](doc/images/preset/RdYlBu.png)
 
 `colorgrad.RdYlGn()`
-![img](img/gradient-RdYlGn.png)
+![img](doc/images/preset/RdYlGn.png)
 
 `colorgrad.Spectral()`
-![img](img/gradient-spectral.png)
+![img](doc/images/preset/Spectral.png)
 
 #### Sequential (Single Hue)
 
 `colorgrad.Blues()`
-![img](img/gradient-blues.png)
+![img](doc/images/preset/Blues.png)
 
 `colorgrad.Greens()`
-![img](img/gradient-greens.png)
+![img](doc/images/preset/Greens.png)
 
 `colorgrad.Greys()`
-![img](img/gradient-greys.png)
+![img](doc/images/preset/Greys.png)
 
 `colorgrad.Oranges()`
-![img](img/gradient-oranges.png)
+![img](doc/images/preset/Oranges.png)
 
 `colorgrad.Purples()`
-![img](img/gradient-purples.png)
+![img](doc/images/preset/Purples.png)
 
 `colorgrad.Reds()`
-![img](img/gradient-reds.png)
+![img](doc/images/preset/Reds.png)
 
 #### Sequential (Multi-Hue)
 
 `colorgrad.Turbo()`
-![img](img/gradient-turbo.png)
+![img](doc/images/preset/Turbo.png)
 
 `colorgrad.Viridis()`
-![img](img/gradient-viridis.png)
+![img](doc/images/preset/Viridis.png)
 
 `colorgrad.Inferno()`
-![img](img/gradient-inferno.png)
+![img](doc/images/preset/Inferno.png)
 
 `colorgrad.Magma()`
-![img](img/gradient-magma.png)
+![img](doc/images/preset/Magma.png)
 
 `colorgrad.Plasma()`
-![img](img/gradient-plasma.png)
+![img](doc/images/preset/Plasma.png)
 
 `colorgrad.Cividis()`
-![img](img/gradient-cividis.png)
+![img](doc/images/preset/Cividis.png)
 
 `colorgrad.Warm()`
-![img](img/gradient-warm.png)
+![img](doc/images/preset/Warm.png)
 
 `colorgrad.Cool()`
-![img](img/gradient-cool.png)
+![img](doc/images/preset/Cool.png)
 
 `colorgrad.CubehelixDefault()`
-![img](img/gradient-cubehelix-default.png)
+![img](doc/images/preset/CubehelixDefault.png)
 
 #### Cyclical
 
 `colorgrad.Rainbow()`
-![img](img/gradient-rainbow.png)
+![img](doc/images/preset/Rainbow.png)
 
 `colorgrad.Sinebow()`
-![img](img/gradient-sinebow.png)
+![img](doc/images/preset/Sinebow.png)
 
 ### Color Scheme
 
@@ -308,7 +309,7 @@ Random _cool_ colors
 
 ### Playground
 
-* [Basic](https://play.golang.org/p/ib8mw_gM0oD)
+* [Basic](https://play.golang.org/p/qoUQvzOkceg)
 * [Random colors](https://play.golang.org/p/d67x9di4sAF)
 
 ### Dependencies
@@ -319,3 +320,5 @@ Random _cool_ colors
 
 * [chroma.js](https://github.com/gka/chroma.js)
 * [d3-scale-chromatic](https://github.com/d3/d3-scale-chromatic/)
+* colorful's [gradientgen.go](https://github.com/lucasb-eyer/go-colorful/blob/master/doc/gradientgen/gradientgen.go)
+
