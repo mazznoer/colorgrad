@@ -176,18 +176,18 @@ func (gb *GradientBuilder) Build() (Gradient, error) {
 		gb.colors = append(gb.colors, gb.colors[0])
 	}
 
-	if len(gb.pos) > 0 && len(gb.pos) != len(gb.colors) {
-		return zgrad, fmt.Errorf("Domain's count (if domain is specified) must equal colors' count")
-	}
+	var pos []float64
 
 	if len(gb.pos) == 0 {
-		w := 1.0 / float64(len(gb.colors)-1)
-		gb.pos = make([]float64, len(gb.colors))
-
-		for i := range gb.pos {
-			gb.pos[i] = float64(i) * w
-		}
+		pos = linspace(0, 1, uint(len(gb.colors)))
+	} else if len(gb.pos) == len(gb.colors) {
+		pos = gb.pos
+	} else if len(gb.pos) == 2 {
+		pos = linspace(gb.pos[0], gb.pos[1], uint(len(gb.colors)))
+	} else {
+		return zgrad, fmt.Errorf("Wrong domain.")
 	}
+	gb.pos = pos
 
 	for i := 0; i < len(gb.pos)-1; i++ {
 		if gb.pos[i] > gb.pos[i+1] {

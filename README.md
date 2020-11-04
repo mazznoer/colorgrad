@@ -1,14 +1,12 @@
 # colorgrad 🎨
 
-[![go.dev reference](https://img.shields.io/badge/go.dev-reference-007d9c?logo=go&logoColor=white&style=flat-square)](https://pkg.go.dev/github.com/mazznoer/colorgrad?tab=doc)
+[![PkgGoDev](https://pkg.go.dev/badge/github.com/mazznoer/colorgrad)](https://pkg.go.dev/github.com/mazznoer/colorgrad)
 [![Build Status](https://travis-ci.org/mazznoer/colorgrad.svg?branch=master)](https://travis-ci.org/mazznoer/colorgrad)
 [![Build Status](https://github.com/mazznoer/colorgrad/workflows/Go/badge.svg)](https://github.com/mazznoer/colorgrad/actions)
 [![go report](https://goreportcard.com/badge/github.com/mazznoer/colorgrad)](https://goreportcard.com/report/github.com/mazznoer/colorgrad)
 [![codecov](https://codecov.io/gh/mazznoer/colorgrad/branch/master/graph/badge.svg)](https://codecov.io/gh/mazznoer/colorgrad)
 
-Fun & easy way to create _color gradient_ / _color scales_ in __Go__ (__Golang__).
-
-![color-scale](img/color-scale-1.png)
+Go (Golang) _color scales_ library.
 
 ### Index
 
@@ -20,21 +18,40 @@ Fun & easy way to create _color gradient_ / _color scales_ in __Go__ (__Golang__
   - [Custom Domain](#custom-domain)
   - [Blending Mode](#blending-mode)
   - [Invalid RGB](#beware-of-invalid-rgb-color)
-  - [Hard-Edged Gradient](#hard-edged-gradient)
 * [Preset Gradients](#preset-gradients)
+* [Hard-Edged Gradient](#hard-edged-gradient)
 * [Color Scheme](#color-scheme)
 * [Gallery](#gallery)
 * [Playground](#playground)
 * [Dependencies](#dependencies)
 * [Inspirations](#inspirations)
 
-### Usages
-
-#### Basic
-
 ```go
 import "github.com/mazznoer/colorgrad"
 ```
+
+```go
+type Gradient interface {
+    // Get color at certain position
+    At(float64) colorful.Color
+
+    // Get n colors evenly spaced across gradient
+    ColorfulColors(uint) []colorful.Color
+
+    // Get n colors evenly spaced across gradient
+    Colors(uint) []color.Color
+
+    // Get the gradient domain min and max
+    Domain() (float64, float64)
+
+    // Return a new hard-edge gradient
+    Sharp(uint) Gradient
+}
+```
+
+### Usages
+
+#### Basic
 
 ```go
 grad, err := colorgrad.NewGradient().Build()
@@ -55,7 +72,7 @@ var c3 color.Color = grad.At(t) // color.Color
 colors1 := grad.ColorfulColors(9) // []colorful.Color
 colors2 := grad.Colors(23)        // []color.Color
 ```
-![img](img/black-to-white.png)
+![img](doc/images/custom-default.png)
 
 #### Custom Colors
 
@@ -73,19 +90,18 @@ grad, err := colorgrad.NewGradient().
         colorful.Hsv(50, 1, 1),
         colorful.Hsv(348, 0.9, 0.8),
     ).
-    Mode(colorgrad.HCL).
     Build()
 ```
-![img](img/custom-colors.png)
+![img](doc/images/custom-colors.png)
 
 #### Using Hex Colors
 
 ```go
 grad, err := colorgrad.NewGradient().
-    HtmlColors("#FFD700", "#00BFFF", "#FFD700").
+    HtmlColors("#c41189", "#00BFFF", "#FFD700").
     Build()
 ```
-![img](img/hex-colors.png)
+![img](doc/images/custom-hex-colors.png)
 
 #### Named Colors
 
@@ -96,36 +112,40 @@ grad, err := colorgrad.NewGradient().
     HtmlColors("gold", "hotpink", "darkturquoise").
     Build()
 ```
-![img](img/named-colors.png)
+![img](doc/images/custom-named-colors.png)
 
-#### Custom Domain
-
-```go
-grad, err := colorgrad.NewGradient().
-    HtmlColors("#DC143C", "#FFD700", "#4682b4").
-    Build()
-```
-![img](img/color-scale-1.png)
+#### Domain & Color Position
 
 ```go
 grad, err := colorgrad.NewGradient().
-    HtmlColors("#DC143C", "#FFD700", "#4682b4").
-    Domain(0, 0.35, 1).
+    HtmlColors("deeppink", "gold", "seagreen").
     Build()
 ```
-![img](img/color-scale-2.png)
+![img](doc/images/domain-default.png)
 
 ```go
 grad, err := colorgrad.NewGradient().
-    HtmlColors("#DC143C", "#FFD700", "#4682b4").
-    Domain(15, 60, 80).
+    HtmlColors("deeppink", "gold", "seagreen").
+    Domain(0, 100).
     Build()
-
-grad.At(15).Hex() // #DC143C
-grad.At(75)
-grad.At(80).Hex() // #4682b4
 ```
-![img](img/color-scale-3.png)
+![img](doc/images/domain-100.png)
+
+```go
+grad, err := colorgrad.NewGradient().
+    HtmlColors("deeppink", "gold", "seagreen").
+    Domain(0, 0.7, 1).
+    Build()
+```
+![img](doc/images/color-position-1.png)
+
+```go
+grad, err := colorgrad.NewGradient().
+    HtmlColors("deeppink", "gold", "seagreen").
+    Domain(15, 30, 80).
+    Build()
+```
+![img](doc/images/color-position-2.png)
 
 #### Blending Mode
 
@@ -151,38 +171,14 @@ grad.At(t).Clamped() // return closest valid RGB color
 ```
 
 Without `Clamped()`
-![invalig rgb](img/not-clamped.png)
+![invalid rgb](doc/images/custom-invalid-colors.png)
 
 With `Clamped()`
-![valid rgb](img/clamped.png)
-
-#### Hard-Edged Gradient
-
-```go
-grad1, err := colorgrad.NewGradient().
-    HtmlColors("#18dbf4", "#f6ff56").
-    Domain(0, 100).
-    Build()
-```
-![img](img/normal-gradient.png)
-
-```go
-grad2 := grad1.Sharp(7)
-
-dmin, dmax := grad2.Domain() // 0, 100 -- same as original gradient
-```
-![img](img/classes-gradient.png)
+![valid rgb](doc/images/custom-clamped.png)
 
 ### Preset Gradients
 
-```go
-grad := colorgrad.Rainbow()
-
-c := grad.At(t) // t in the range 0..1
-colors1 := grad.ColorfulColors(5)
-colors2 := grad.Colors(17)
-grad2 := grad.Sharp(13)
-```
+All preset gradients are in the domain 0..1.
 
 #### Diverging
 
@@ -269,6 +265,25 @@ grad2 := grad.Sharp(13)
 
 `colorgrad.Sinebow()`
 ![img](doc/images/preset/Sinebow.png)
+
+### Hard-Edged Gradient
+
+```go
+grad1, err := colorgrad.NewGradient().
+    HtmlColors("#18dbf4", "#f6ff56").
+    Build()
+```
+![img](doc/images/gradient-normal.png)
+
+```go
+grad2 := grad1.Sharp(7)
+```
+![img](doc/images/gradient-sharp.png)
+
+```go
+grad := colorgrad.Spectral().Sharp(19)
+```
+![img](doc/images/spectral-sharp.png)
 
 ### Color Scheme
 

@@ -10,7 +10,7 @@ import (
 
 func TestBasic1(t *testing.T) {
 	// Single color
-	grad, err := NewGradient().
+	grad, _ := NewGradient().
 		Colors(color.RGBA{0, 255, 0, 255}).
 		Build()
 	dmin, dmax := grad.Domain()
@@ -20,43 +20,8 @@ func TestBasic1(t *testing.T) {
 	testStr(t, grad.At(0).Hex(), "#00ff00")
 	testStr(t, grad.At(1).Hex(), "#00ff00")
 
-	// Domain's length != colors's length
-	grad, err = NewGradient().
-		HtmlColors("#777", "#fff", "#ccc").
-		Domain(0, 1).
-		Build()
-	if err == nil {
-		t.Errorf("It should error")
-	}
-	if !isZeroGradient(grad) {
-		t.Errorf("It should zeroGradient")
-	}
-
-	// Wrong domain
-	grad, err = NewGradient().
-		HtmlColors("#777", "#fff", "#ccc", "#222").
-		Domain(0, 0.71, 0.70, 1).
-		Build()
-	if err == nil {
-		t.Errorf("It should error")
-	}
-	if !isZeroGradient(grad) {
-		t.Errorf("It should zeroGradient")
-	}
-
-	// Invalid HTML colors
-	grad, err = NewGradient().
-		HtmlColors("#777", "bloodred", "#bbb", "#zzz").
-		Build()
-	if err == nil {
-		t.Errorf("It should error")
-	}
-	if !isZeroGradient(grad) {
-		t.Errorf("It should zeroGradient")
-	}
-
 	// Named colors
-	grad, err = NewGradient().
+	grad, _ = NewGradient().
 		HtmlColors("tomato", "skyblue", "gold", "springgreen").
 		Build()
 	colors := grad.ColorfulColors(4)
@@ -66,42 +31,42 @@ func TestBasic1(t *testing.T) {
 	testStr(t, colors[3].Hex(), "#00ff7f")
 
 	// Blend mode
-	grad, err = NewGradient().
+	grad, _ = NewGradient().
 		HtmlColors("#333", "#bbb").
 		Mode(HCL).
 		Build()
 	testStr(t, grad.At(0).Hex(), "#333333")
 	testStr(t, grad.At(1).Hex(), "#bbbbbb")
 
-	grad, err = NewGradient().
+	grad, _ = NewGradient().
 		HtmlColors("#333", "#bbb").
 		Mode(HSV).
 		Build()
 	testStr(t, grad.At(0).Hex(), "#333333")
 	testStr(t, grad.At(1).Hex(), "#bbbbbb")
 
-	grad, err = NewGradient().
+	grad, _ = NewGradient().
 		HtmlColors("#333", "#bbb").
 		Mode(LAB).
 		Build()
 	testStr(t, grad.At(0).Hex(), "#333333")
 	testStr(t, grad.At(1).Hex(), "#bbbbbb")
 
-	grad, err = NewGradient().
+	grad, _ = NewGradient().
 		HtmlColors("#333", "#bbb").
 		Mode(LRGB).
 		Build()
 	testStr(t, grad.At(0).Hex(), "#333333")
 	testStr(t, grad.At(1).Hex(), "#bbbbbb")
 
-	grad, err = NewGradient().
+	grad, _ = NewGradient().
 		HtmlColors("#333", "#bbb").
 		Mode(LUV).
 		Build()
 	testStr(t, grad.At(0).Hex(), "#333333")
 	testStr(t, grad.At(1).Hex(), "#bbbbbb")
 
-	grad, err = NewGradient().
+	grad, _ = NewGradient().
 		HtmlColors("#333", "#bbb").
 		Mode(RGB).
 		Build()
@@ -110,6 +75,7 @@ func TestBasic1(t *testing.T) {
 }
 
 func TestBasic2(t *testing.T) {
+	// Custom gradient default
 	grad, _ := NewGradient().Build()
 	colors := grad.ColorfulColors(2)
 
@@ -121,6 +87,7 @@ func TestBasic2(t *testing.T) {
 
 	testStr(t, grad.At(math.NaN()).Hex(), "#000000")
 
+	// Custom colors
 	grad, _ = NewGradient().
 		Colors(
 			color.RGBA{255, 0, 0, 255},
@@ -140,8 +107,57 @@ func TestBasic2(t *testing.T) {
 	testStr(t, grad.At(math.NaN()).Hex(), "#ff0000")
 }
 
+func TestError(t *testing.T) {
+	// Invalid HTML colors
+	grad, err := NewGradient().
+		HtmlColors("#777", "bloodred", "#bbb", "#zzz").
+		Build()
+	if err == nil {
+		t.Errorf("It should error")
+	}
+	if !isZeroGradient(grad) {
+		t.Errorf("It should zeroGradient")
+	}
+
+	// Wrong domain 1
+	grad, err = NewGradient().
+		HtmlColors("#777", "#fff", "#ccc", "#222").
+		Domain(0, 0.5, 1).
+		Build()
+	if err == nil {
+		t.Errorf("It should error")
+	}
+	if !isZeroGradient(grad) {
+		t.Errorf("It should zeroGradient")
+	}
+
+	// Wrong domain 2
+	grad, err = NewGradient().
+		HtmlColors("#777", "#fff", "#ccc", "#222").
+		Domain(0, 0.71, 0.70, 1).
+		Build()
+	if err == nil {
+		t.Errorf("It should error")
+	}
+	if !isZeroGradient(grad) {
+		t.Errorf("It should zeroGradient")
+	}
+}
+
 func TestDomain(t *testing.T) {
 	grad, _ := NewGradient().
+		HtmlColors("yellow", "blue", "lime").
+		Domain(0, 100).
+		Build()
+
+	testStr(t, grad.At(0).Hex(), "#ffff00")
+	testStr(t, grad.At(50).Hex(), "#0000ff")
+	testStr(t, grad.At(100).Hex(), "#00ff00")
+	// outside domain
+	testStr(t, grad.At(-10).Hex(), "#ffff00")
+	testStr(t, grad.At(150).Hex(), "#00ff00")
+
+	grad, _ = NewGradient().
 		HtmlColors("#00ff00", "#ff0000", "#ffff00").
 		Domain(0, 0.75, 1).
 		Build()
@@ -149,7 +165,6 @@ func TestDomain(t *testing.T) {
 	testStr(t, grad.At(0).Hex(), "#00ff00")
 	testStr(t, grad.At(0.75).Hex(), "#ff0000")
 	testStr(t, grad.At(1).Hex(), "#ffff00")
-
 	// outside domain
 	testStr(t, grad.At(-1).Hex(), "#00ff00")
 	testStr(t, grad.At(1.5).Hex(), "#ffff00")
@@ -163,7 +178,6 @@ func TestDomain(t *testing.T) {
 	testStr(t, grad.At(25).Hex(), "#ff0000")
 	testStr(t, grad.At(29).Hex(), "#0000ff")
 	testStr(t, grad.At(63).Hex(), "#ffff00")
-
 	// outside domain
 	testStr(t, grad.At(10).Hex(), "#00ff00")
 	testStr(t, grad.At(67).Hex(), "#ffff00")
