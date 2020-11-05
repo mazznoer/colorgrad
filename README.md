@@ -5,19 +5,20 @@
 [![Build Status](https://github.com/mazznoer/colorgrad/workflows/Go/badge.svg)](https://github.com/mazznoer/colorgrad/actions)
 [![go report](https://goreportcard.com/badge/github.com/mazznoer/colorgrad)](https://goreportcard.com/report/github.com/mazznoer/colorgrad)
 [![codecov](https://codecov.io/gh/mazznoer/colorgrad/branch/master/graph/badge.svg)](https://codecov.io/gh/mazznoer/colorgrad)
+[![Release](https://img.shields.io/github/release/mazznoer/colorgrad.svg?style=flat-square)](https://github.com/mazznoer/colorgrad/releases/latest)
 
 Go (Golang) _color scales_ library.
 
-### Index
+## Index
 
 * [Usages](#usages)
-  - [Basic](#basic)
-  - [Custom Colors](#custom-colors)
-  - [Hex Colors](#using-hex-colors)
-  - [Named Colors](#named-colors)
-  - [Custom Domain](#custom-domain)
-  - [Blending Mode](#blending-mode)
-  - [Invalid RGB](#beware-of-invalid-rgb-color)
+    - [Basic](#basic)
+    - [Custom Colors](#custom-colors)
+    - [Hex Colors](#using-hex-colors)
+    - [Named Colors](#named-colors)
+    - [Domain & Color Position](#domain-color-position)
+    - [Blending Mode](#blending-mode)
+    - [Invalid RGB](#beware-of-invalid-rgb-color)
 * [Preset Gradients](#preset-gradients)
 * [Hard-Edged Gradient](#hard-edged-gradient)
 * [Color Scheme](#color-scheme)
@@ -49,9 +50,9 @@ type Gradient interface {
 }
 ```
 
-### Usages
+## Usages
 
-#### Basic
+### Basic
 
 ```go
 grad, err := colorgrad.NewGradient().Build()
@@ -74,7 +75,7 @@ colors2 := grad.Colors(23)        // []color.Color
 ```
 ![img](doc/images/custom-default.png)
 
-#### Custom Colors
+### Custom Colors
 
 `Colors()` method accept anything that implement [color.Color](https://golang.org/pkg/image/color/#Color) interface.
 
@@ -94,7 +95,7 @@ grad, err := colorgrad.NewGradient().
 ```
 ![img](doc/images/custom-colors.png)
 
-#### Using Hex Colors
+### Using Hex Colors
 
 ```go
 grad, err := colorgrad.NewGradient().
@@ -103,7 +104,7 @@ grad, err := colorgrad.NewGradient().
 ```
 ![img](doc/images/custom-hex-colors.png)
 
-#### Named Colors
+### Named Colors
 
 We can also use named colors as defined in the SVG 1.1 spec.
 
@@ -114,7 +115,7 @@ grad, err := colorgrad.NewGradient().
 ```
 ![img](doc/images/custom-named-colors.png)
 
-#### Domain & Color Position
+### Domain & Color Position
 
 ```go
 grad, err := colorgrad.NewGradient().
@@ -147,7 +148,7 @@ grad, err := colorgrad.NewGradient().
 ```
 ![img](doc/images/color-position-2.png)
 
-#### Blending Mode
+### Blending Mode
 
 ```go
 grad, err := colorgrad.NewGradient().
@@ -155,9 +156,9 @@ grad, err := colorgrad.NewGradient().
     Mode(colorgrad.LRGB).
     Build()
 ```
-![blend-modes](img/blend-modes.png)
+![blend-modes](doc/images/blend-modes.png)
 
-#### Beware of Invalid RGB Color
+### Beware of Invalid RGB Color
 Read it [here](https://github.com/lucasb-eyer/go-colorful#blending-colors).
 
 ```go
@@ -176,11 +177,11 @@ Without `Clamped()`
 With `Clamped()`
 ![valid rgb](doc/images/custom-clamped.png)
 
-### Preset Gradients
+## Preset Gradients
 
 All preset gradients are in the domain 0..1.
 
-#### Diverging
+### Diverging
 
 `colorgrad.BrBG()`
 ![img](doc/images/preset/BrBG.png)
@@ -209,7 +210,7 @@ All preset gradients are in the domain 0..1.
 `colorgrad.Spectral()`
 ![img](doc/images/preset/Spectral.png)
 
-#### Sequential (Single Hue)
+### Sequential (Single Hue)
 
 `colorgrad.Blues()`
 ![img](doc/images/preset/Blues.png)
@@ -229,7 +230,7 @@ All preset gradients are in the domain 0..1.
 `colorgrad.Reds()`
 ![img](doc/images/preset/Reds.png)
 
-#### Sequential (Multi-Hue)
+### Sequential (Multi-Hue)
 
 `colorgrad.Turbo()`
 ![img](doc/images/preset/Turbo.png)
@@ -258,7 +259,7 @@ All preset gradients are in the domain 0..1.
 `colorgrad.CubehelixDefault()`
 ![img](doc/images/preset/CubehelixDefault.png)
 
-#### Cyclical
+### Cyclical
 
 `colorgrad.Rainbow()`
 ![img](doc/images/preset/Rainbow.png)
@@ -266,7 +267,7 @@ All preset gradients are in the domain 0..1.
 `colorgrad.Sinebow()`
 ![img](doc/images/preset/Sinebow.png)
 
-### Hard-Edged Gradient
+## Hard-Edged Gradient
 
 ```go
 grad1, err := colorgrad.NewGradient().
@@ -284,8 +285,8 @@ grad2 := grad1.Sharp(7)
 grad := colorgrad.Spectral().Sharp(19)
 ```
 ![img](doc/images/spectral-sharp.png)
-
-### Color Scheme
+<!--
+## Color Scheme
 
 `colorgrad.Scheme.Accent`
 ![img](img/scheme-accent.png)
@@ -313,25 +314,25 @@ grad := colorgrad.Spectral().Sharp(19)
 
 `colorgrad.Scheme.Set3`
 ![img](img/scheme-set3.png)
-
-### Gallery
+-->
+## Gallery
 
 Noise + hard-edged gradient
 ![noise](img/noise-2.png)
 
-Random _cool_ colors
+Random colors from `colorgrad.Cool()`
 ![random-color](img/random-cool.png)
 
-### Playground
+## Playground
 
 * [Basic](https://play.golang.org/p/qoUQvzOkceg)
 * [Random colors](https://play.golang.org/p/d67x9di4sAF)
 
-### Dependencies
+## Dependencies
 
 * [colorful](https://github.com/lucasb-eyer/go-colorful)
 
-### Inspirations
+## Inspirations
 
 * [chroma.js](https://github.com/gka/chroma.js)
 * [d3-scale-chromatic](https://github.com/d3/d3-scale-chromatic/)

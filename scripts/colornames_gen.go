@@ -1,5 +1,7 @@
 // Code generator for colornames.go
-// Run `go fmt` on output code
+// Run `gofmt` on output code
+
+// +build ignore
 
 package main
 
