@@ -160,9 +160,11 @@ grad.At(t).Clamped() // return closest valid RGB color
 ```
 
 Without `Clamped()`
+
 ![invalid rgb](doc/images/custom-invalid-colors.png)
 
 With `Clamped()`
+
 ![valid rgb](doc/images/custom-clamped.png)
 
 ## Preset Gradients
@@ -281,41 +283,53 @@ import "github.com/mazznoer/colorgrad/scheme"
 ```
 
 `scheme.Category10`
+
 ![img](doc/images/scheme/Category10.png)
 
 `scheme.Accent`
+
 ![img](doc/images/scheme/Accent.png)
 
 `scheme.Dark2`
+
 ![img](doc/images/scheme/Dark2.png)
 
 `scheme.Paired`
+
 ![img](doc/images/scheme/Paired.png)
 
 `scheme.Pastel1`
+
 ![img](doc/images/scheme/Pastel1.png)
 
 `scheme.Pastel2`
+
 ![img](doc/images/scheme/Pastel2.png)
 
 `scheme.Set1`
+
 ![img](doc/images/scheme/Set1.png)
 
 `scheme.Set2`
+
 ![img](doc/images/scheme/Set2.png)
 
 `scheme.Set3`
+
 ![img](doc/images/scheme/Set3.png)
 
 `scheme.Tableau10`
+
 ![img](doc/images/scheme/Tableau10.png)
 
 ## Gallery
 
 Noise + hard-edged gradient
+
 ![noise](doc/images/noise.png)
 
 Random colors from `colorgrad.Cool()`
+
 ![random-colors](doc/images/random-colors.png)
 
 ## Playground
