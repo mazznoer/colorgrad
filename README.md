@@ -5,26 +5,26 @@
 [![Build Status](https://github.com/mazznoer/colorgrad/workflows/Go/badge.svg)](https://github.com/mazznoer/colorgrad/actions)
 [![go report](https://goreportcard.com/badge/github.com/mazznoer/colorgrad)](https://goreportcard.com/report/github.com/mazznoer/colorgrad)
 [![codecov](https://codecov.io/gh/mazznoer/colorgrad/branch/master/graph/badge.svg)](https://codecov.io/gh/mazznoer/colorgrad)
-[![Release](https://img.shields.io/github/release/mazznoer/colorgrad.svg?style=flat-square)](https://github.com/mazznoer/colorgrad/releases/latest)
+[![Release](https://img.shields.io/github/release/mazznoer/colorgrad.svg)](https://github.com/mazznoer/colorgrad/releases/latest)
 
 Go (Golang) _color scales_ library.
 
 ## Index
 
-* [Usages](#usages)
+* [Usage](#usage)
     - [Basic](#basic)
     - [Custom Colors](#custom-colors)
     - [Hex Colors](#using-hex-colors)
     - [Named Colors](#named-colors)
-    - [Domain & Color Position](#domain-color-position)
+    - [Domain & Color Position](#domain--color-position)
     - [Blending Mode](#blending-mode)
     - [Invalid RGB](#beware-of-invalid-rgb-color)
 * [Preset Gradients](#preset-gradients)
 * [Hard-Edged Gradient](#hard-edged-gradient)
-* [Color Scheme](#color-scheme)
+* [Color Schemes](#color-schemes)
 * [Gallery](#gallery)
 * [Playground](#playground)
-* [Dependencies](#dependencies)
+* [Dependency](#dependency)
 * [Inspirations](#inspirations)
 
 ```go
@@ -50,7 +50,7 @@ type Gradient interface {
 }
 ```
 
-## Usages
+## Usage
 
 ### Basic
 
@@ -60,18 +60,6 @@ grad, err := colorgrad.NewGradient().Build()
 if err != nil {
     panic(err)
 }
-
-dmin, dmax := grad.Domain()
-
-// Get single color at certain position.
-// t in the range dmin..dmax (default to 0..1)
-c1 := grad.At(t)       // colorful.Color
-c2 := grad.At(t).Hex() // hex color string
-var c3 color.Color = grad.At(t) // color.Color
-
-// Get n colors evenly spaced across gradient.
-colors1 := grad.ColorfulColors(9) // []colorful.Color
-colors2 := grad.Colors(23)        // []color.Color
 ```
 ![img](doc/images/custom-default.png)
 
@@ -285,50 +273,57 @@ grad2 := grad1.Sharp(7)
 grad := colorgrad.Spectral().Sharp(19)
 ```
 ![img](doc/images/spectral-sharp.png)
-<!--
-## Color Scheme
 
-`colorgrad.Scheme.Accent`
-![img](img/scheme-accent.png)
+## Color Schemes
 
-`colorgrad.Scheme.Category10`
-![img](img/scheme-category10.png)
+```go
+import "github.com/mazznoer/colorgrad/scheme"
+```
 
-`colorgrad.Scheme.Dark2`
-![img](img/scheme-dark2.png)
+`scheme.Category10`
+![img](doc/images/scheme/Category10.png)
 
-`colorgrad.Scheme.Paired`
-![img](img/scheme-paired.png)
+`scheme.Accent`
+![img](doc/images/scheme/Accent.png)
 
-`colorgrad.Scheme.Pastel1`
-![img](img/scheme-pastel1.png)
+`scheme.Dark2`
+![img](doc/images/scheme/Dark2.png)
 
-`colorgrad.Scheme.Pastel2`
-![img](img/scheme-pastel2.png)
+`scheme.Paired`
+![img](doc/images/scheme/Paired.png)
 
-`colorgrad.Scheme.Set1`
-![img](img/scheme-set1.png)
+`scheme.Pastel1`
+![img](doc/images/scheme/Pastel1.png)
 
-`colorgrad.Scheme.Set2`
-![img](img/scheme-set2.png)
+`scheme.Pastel2`
+![img](doc/images/scheme/Pastel2.png)
 
-`colorgrad.Scheme.Set3`
-![img](img/scheme-set3.png)
--->
+`scheme.Set1`
+![img](doc/images/scheme/Set1.png)
+
+`scheme.Set2`
+![img](doc/images/scheme/Set2.png)
+
+`scheme.Set3`
+![img](doc/images/scheme/Set3.png)
+
+`scheme.Tableau10`
+![img](doc/images/scheme/Tableau10.png)
+
 ## Gallery
 
 Noise + hard-edged gradient
-![noise](img/noise-2.png)
+![noise](doc/images/noise.png)
 
 Random colors from `colorgrad.Cool()`
-![random-color](img/random-cool.png)
+![random-colors](doc/images/random-colors.png)
 
 ## Playground
 
 * [Basic](https://play.golang.org/p/qoUQvzOkceg)
 * [Random colors](https://play.golang.org/p/d67x9di4sAF)
 
-## Dependencies
+## Dependency
 
 * [colorful](https://github.com/lucasb-eyer/go-colorful)
 
