@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"image/color"
 	"math"
-	"strings"
 
 	"github.com/lucasb-eyer/go-colorful"
 )
@@ -121,18 +120,11 @@ func (gb *GradientBuilder) HtmlColors(htmlColors ...string) *GradientBuilder {
 	colors := []colorful.Color{}
 	invalidColors := []string{}
 
-	for _, v := range htmlColors {
-		var col colorful.Color
-		c, ok := colornames[strings.ToLower(v)]
-		if ok {
-			col = c
-		} else {
-			c, err := colorful.Hex(v)
-			if err != nil {
-				invalidColors = append(invalidColors, v)
-				continue
-			}
-			col = c
+	for _, s := range htmlColors {
+		col, err := parseColor(s)
+		if err != nil {
+			invalidColors = append(invalidColors, s)
+			continue
 		}
 		colors = append(colors, col)
 	}
@@ -280,24 +272,4 @@ func (sg sharpGradient) At(t float64) colorful.Color {
 		}
 	}
 	return sg.colors[sg.n-1]
-}
-
-func linspace(min, max float64, n uint) []float64 {
-	d := max - min
-	l := float64(n - 1)
-	res := make([]float64, n)
-	for i := range res {
-		res[i] = (min + (float64(i)*d)/l)
-	}
-	return res
-}
-
-// Algorithm taken from: https://github.com/gka/chroma.js
-
-func blendLrgb(a, b colorful.Color, t float64) colorful.Color {
-	return colorful.Color{
-		R: math.Sqrt(math.Pow(a.R, 2)*(1-t) + math.Pow(b.R, 2)*t),
-		G: math.Sqrt(math.Pow(a.G, 2)*(1-t) + math.Pow(b.G, 2)*t),
-		B: math.Sqrt(math.Pow(a.B, 2)*(1-t) + math.Pow(b.B, 2)*t),
-	}
 }
