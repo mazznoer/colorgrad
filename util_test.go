@@ -20,6 +20,7 @@ func TestParseColor(t *testing.T) {
 		{"RGB( 255 , 255 , 0 )", colorful.Color{R: 1, G: 1, B: 0}},
 		{"rgba(255,0,0,0.5)", colorful.Color{R: 1, G: 0, B: 0}},
 		{"rgb(100%,0%,0%)", colorful.Color{R: 1, G: 0, B: 0}},
+		{"rgba(100%,0%,0%,0.5)", colorful.Color{R: 1, G: 0, B: 0}},
 		{"hsl(0,100%,50%)", colorful.Color{R: 1, G: 0, B: 0}},
 		{"hsla(360,100%,50%,0.5)", colorful.Color{R: 1, G: 0, B: 0}},
 	}
