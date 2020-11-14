@@ -43,6 +43,7 @@ func TestLinspace(t *testing.T) {
 	for i, v := range result {
 		if v != expected[i] {
 			t.Errorf("%v != %v", result, expected)
+			break
 		}
 	}
 
@@ -51,6 +52,7 @@ func TestLinspace(t *testing.T) {
 	for i, v := range result {
 		if v != expected[i] {
 			t.Errorf("%v != %v", result, expected)
+			break
 		}
 	}
 
@@ -59,6 +61,7 @@ func TestLinspace(t *testing.T) {
 	for i, v := range result {
 		if v != expected[i] {
 			t.Errorf("%v != %v", result, expected)
+			break
 		}
 	}
 }
