@@ -16,6 +16,7 @@ Go (Golang) _color scales_ library.
     - [Custom Colors](#custom-colors)
     - [Hex Colors](#using-hex-colors)
     - [Named Colors](#named-colors)
+    - [CSS Color String](#css-color-string)
     - [Domain & Color Position](#domain--color-position)
     - [Blending Mode](#blending-mode)
     - [Invalid RGB](#beware-of-invalid-rgb-color)
@@ -102,6 +103,19 @@ grad, err := colorgrad.NewGradient().
     Build()
 ```
 ![img](doc/images/custom-named-colors.png)
+
+### CSS Color String
+
+```go
+grad, err := colorgrad.NewGradient().
+    HtmlColors(
+        "rgb(125,110,221)",
+        "rgb(90%,45%,97%)",
+        "hsl(229,79%,85%)",
+    ).
+    Build()
+```
+![img](doc/images/custom-css-colors.png)
 
 ### Domain & Color Position
 
