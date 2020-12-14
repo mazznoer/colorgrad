@@ -6,6 +6,7 @@ import (
 	"math"
 
 	"github.com/lucasb-eyer/go-colorful"
+	"github.com/mazznoer/csscolorparser"
 )
 
 type BlendMode int
@@ -121,11 +122,12 @@ func (gb *GradientBuilder) HtmlColors(htmlColors ...string) *GradientBuilder {
 	invalidColors := []string{}
 
 	for _, s := range htmlColors {
-		col, err := parseColor(s)
+		c, err := csscolorparser.Parse(s)
 		if err != nil {
 			invalidColors = append(invalidColors, s)
 			continue
 		}
+		col, _ := colorful.MakeColor(c)
 		colors = append(colors, col)
 	}
 
