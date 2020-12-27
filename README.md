@@ -124,7 +124,7 @@ grad, err := colorgrad.NewGradient().
     HtmlColors("deeppink", "gold", "seagreen").
     Build()
 ```
-![img](doc/images/domain-default.png)
+![img](https://raw.githubusercontent.com/mazznoer/colorgrad-rs/master/docs/images/domain-default.png)
 
 ```go
 grad, err := colorgrad.NewGradient().
@@ -132,7 +132,15 @@ grad, err := colorgrad.NewGradient().
     Domain(0, 100).
     Build()
 ```
-![img](doc/images/domain-100.png)
+![img](https://raw.githubusercontent.com/mazznoer/colorgrad-rs/master/docs/images/domain-100.png)
+
+```go
+grad, err := colorgrad.NewGradient().
+    HtmlColors("deeppink", "gold", "seagreen").
+    Domain(-1, 1).
+    Build()
+```
+![img](https://raw.githubusercontent.com/mazznoer/colorgrad-rs/master/docs/images/domain-neg1-1.png)
 
 ```go
 grad, err := colorgrad.NewGradient().
@@ -140,7 +148,7 @@ grad, err := colorgrad.NewGradient().
     Domain(0, 0.7, 1).
     Build()
 ```
-![img](doc/images/color-position-1.png)
+![img](https://raw.githubusercontent.com/mazznoer/colorgrad-rs/master/docs/images/color-position-1.png)
 
 ```go
 grad, err := colorgrad.NewGradient().
@@ -148,7 +156,7 @@ grad, err := colorgrad.NewGradient().
     Domain(15, 30, 80).
     Build()
 ```
-![img](doc/images/color-position-2.png)
+![img](https://raw.githubusercontent.com/mazznoer/colorgrad-rs/master/docs/images/color-position-2.png)
 
 ### Blending Mode
 

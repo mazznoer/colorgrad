@@ -158,6 +158,18 @@ func TestDomain(t *testing.T) {
 	testStr(t, grad.At(150).Hex(), "#00ff00")
 
 	grad, _ = NewGradient().
+		HtmlColors("yellow", "blue", "lime").
+		Domain(-1, 1).
+		Build()
+
+	testStr(t, grad.At(-1).Hex(), "#ffff00")
+	testStr(t, grad.At(0).Hex(), "#0000ff")
+	testStr(t, grad.At(1).Hex(), "#00ff00")
+	// outside domain
+	testStr(t, grad.At(-1.5).Hex(), "#ffff00")
+	testStr(t, grad.At(1.5).Hex(), "#00ff00")
+
+	grad, _ = NewGradient().
 		HtmlColors("#00ff00", "#ff0000", "#ffff00").
 		Domain(0, 0.75, 1).
 		Build()
