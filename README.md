@@ -11,19 +11,11 @@ Go (Golang) _color scales_ library.
 
 ## Index
 
-* [Usage](#usage)
-    - [Basic](#basic)
-    - [Custom Colors](#custom-colors)
-    - [Hex Colors](#using-hex-colors)
-    - [Named Colors](#named-colors)
-    - [CSS Color String](#css-color-string)
-    - [Domain & Color Position](#domain--color-position)
-    - [Blending Mode](#blending-mode)
-    - [Invalid RGB](#beware-of-invalid-rgb-color)
+* [Custom Gradient](#custom-gradient)
 * [Preset Gradients](#preset-gradients)
 * [Hard-Edged Gradient](#hard-edged-gradient)
 * [Color Schemes](#color-schemes)
-* [Gallery](#gallery)
+* [Examples](#examples)
 * [Playground](#playground)
 * [Dependency](#dependency)
 * [Inspirations](#inspirations)
@@ -51,7 +43,7 @@ type Gradient interface {
 }
 ```
 
-## Usage
+## Custom Gradient
 
 ### Basic
 
@@ -344,15 +336,94 @@ import "github.com/mazznoer/colorgrad/scheme"
 
 ![img](doc/images/scheme/Tableau10.png)
 
-## Gallery
+## Examples
 
-Noise + hard-edged gradient
+### Gradient Image
+
+```go
+package main
+
+import (
+	"image"
+	"image/png"
+	"os"
+
+	"github.com/mazznoer/colorgrad"
+)
+
+func main() {
+	grad, _ := colorgrad.NewGradient().
+		HtmlColors("#c41189", "#00BFFF", "#FFD700").
+		Build()
+
+	w := 1500
+	h := 70
+	fw := float64(w)
+
+	img := image.NewRGBA(image.Rect(0, 0, w, h))
+
+	for x := 0; x < w; x++ {
+		col := grad.At(float64(x) / fw)
+		for y := 0; y < h; y++ {
+			img.Set(x, y, col)
+		}
+	}
+
+	file, err := os.Create("gradient.png")
+	if err != nil {
+		panic(err.Error())
+	}
+	defer file.Close()
+	png.Encode(file, img)
+}
+```
+
+Example output:
+
+![img](doc/images/custom-hex-colors.png)
+
+### Colored Noise
+
+```go
+package main
+
+import (
+	"image"
+	"image/png"
+	"os"
+
+	"github.com/mazznoer/colorgrad"
+	"github.com/ojrac/opensimplex-go"
+)
+
+func main() {
+	w := 600
+	h := 350
+	scale := 0.02
+
+	grad := colorgrad.Rainbow().Sharp(7)
+	noise := opensimplex.NewNormalized(996)
+	img := image.NewRGBA(image.Rect(0, 0, w, h))
+
+	for y := 0; y < h; y++ {
+		for x := 0; x < w; x++ {
+			t := noise.Eval2(float64(x)*scale, float64(y)*scale)
+			img.Set(x, y, grad.At(t))
+		}
+	}
+
+	file, err := os.Create("noise.png")
+	if err != nil {
+		panic(err.Error())
+	}
+	defer file.Close()
+	png.Encode(file, img)
+}
+```
+
+Example output:
 
 ![noise](doc/images/noise.png)
-
-Random colors from `colorgrad.Cool()`
-
-![random-colors](doc/images/random-colors.png)
 
 ## Playground
 
