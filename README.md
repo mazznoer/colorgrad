@@ -263,6 +263,42 @@ All preset gradients are in the domain 0..1.
 `colorgrad.CubehelixDefault()`
 ![img](doc/images/preset/CubehelixDefault.png)
 
+`colorgrad.BuGn()`
+![img](doc/images/preset/BuGn.png)
+
+`colorgrad.BuPu()`
+![img](doc/images/preset/BuPu.png)
+
+`colorgrad.GnBu()`
+![img](doc/images/preset/GnBu.png)
+
+`colorgrad.OrRd()`
+![img](doc/images/preset/OrRd.png)
+
+`colorgrad.PuBuGn()`
+![img](doc/images/preset/PuBuGn.png)
+
+`colorgrad.PuBu()`
+![img](doc/images/preset/PuBu.png)
+
+`colorgrad.PuRd()`
+![img](doc/images/preset/PuRd.png)
+
+`colorgrad.RdPu()`
+![img](doc/images/preset/RdPu.png)
+
+`colorgrad.YlGnBu()`
+![img](doc/images/preset/YlGnBu.png)
+
+`colorgrad.YlGn()`
+![img](doc/images/preset/YlGn.png)
+
+`colorgrad.YlOrBr()`
+![img](doc/images/preset/YlOrBr.png)
+
+`colorgrad.YlOrRd()`
+![img](doc/images/preset/YlOrRd.png)
+
 ### Cyclical
 
 `colorgrad.Rainbow()`

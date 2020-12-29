@@ -26,6 +26,19 @@ func TestPreset(t *testing.T) {
 	testGrad(t, Inferno(), "#000004", "#fcffa4")
 	testGrad(t, Magma(), "#000004", "#fcfdbf")
 	testGrad(t, Plasma(), "#0d0887", "#f0f921")
+
+	testGrad(t, BuGn(), "#f7fcfd", "#00441b")
+	testGrad(t, BuPu(), "#f7fcfd", "#4d004b")
+	testGrad(t, GnBu(), "#f7fcf0", "#084081")
+	testGrad(t, OrRd(), "#fff7ec", "#7f0000")
+	testGrad(t, PuBuGn(), "#fff7fb", "#014636")
+	testGrad(t, PuBu(), "#fff7fb", "#023858")
+	testGrad(t, PuRd(), "#f7f4f9", "#67001f")
+	testGrad(t, RdPu(), "#fff7f3", "#49006a")
+	testGrad(t, YlGnBu(), "#ffffd9", "#081d58")
+	testGrad(t, YlGn(), "#ffffe5", "#004529")
+	testGrad(t, YlOrBr(), "#ffffe5", "#662506")
+	testGrad(t, YlOrRd(), "#ffffcc", "#800026")
 }
 
 func testGrad(t *testing.T, grad Gradient, start, end string) {
