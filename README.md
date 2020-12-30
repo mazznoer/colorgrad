@@ -361,37 +361,37 @@ import "github.com/mazznoer/colorgrad/scheme"
 package main
 
 import (
-	"image"
-	"image/png"
-	"os"
+    "image"
+    "image/png"
+    "os"
 
-	"github.com/mazznoer/colorgrad"
+    "github.com/mazznoer/colorgrad"
 )
 
 func main() {
-	grad, _ := colorgrad.NewGradient().
-		HtmlColors("#c41189", "#00BFFF", "#FFD700").
-		Build()
+    grad, _ := colorgrad.NewGradient().
+        HtmlColors("#c41189", "#00BFFF", "#FFD700").
+        Build()
 
-	w := 1500
-	h := 70
-	fw := float64(w)
+    w := 1500
+    h := 70
+    fw := float64(w)
 
-	img := image.NewRGBA(image.Rect(0, 0, w, h))
+    img := image.NewRGBA(image.Rect(0, 0, w, h))
 
-	for x := 0; x < w; x++ {
-		col := grad.At(float64(x) / fw)
-		for y := 0; y < h; y++ {
-			img.Set(x, y, col)
-		}
-	}
+    for x := 0; x < w; x++ {
+        col := grad.At(float64(x) / fw)
+        for y := 0; y < h; y++ {
+            img.Set(x, y, col)
+        }
+    }
 
-	file, err := os.Create("gradient.png")
-	if err != nil {
-		panic(err.Error())
-	}
-	defer file.Close()
-	png.Encode(file, img)
+    file, err := os.Create("gradient.png")
+    if err != nil {
+        panic(err.Error())
+    }
+    defer file.Close()
+    png.Encode(file, img)
 }
 ```
 
@@ -405,36 +405,36 @@ Example output:
 package main
 
 import (
-	"image"
-	"image/png"
-	"os"
+    "image"
+    "image/png"
+    "os"
 
-	"github.com/mazznoer/colorgrad"
-	"github.com/ojrac/opensimplex-go"
+    "github.com/mazznoer/colorgrad"
+    "github.com/ojrac/opensimplex-go"
 )
 
 func main() {
-	w := 600
-	h := 350
-	scale := 0.02
+    w := 600
+    h := 350
+    scale := 0.02
 
-	grad := colorgrad.Rainbow().Sharp(7)
-	noise := opensimplex.NewNormalized(996)
-	img := image.NewRGBA(image.Rect(0, 0, w, h))
+    grad := colorgrad.Rainbow().Sharp(7)
+    noise := opensimplex.NewNormalized(996)
+    img := image.NewRGBA(image.Rect(0, 0, w, h))
 
-	for y := 0; y < h; y++ {
-		for x := 0; x < w; x++ {
-			t := noise.Eval2(float64(x)*scale, float64(y)*scale)
-			img.Set(x, y, grad.At(t))
-		}
-	}
+    for y := 0; y < h; y++ {
+        for x := 0; x < w; x++ {
+            t := noise.Eval2(float64(x)*scale, float64(y)*scale)
+            img.Set(x, y, grad.At(t))
+        }
+    }
 
-	file, err := os.Create("noise.png")
-	if err != nil {
-		panic(err.Error())
-	}
-	defer file.Close()
-	png.Encode(file, img)
+    file, err := os.Create("noise.png")
+    if err != nil {
+        panic(err.Error())
+    }
+    defer file.Close()
+    png.Encode(file, img)
 }
 ```
 
@@ -456,4 +456,8 @@ Example output:
 * [chroma.js](https://github.com/gka/chroma.js)
 * [d3-scale-chromatic](https://github.com/d3/d3-scale-chromatic/)
 * colorful's [gradientgen.go](https://github.com/lucasb-eyer/go-colorful/blob/master/doc/gradientgen/gradientgen.go)
+
+## Links
+
+* [colorgrad-rs](https://github.com/mazznoer/colorgrad-rs) - Rust port of this library
 
