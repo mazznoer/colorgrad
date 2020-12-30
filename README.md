@@ -24,25 +24,6 @@ Go (Golang) _color scales_ library.
 import "github.com/mazznoer/colorgrad"
 ```
 
-```go
-type Gradient interface {
-    // Get color at certain position
-    At(float64) colorful.Color
-
-    // Get n colors evenly spaced across gradient
-    ColorfulColors(uint) []colorful.Color
-
-    // Get n colors evenly spaced across gradient
-    Colors(uint) []color.Color
-
-    // Get the gradient domain min and max
-    Domain() (float64, float64)
-
-    // Return a new hard-edge gradient
-    Sharp(uint) Gradient
-}
-```
-
 ## Custom Gradient
 
 ### Basic

@@ -25,34 +25,19 @@ type gradientBase interface {
 	At(float64) colorful.Color
 }
 
-type Gradient interface {
-	// Get color at certain position
-	At(float64) colorful.Color
-
-	// Get n colors evenly spaced across gradient
-	ColorfulColors(uint) []colorful.Color
-
-	// Get n colors evenly spaced across gradient
-	Colors(uint) []color.Color
-
-	// Get the gradient domain min and max
-	Domain() (float64, float64)
-
-	// Return a new hard-edge gradient
-	Sharp(uint) Gradient
-}
-
-type gradient struct {
+type Gradient struct {
 	grad gradientBase
 	min  float64
 	max  float64
 }
 
-func (g gradient) At(t float64) colorful.Color {
+// Get color at certain position
+func (g Gradient) At(t float64) colorful.Color {
 	return g.grad.At(t)
 }
 
-func (g gradient) ColorfulColors(count uint) []colorful.Color {
+// Get n colors evenly spaced across gradient
+func (g Gradient) ColorfulColors(count uint) []colorful.Color {
 	d := g.max - g.min
 	l := float64(count - 1)
 	colors := make([]colorful.Color, count)
@@ -62,7 +47,8 @@ func (g gradient) ColorfulColors(count uint) []colorful.Color {
 	return colors
 }
 
-func (g gradient) Colors(count uint) []color.Color {
+// Get n colors evenly spaced across gradient
+func (g Gradient) Colors(count uint) []color.Color {
 	colors := make([]color.Color, count)
 	for i, col := range g.ColorfulColors(count) {
 		colors[i] = col
@@ -70,11 +56,13 @@ func (g gradient) Colors(count uint) []color.Color {
 	return colors
 }
 
-func (g gradient) Domain() (float64, float64) {
+// Get the gradient domain min and max
+func (g Gradient) Domain() (float64, float64) {
 	return g.min, g.max
 }
 
-func (g gradient) Sharp(n uint) Gradient {
+// Return a new hard-edge gradient
+func (g Gradient) Sharp(n uint) Gradient {
 	gradbase := sharpGradient{
 		colors: g.ColorfulColors(n),
 		pos:    linspace(g.min, g.max, n+1),
@@ -82,7 +70,7 @@ func (g gradient) Sharp(n uint) Gradient {
 		min:    g.min,
 		max:    g.max,
 	}
-	return gradient{
+	return Gradient{
 		grad: gradbase,
 		min:  g.min,
 		max:  g.max,
@@ -150,7 +138,7 @@ func (gb *GradientBuilder) Mode(mode BlendMode) *GradientBuilder {
 }
 
 func (gb *GradientBuilder) Build() (Gradient, error) {
-	zgrad := gradient{
+	zgrad := Gradient{
 		grad: zeroGradient{},
 		min:  0,
 		max:  1,
@@ -198,7 +186,7 @@ func (gb *GradientBuilder) Build() (Gradient, error) {
 		mode:   gb.mode,
 	}
 
-	return gradient{
+	return Gradient{
 		grad: gradbase,
 		min:  gb.pos[0],
 		max:  gb.pos[len(gb.pos)-1],

@@ -17,7 +17,7 @@ const pi2_3 = math.Pi * 2 / 3
 type sinebowGradient struct{}
 
 func Sinebow() Gradient {
-	return gradient{
+	return Gradient{
 		grad: sinebowGradient{},
 		min:  0,
 		max:  1,
@@ -38,7 +38,7 @@ func (sg sinebowGradient) At(t float64) colorful.Color {
 type turboGradient struct{}
 
 func Turbo() Gradient {
-	return gradient{
+	return Gradient{
 		grad: turboGradient{},
 		min:  0,
 		max:  1,
@@ -62,7 +62,7 @@ func (tg turboGradient) At(t float64) colorful.Color {
 type cividisGradient struct{}
 
 func Cividis() Gradient {
-	return gradient{
+	return Gradient{
 		grad: cividisGradient{},
 		min:  0,
 		max:  1,
@@ -122,7 +122,7 @@ func CubehelixDefault() Gradient {
 		start: cubehelix{300, 0.5, 0.0},
 		end:   cubehelix{-240, 0.5, 1.0},
 	}
-	return gradient{
+	return Gradient{
 		grad: gradbase,
 		min:  0,
 		max:  1,
@@ -134,7 +134,7 @@ func Warm() Gradient {
 		start: cubehelix{-100, 0.75, 0.35},
 		end:   cubehelix{80, 1.50, 0.8},
 	}
-	return gradient{
+	return Gradient{
 		grad: gradbase,
 		min:  0,
 		max:  1,
@@ -146,7 +146,7 @@ func Cool() Gradient {
 		start: cubehelix{260, 0.75, 0.35},
 		end:   cubehelix{80, 1.50, 0.8},
 	}
-	return gradient{
+	return Gradient{
 		grad: gradbase,
 		min:  0,
 		max:  1,
@@ -162,7 +162,7 @@ func (cg cubehelixGradient) At(t float64) colorful.Color {
 type rainbowGradient struct{}
 
 func Rainbow() Gradient {
-	return gradient{
+	return Gradient{
 		grad: rainbowGradient{},
 		min:  0,
 		max:  1,
