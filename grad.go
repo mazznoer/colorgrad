@@ -97,33 +97,23 @@ func NewGradient() *GradientBuilder {
 }
 
 func (gb *GradientBuilder) Colors(colors ...color.Color) *GradientBuilder {
-	gb.colors = make([]colorful.Color, len(colors))
-	for i, v := range colors {
-		c, _ := colorful.MakeColor(v)
-		gb.colors[i] = c
+	for _, c := range colors {
+		col, _ := colorful.MakeColor(c)
+		gb.colors = append(gb.colors, col)
 	}
 	return gb
 }
 
 func (gb *GradientBuilder) HtmlColors(htmlColors ...string) *GradientBuilder {
-	colors := []colorful.Color{}
-	invalidColors := []string{}
-
 	for _, s := range htmlColors {
 		c, err := csscolorparser.Parse(s)
 		if err != nil {
-			invalidColors = append(invalidColors, s)
+			gb.invalidHtmlColors = append(gb.invalidHtmlColors, s)
 			continue
 		}
 		col, _ := colorful.MakeColor(c)
-		colors = append(colors, col)
+		gb.colors = append(gb.colors, col)
 	}
-
-	if len(invalidColors) > 0 {
-		gb.invalidHtmlColors = invalidColors
-	}
-
-	gb.colors = colors
 	return gb
 }
 

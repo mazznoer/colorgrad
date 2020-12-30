@@ -105,6 +105,18 @@ func TestBasic2(t *testing.T) {
 	testStr(t, colors[2].Hex(), "#0000ff")
 
 	testStr(t, grad.At(math.NaN()).Hex(), "#ff0000")
+
+	// Custom colors #2
+	grad, _ = NewGradient().
+		HtmlColors("#00f", "#00ffff").
+		Colors(color.RGBA{255, 255, 0, 255}).
+		HtmlColors("lime").
+		Build()
+	colors = grad.ColorfulColors(4)
+	testStr(t, colors[0].Hex(), "#0000ff")
+	testStr(t, colors[1].Hex(), "#00ffff")
+	testStr(t, colors[2].Hex(), "#ffff00")
+	testStr(t, colors[3].Hex(), "#00ff00")
 }
 
 func TestError(t *testing.T) {

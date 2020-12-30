@@ -294,12 +294,11 @@ All preset gradients are in the domain 0..1.
 grad1, err := colorgrad.NewGradient().
     HtmlColors("#18dbf4", "#f6ff56").
     Build()
+
+grad2 := grad1.Sharp(7)
 ```
 ![img](doc/images/gradient-normal.png)
 
-```go
-grad2 := grad1.Sharp(7)
-```
 ![img](doc/images/gradient-sharp.png)
 
 ```go
