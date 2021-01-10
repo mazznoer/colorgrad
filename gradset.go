@@ -27,7 +27,7 @@ func PiYG() Gradient {
 }
 
 func PuOr() Gradient {
-	colors := []string{"#7f3b08", "#b35806", "#e08214", "#fdb863", "#fee0b6", "#f7f7f7", "#d8daeb", "#b2abd2", "#8073ac", "#542788", "#2d004b"}
+	colors := []string{"#2d004b", "#542788", "#8073ac", "#b2abd2", "#d8daeb", "#f7f7f7", "#fee0b6", "#fdb863", "#e08214", "#b35806", "#7f3b08"}
 	grad, _ := NewGradient().
 		HtmlColors(colors...).
 		Build()

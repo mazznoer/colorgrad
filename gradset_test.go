@@ -8,7 +8,7 @@ func TestPreset(t *testing.T) {
 	testGrad(t, BrBG(), "#543005", "#003c30")
 	testGrad(t, PRGn(), "#40004b", "#00441b")
 	testGrad(t, PiYG(), "#8e0152", "#276419")
-	testGrad(t, PuOr(), "#7f3b08", "#2d004b")
+	testGrad(t, PuOr(), "#2d004b", "#7f3b08")
 	testGrad(t, RdBu(), "#67001f", "#053061")
 	testGrad(t, RdGy(), "#67001f", "#1a1a1a")
 	testGrad(t, RdYlBu(), "#a50026", "#313695")
