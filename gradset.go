@@ -93,8 +93,9 @@ func Greens() Gradient {
 }
 
 func Greys() Gradient {
+	colors := []string{"#ffffff", "#f0f0f0", "#d9d9d9", "#bdbdbd", "#969696", "#737373", "#525252", "#252525", "#000000"}
 	grad, _ := NewGradient().
-		HtmlColors("#ffffff", "#000000").
+		HtmlColors(colors...).
 		Build()
 	return grad
 }
