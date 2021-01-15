@@ -13,12 +13,10 @@ Go (Golang) _color scales_ library.
 
 * [Custom Gradient](#custom-gradient)
 * [Preset Gradients](#preset-gradients)
-* [Hard-Edged Gradient](#hard-edged-gradient)
+* [Using the Gradient](#using-the-gradient)
 * [Color Schemes](#color-schemes)
 * [Examples](#examples)
 * [Playground](#playground)
-* [Dependency](#dependency)
-* [Inspirations](#inspirations)
 
 ```go
 import "github.com/mazznoer/colorgrad"
@@ -288,7 +286,52 @@ All preset gradients are in the domain 0..1.
 `colorgrad.Sinebow()`
 ![img](doc/images/preset/Sinebow.png)
 
-## Hard-Edged Gradient
+## Using the Gradient
+
+Get the gradient domain's min and max.
+
+```go
+grad := colorgrad.Rainbow()
+
+fmt.Println(grad.Domain()) // 0 1
+```
+
+Get color at certain position.
+
+```go
+grad := colorgrad.Rainbow()
+
+fmt.Println(grad.At(0.0).Hex()) // #6e40aa
+fmt.Println(grad.At(0.5).Hex()) // #aff05b
+fmt.Println(grad.At(1.0).Hex()) // #6e40aa
+```
+
+Get colors evenly spaced across gradient.
+
+```go
+grad := colorgrad.Rainbow()
+
+for _, c := range grad.ColorfulColors(10) {
+    fmt.Println(c.Hex())
+}
+```
+
+Output:
+
+```console
+#6e40aa
+#c83dac
+#ff5375
+#ff8c38
+#c9d33a
+#7cf659
+#5dea8d
+#48b8d0
+#4775de
+#6e40aa
+```
+
+### Hard-Edged Gradient
 
 ```go
 grad1, err := colorgrad.NewGradient().
@@ -446,17 +489,19 @@ Example output:
 * [Basic](https://play.golang.org/p/qoUQvzOkceg)
 * [Random colors](https://play.golang.org/p/d67x9di4sAF)
 
-## Dependency
+## Dependencies
 
 * [colorful](https://github.com/lucasb-eyer/go-colorful)
+* [csscolorparser](https://github.com/mazznoer/csscolorparser)
 
 ## Inspirations
 
-* [chroma.js](https://github.com/gka/chroma.js)
+* [chroma.js](https://gka.github.io/chroma.js/#color-scales)
 * [d3-scale-chromatic](https://github.com/d3/d3-scale-chromatic/)
 * colorful's [gradientgen.go](https://github.com/lucasb-eyer/go-colorful/blob/master/doc/gradientgen/gradientgen.go)
 
 ## Links
 
 * [colorgrad-rs](https://github.com/mazznoer/colorgrad-rs) - Rust port of this library
-
+* [https://www.color-blindness.com/coblis-color-blindness-simulator/](https://www.color-blindness.com/coblis-color-blindness-simulator/)
+* [https://github.com/UniStuttgart-VISUS/visual-system-simulator](https://github.com/UniStuttgart-VISUS/visual-system-simulator)
