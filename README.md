@@ -55,18 +55,16 @@ grad, err := colorgrad.NewGradient().
 ```
 ![img](doc/images/custom-colors.png)
 
-### Using Hex Colors
+### Using Web Color Format
+
+`HtmlColors()` method accepts [named colors](https://www.w3.org/TR/css-color-4/#named-colors), hexadecimal (`#rgb`, `#rgba`, `#rrggbb`, `#rrggbbaa`), `rgb()`, `rgba()`, `hsl()`, `hsla()`, `hwb()`, and `hsv()`.
 
 ```go
 grad, err := colorgrad.NewGradient().
-    HtmlColors("#c41189", "#00BFFF", "#FFD700").
+    HtmlColors("#C41189", "#00BFFF", "#FFD700").
     Build()
 ```
 ![img](doc/images/custom-hex-colors.png)
-
-### Named Colors
-
-We can also use named colors as defined in the SVG 1.1 spec.
 
 ```go
 grad, err := colorgrad.NewGradient().
@@ -74,8 +72,6 @@ grad, err := colorgrad.NewGradient().
     Build()
 ```
 ![img](doc/images/custom-named-colors.png)
-
-### CSS Color String
 
 ```go
 grad, err := colorgrad.NewGradient().
@@ -90,12 +86,16 @@ grad, err := colorgrad.NewGradient().
 
 ### Domain & Color Position
 
+Default domain is [0..1].
+
 ```go
 grad, err := colorgrad.NewGradient().
     HtmlColors("deeppink", "gold", "seagreen").
     Build()
 ```
 ![img](https://raw.githubusercontent.com/mazznoer/colorgrad-rs/master/docs/images/domain-default.png)
+
+Set the domain to [0..100].
 
 ```go
 grad, err := colorgrad.NewGradient().
@@ -105,6 +105,8 @@ grad, err := colorgrad.NewGradient().
 ```
 ![img](https://raw.githubusercontent.com/mazznoer/colorgrad-rs/master/docs/images/domain-100.png)
 
+Set the domain to [-1..1].
+
 ```go
 grad, err := colorgrad.NewGradient().
     HtmlColors("deeppink", "gold", "seagreen").
@@ -113,6 +115,8 @@ grad, err := colorgrad.NewGradient().
 ```
 ![img](https://raw.githubusercontent.com/mazznoer/colorgrad-rs/master/docs/images/domain-neg1-1.png)
 
+Set exact position for each color. The domain is [0..1].
+
 ```go
 grad, err := colorgrad.NewGradient().
     HtmlColors("deeppink", "gold", "seagreen").
@@ -120,6 +124,8 @@ grad, err := colorgrad.NewGradient().
     Build()
 ```
 ![img](https://raw.githubusercontent.com/mazznoer/colorgrad-rs/master/docs/images/color-position-1.png)
+
+Set exact position for each color. The domain is [15..80].
 
 ```go
 grad, err := colorgrad.NewGradient().
@@ -162,7 +168,7 @@ With `Clamped()`
 
 ## Preset Gradients
 
-All preset gradients are in the domain 0..1.
+All preset gradients are in the domain [0..1].
 
 ### Diverging
 
@@ -288,7 +294,7 @@ All preset gradients are in the domain 0..1.
 
 ## Using the Gradient
 
-Get the gradient domain's min and max.
+### Get the domain
 
 ```go
 grad := colorgrad.Rainbow()
@@ -296,7 +302,7 @@ grad := colorgrad.Rainbow()
 fmt.Println(grad.Domain()) // 0 1
 ```
 
-Get color at certain position.
+### Get single color at certain position
 
 ```go
 grad := colorgrad.Rainbow()
@@ -306,7 +312,31 @@ fmt.Println(grad.At(0.5).Hex()) // #aff05b
 fmt.Println(grad.At(1.0).Hex()) // #6e40aa
 ```
 
-Get colors evenly spaced across gradient.
+### Get n colors evenly spaced across gradient
+
+`.Colors()` will return `[]color.Color`.
+
+```go
+grad := colorgrad.Rainbow()
+
+for _, c := range grad.Colors(7) {
+    fmt.Println(c)
+}
+```
+
+Output:
+
+```console
+{0.43021004989867906 0.25023866753368473 0.6663314402976028}
+{0.9324699655386229 0.2641323667713124 0.5856493589115485}
+{1 0.5479694546462268 0.220207078599215}
+{0.68717707266999 0.9403236324800919 0.355050281779196}
+{0.36562500000000014 0.9182994327976323 0.5525738542381139}
+{0.25 0.589697182728592 0.877839930901789}
+{0.4302100498986791 0.2502386675336847 0.6663314402976028}
+```
+
+`.ColorfulColors()` will return `[]colorful.Color`.
 
 ```go
 grad := colorgrad.Rainbow()
@@ -412,7 +442,7 @@ import (
 
 func main() {
     grad, _ := colorgrad.NewGradient().
-        HtmlColors("#c41189", "#00BFFF", "#FFD700").
+        HtmlColors("#C41189", "#00BFFF", "#FFD700").
         Build()
 
     w := 1500
