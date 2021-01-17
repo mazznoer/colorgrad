@@ -207,22 +207,38 @@ func TestDomain(t *testing.T) {
 	testStr(t, grad.At(67).Hex(), "#ffff00")
 }
 
-func TestSharp(t *testing.T) {
-	grad, _ := NewGradient().Build()
-	grad2 := grad.Sharp(7)
-	testStr(t, grad2.At(0).Hex(), "#000000")
-	testStr(t, grad2.At(1).Hex(), "#ffffff")
+func TestSharpGradient(t *testing.T) {
+	grad, _ := NewGradient().
+		HtmlColors("#f00", "#0f0", "#00f").
+		Build()
 
-	testStr(t, grad2.At(math.NaN()).Hex(), "#000000")
-	testStr(t, grad2.At(-0.01).Hex(), "#000000")
-	testStr(t, grad2.At(1.01).Hex(), "#ffffff")
-
-	colors := grad2.ColorfulColors(7)
-	if len(colors) != 7 {
-		t.Errorf("Expected 7, got %v", len(colors))
+	// Sharp(0) will return black gradient
+	grad1 := grad.Sharp(0)
+	if !isZeroGradient(grad1) {
+		t.Errorf("It should zeroGradient")
 	}
-	testStr(t, colors[0].Hex(), "#000000")
-	testStr(t, colors[6].Hex(), "#ffffff")
+
+	// Sharp(1)
+	grad2 := grad.Sharp(1)
+	testStr(t, grad2.At(0.0).Hex(), "#ff0000")
+	testStr(t, grad2.At(0.5).Hex(), "#ff0000")
+	testStr(t, grad2.At(1.0).Hex(), "#ff0000")
+
+	// Sharp(3)
+	grad3 := grad.Sharp(3)
+	testStr(t, grad3.At(0.0).Hex(), "#ff0000")
+	testStr(t, grad3.At(0.2).Hex(), "#ff0000")
+
+	testStr(t, grad3.At(0.4).Hex(), "#00ff00")
+	testStr(t, grad3.At(0.5).Hex(), "#00ff00")
+	testStr(t, grad3.At(0.6).Hex(), "#00ff00")
+
+	testStr(t, grad3.At(0.9).Hex(), "#0000ff")
+	testStr(t, grad3.At(1.0).Hex(), "#0000ff")
+
+	testStr(t, grad3.At(-0.1).Hex(), "#ff0000")
+	testStr(t, grad3.At(1.1).Hex(), "#0000ff")
+	testStr(t, grad3.At(math.NaN()).Hex(), "#ff0000")
 }
 
 func TestGetColors(t *testing.T) {

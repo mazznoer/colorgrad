@@ -3,7 +3,6 @@ package colorgrad
 import (
 	"fmt"
 	"image/color"
-	"math"
 
 	"github.com/lucasb-eyer/go-colorful"
 	"github.com/mazznoer/csscolorparser"
@@ -63,12 +62,19 @@ func (g Gradient) Domain() (float64, float64) {
 
 // Return a new hard-edge gradient
 func (g Gradient) Sharp(n uint) Gradient {
+	if n == 0 {
+		return Gradient{
+			grad: zeroGradient{},
+			min:  0,
+			max:  1,
+		}
+	}
 	gradbase := sharpGradient{
 		colors: g.ColorfulColors(n),
 		pos:    linspace(g.min, g.max, n+1),
 		n:      int(n),
-		min:    g.min,
-		max:    g.max,
+		dmin:   g.min,
+		dmax:   g.max,
 	}
 	return Gradient{
 		grad: gradbase,
@@ -170,9 +176,9 @@ func (gb *GradientBuilder) Build() (Gradient, error) {
 	gradbase := gradientX{
 		colors: gb.colors,
 		pos:    gb.pos,
-		min:    gb.pos[0],
-		max:    gb.pos[len(gb.pos)-1],
-		count:  len(gb.colors),
+		dmin:   gb.pos[0],
+		dmax:   gb.pos[len(gb.pos)-1],
+		count:  len(gb.colors) - 1,
 		mode:   gb.mode,
 	}
 
@@ -186,22 +192,22 @@ func (gb *GradientBuilder) Build() (Gradient, error) {
 type gradientX struct {
 	colors []colorful.Color
 	pos    []float64
-	min    float64
-	max    float64
+	dmin   float64
+	dmax   float64
 	count  int
 	mode   BlendMode
 }
 
 func (gx gradientX) At(t float64) colorful.Color {
-	if math.IsNaN(t) || t < gx.min {
+	if t < gx.dmin {
 		return gx.colors[0]
 	}
 
-	//if t > gx.max {
-	//	return gx.colors[gx.count-1]
-	//}
+	if t > gx.dmax {
+		return gx.colors[gx.count]
+	}
 
-	for i := 0; i < gx.count-1; i++ {
+	for i := 0; i < gx.count; i++ {
 		p1 := gx.pos[i]
 		p2 := gx.pos[i+1]
 
@@ -226,30 +232,30 @@ func (gx gradientX) At(t float64) colorful.Color {
 			}
 		}
 	}
-	return gx.colors[gx.count-1]
+	return gx.colors[0]
 }
 
 type sharpGradient struct {
 	colors []colorful.Color
 	pos    []float64
 	n      int
-	min    float64
-	max    float64
+	dmin   float64
+	dmax   float64
 }
 
 func (sg sharpGradient) At(t float64) colorful.Color {
-	if math.IsNaN(t) || t < sg.min {
+	if t < sg.dmin {
 		return sg.colors[0]
 	}
 
-	//if t > sg.max {
-	//	return sg.colors[sg.n-1]
-	//}
+	if t > sg.dmax {
+		return sg.colors[sg.n-1]
+	}
 
 	for i := 0; i < sg.n; i++ {
 		if (sg.pos[i] <= t) && (t <= sg.pos[i+1]) {
 			return sg.colors[i]
 		}
 	}
-	return sg.colors[sg.n-1]
+	return sg.colors[0]
 }
