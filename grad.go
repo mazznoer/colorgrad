@@ -38,7 +38,7 @@ func (g Gradient) At(t float64) colorful.Color {
 // Get n colors evenly spaced across gradient
 func (g Gradient) ColorfulColors(count uint) []colorful.Color {
 	d := g.max - g.min
-	l := float64(count - 1)
+	l := float64(count) - 1
 	colors := make([]colorful.Color, count)
 	for i := range colors {
 		colors[i] = g.grad.At(g.min + (float64(i)*d)/l).Clamped()
@@ -65,8 +65,8 @@ func (g Gradient) Sharp(n uint) Gradient {
 	if n == 0 {
 		return Gradient{
 			grad: zeroGradient{},
-			min:  0,
-			max:  1,
+			min:  g.min,
+			max:  g.max,
 		}
 	}
 	gradbase := sharpGradient{

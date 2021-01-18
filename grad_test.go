@@ -213,16 +213,16 @@ func TestSharpGradient(t *testing.T) {
 		Build()
 
 	// Sharp(0) will return black gradient
-	grad1 := grad.Sharp(0)
-	if !isZeroGradient(grad1) {
+	grad0 := grad.Sharp(0)
+	if !isZeroGradient(grad0) {
 		t.Errorf("It should zeroGradient")
 	}
 
 	// Sharp(1)
-	grad2 := grad.Sharp(1)
-	testStr(t, grad2.At(0.0).Hex(), "#ff0000")
-	testStr(t, grad2.At(0.5).Hex(), "#ff0000")
-	testStr(t, grad2.At(1.0).Hex(), "#ff0000")
+	grad1 := grad.Sharp(1)
+	testStr(t, grad1.At(0.0).Hex(), "#ff0000")
+	testStr(t, grad1.At(0.5).Hex(), "#ff0000")
+	testStr(t, grad1.At(1.0).Hex(), "#ff0000")
 
 	// Sharp(3)
 	grad3 := grad.Sharp(3)
@@ -239,19 +239,61 @@ func TestSharpGradient(t *testing.T) {
 	testStr(t, grad3.At(-0.1).Hex(), "#ff0000")
 	testStr(t, grad3.At(1.1).Hex(), "#0000ff")
 	testStr(t, grad3.At(math.NaN()).Hex(), "#ff0000")
+
+	// Sharp(2)
+	grad, _ = NewGradient().
+		HtmlColors("#f00", "#0f0", "#00f").
+		Domain(-1, 1).
+		Build()
+	grad2 := grad.Sharp(2)
+	testStr(t, grad2.At(-1.0).Hex(), "#ff0000")
+	testStr(t, grad2.At(-0.5).Hex(), "#ff0000")
+	testStr(t, grad2.At(-0.1).Hex(), "#ff0000")
+
+	testStr(t, grad2.At(0.1).Hex(), "#0000ff")
+	testStr(t, grad2.At(0.5).Hex(), "#0000ff")
+	testStr(t, grad2.At(1.0).Hex(), "#0000ff")
 }
 
 func TestGetColors(t *testing.T) {
 	grad, _ := NewGradient().Build()
-	colors1 := grad.ColorfulColors(5) // []colorful.Color
-	colors2 := grad.Colors(5)         // []color.Color
+	colorsA := grad.ColorfulColors(5) // []colorful.Color
+	colorsB := grad.Colors(5)         // []color.Color
 
-	for i, c2 := range colors2 {
-		var c1 color.Color = colors1[i]
+	for i, c2 := range colorsB {
+		var c1 color.Color = colorsA[i]
 		if c1 != c2 {
 			t.Errorf("%v != %v", c1, c2)
 		}
 	}
+
+	colors0 := grad.ColorfulColors(0)
+	if len(colors0) != 0 {
+		t.Errorf("Error.")
+	}
+	colors1 := grad.ColorfulColors(1)
+	testStr(t, colors1[0].Hex(), "#000000")
+
+	colors2 := grad.ColorfulColors(2)
+	testStr(t, colors2[0].Hex(), "#000000")
+	testStr(t, colors2[1].Hex(), "#ffffff")
+
+	colors3 := grad.ColorfulColors(3)
+	testStr(t, colors3[0].Hex(), "#000000")
+	testStr(t, colors3[1].Hex(), "#808080")
+	testStr(t, colors3[2].Hex(), "#ffffff")
+
+	grad, _ = NewGradient().
+		HtmlColors("#f00", "#0f0", "#00f").
+		Domain(-1, 1).
+		Build()
+
+	colors5 := grad.ColorfulColors(5)
+	testStr(t, colors5[0].Hex(), "#ff0000")
+	testStr(t, colors5[1].Hex(), "#808000")
+	testStr(t, colors5[2].Hex(), "#00ff00")
+	testStr(t, colors5[3].Hex(), "#008080")
+	testStr(t, colors5[4].Hex(), "#0000ff")
 }
 
 func testStr(t *testing.T, result, expected string) {
