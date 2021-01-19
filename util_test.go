@@ -5,7 +5,17 @@ import (
 )
 
 func TestLinspace(t *testing.T) {
-	result := linspace(0, 1, 2)
+	result := linspace(0, 1, 0)
+	if len(result) != 0 {
+		t.Error()
+	}
+
+	result = linspace(0, 1, 1)
+	if result[0] != 0 {
+		t.Error()
+	}
+
+	result = linspace(0, 1, 2)
 	expected := []float64{0, 1}
 	for i, v := range result {
 		if v != expected[i] {

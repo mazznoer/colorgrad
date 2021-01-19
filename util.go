@@ -7,8 +7,11 @@ import (
 )
 
 func linspace(min, max float64, n uint) []float64 {
+	if n == 1 {
+		return []float64{min}
+	}
 	d := max - min
-	l := float64(n - 1)
+	l := float64(n) - 1
 	res := make([]float64, n)
 	for i := range res {
 		res[i] = (min + (float64(i)*d)/l)
