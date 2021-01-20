@@ -117,8 +117,7 @@ func (gb *GradientBuilder) HtmlColors(htmlColors ...string) *GradientBuilder {
 			gb.invalidHtmlColors = append(gb.invalidHtmlColors, s)
 			continue
 		}
-		col, _ := colorful.MakeColor(c)
-		gb.colors = append(gb.colors, col)
+		gb.colors = append(gb.colors, colorful.Color{R: c.R, G: c.G, B: c.B})
 	}
 	return gb
 }
