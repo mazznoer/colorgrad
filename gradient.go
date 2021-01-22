@@ -89,6 +89,71 @@ func (zg zeroGradient) At(t float64) colorful.Color {
 	return colorful.Color{R: 0, G: 0, B: 0}
 }
 
+type gradientX struct {
+	colors []colorful.Color
+	pos    []float64
+	dmin   float64
+	dmax   float64
+	count  int
+	mode   BlendMode
+}
+
+func (gx gradientX) At(t float64) colorful.Color {
+	if t < gx.dmin {
+		return gx.colors[0]
+	}
+	if t > gx.dmax {
+		return gx.colors[gx.count]
+	}
+	for i := 0; i < gx.count; i++ {
+		p1 := gx.pos[i]
+		p2 := gx.pos[i+1]
+		if (p1 <= t) && (t <= p2) {
+			t := (t - p1) / (p2 - p1)
+			a := gx.colors[i]
+			b := gx.colors[i+1]
+			switch gx.mode {
+			case HCL:
+				return a.BlendHcl(b, t)
+			case HSV:
+				return a.BlendHsv(b, t)
+			case LAB:
+				return a.BlendLab(b, t)
+			case LRGB:
+				return blendLrgb(a, b, t)
+			case LUV:
+				return a.BlendLuv(b, t)
+			case RGB:
+				return a.BlendRgb(b, t)
+			}
+		}
+	}
+	return gx.colors[0]
+}
+
+type sharpGradient struct {
+	colors []colorful.Color
+	pos    []float64
+	n      int
+	dmin   float64
+	dmax   float64
+}
+
+func (sg sharpGradient) At(t float64) colorful.Color {
+	if t < sg.dmin {
+		return sg.colors[0]
+	}
+	if t > sg.dmax {
+		return sg.colors[sg.n-1]
+	}
+	for i := 0; i < sg.n; i++ {
+		if (sg.pos[i] <= t) && (t <= sg.pos[i+1]) {
+			return sg.colors[i]
+		}
+	}
+	return sg.colors[0]
+}
+
 type GradientBuilder struct {
 	colors            []colorful.Color
 	pos               []float64
@@ -186,75 +251,4 @@ func (gb *GradientBuilder) Build() (Gradient, error) {
 		min:  gb.pos[0],
 		max:  gb.pos[len(gb.pos)-1],
 	}, nil
-}
-
-type gradientX struct {
-	colors []colorful.Color
-	pos    []float64
-	dmin   float64
-	dmax   float64
-	count  int
-	mode   BlendMode
-}
-
-func (gx gradientX) At(t float64) colorful.Color {
-	if t < gx.dmin {
-		return gx.colors[0]
-	}
-
-	if t > gx.dmax {
-		return gx.colors[gx.count]
-	}
-
-	for i := 0; i < gx.count; i++ {
-		p1 := gx.pos[i]
-		p2 := gx.pos[i+1]
-
-		if (p1 <= t) && (t <= p2) {
-			t := (t - p1) / (p2 - p1)
-			a := gx.colors[i]
-			b := gx.colors[i+1]
-
-			switch gx.mode {
-			case HCL:
-				return a.BlendHcl(b, t)
-			case HSV:
-				return a.BlendHsv(b, t)
-			case LAB:
-				return a.BlendLab(b, t)
-			case LRGB:
-				return blendLrgb(a, b, t)
-			case LUV:
-				return a.BlendLuv(b, t)
-			case RGB:
-				return a.BlendRgb(b, t)
-			}
-		}
-	}
-	return gx.colors[0]
-}
-
-type sharpGradient struct {
-	colors []colorful.Color
-	pos    []float64
-	n      int
-	dmin   float64
-	dmax   float64
-}
-
-func (sg sharpGradient) At(t float64) colorful.Color {
-	if t < sg.dmin {
-		return sg.colors[0]
-	}
-
-	if t > sg.dmax {
-		return sg.colors[sg.n-1]
-	}
-
-	for i := 0; i < sg.n; i++ {
-		if (sg.pos[i] <= t) && (t <= sg.pos[i+1]) {
-			return sg.colors[i]
-		}
-	}
-	return sg.colors[0]
 }
