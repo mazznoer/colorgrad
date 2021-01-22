@@ -61,32 +61,26 @@ func (g Gradient) Domain() (float64, float64) {
 }
 
 // Return a new hard-edge gradient
-func (g Gradient) Sharp(n uint) Gradient {
-	if n == 0 {
+func (g Gradient) Sharp(n uint, t float64) Gradient {
+	if n < 2 {
 		return Gradient{
-			grad: zeroGradient{},
+			grad: zeroGradient{color: g.grad.At(g.min)},
 			min:  g.min,
 			max:  g.max,
 		}
 	}
-	gradbase := sharpGradient{
-		colors: g.ColorfulColors(n),
-		pos:    linspace(g.min, g.max, n+1),
-		n:      int(n),
-		dmin:   g.min,
-		dmax:   g.max,
+	if t > 0 {
+		return newSharpGradientX(g, n, t)
 	}
-	return Gradient{
-		grad: gradbase,
-		min:  g.min,
-		max:  g.max,
-	}
+	return newSharpGradient(g, n)
 }
 
-type zeroGradient struct{}
+type zeroGradient struct {
+	color colorful.Color
+}
 
 func (zg zeroGradient) At(t float64) colorful.Color {
-	return colorful.Color{R: 0, G: 0, B: 0}
+	return zg.color
 }
 
 type gradientX struct {
@@ -152,6 +146,95 @@ func (sg sharpGradient) At(t float64) colorful.Color {
 		}
 	}
 	return sg.colors[0]
+}
+
+func newSharpGradient(grad Gradient, n uint) Gradient {
+	dmin, dmax := grad.Domain()
+	gradbase := sharpGradient{
+		colors: grad.ColorfulColors(n),
+		pos:    linspace(dmin, dmax, n+1),
+		n:      int(n),
+		dmin:   dmin,
+		dmax:   dmax,
+	}
+	return Gradient{
+		grad: gradbase,
+		min:  dmin,
+		max:  dmax,
+	}
+}
+
+type sharpGradientX struct {
+	colors []colorful.Color
+	pos    []float64
+	last   int
+	dmin   float64
+	dmax   float64
+}
+
+func (sg sharpGradientX) At(t float64) colorful.Color {
+	if t < sg.dmin {
+		return sg.colors[0]
+	}
+	if t > sg.dmax {
+		return sg.colors[sg.last]
+	}
+	for i := 0; i < sg.last; i++ {
+		p1 := sg.pos[i]
+		p2 := sg.pos[i+1]
+		if (p1 <= t) && (t <= p2) {
+			if i%2 == 0 {
+				return sg.colors[i]
+			}
+			t := (t - p1) / (p2 - p1)
+			a := sg.colors[i]
+			b := sg.colors[i+1]
+			return a.BlendRgb(b, t)
+		}
+	}
+	return sg.colors[0]
+}
+
+func newSharpGradientX(grad Gradient, n uint, t float64) Gradient {
+	colors := make([]colorful.Color, n*2)
+	i := 0
+	for _, c := range grad.ColorfulColors(n) {
+		colors[i] = c
+		i++
+		colors[i] = c
+		i++
+	}
+	dmin, dmax := grad.Domain()
+	t = clamp01(t) * (dmax - dmin) / float64(n) / 4
+	p := linspace(dmin, dmax, n+1)
+	pos := make([]float64, n*2)
+	i = 0
+	j := 0
+	for x := 0; x < int(n); x++ {
+		pos[i] = p[j]
+		if i > 0 {
+			pos[i] += t
+		}
+		i++
+		j++
+		pos[i] = p[j]
+		if i < len(colors)-1 {
+			pos[i] -= t
+		}
+		i++
+	}
+	gradbase := sharpGradientX{
+		colors: colors,
+		pos:    pos,
+		last:   int(n*2 - 1),
+		dmin:   dmin,
+		dmax:   dmax,
+	}
+	return Gradient{
+		grad: gradbase,
+		min:  dmin,
+		max:  dmax,
+	}
 }
 
 type GradientBuilder struct {
