@@ -1,10 +1,6 @@
 package colorgrad
 
-import (
-	"math"
-
-	"github.com/lucasb-eyer/go-colorful"
-)
+import "github.com/lucasb-eyer/go-colorful"
 
 func linspace(min, max float64, n uint) []float64 {
 	if n == 1 {
@@ -19,12 +15,12 @@ func linspace(min, max float64, n uint) []float64 {
 	return res
 }
 
-// Algorithm taken from: https://github.com/gka/chroma.js
-
 func blendLrgb(a, b colorful.Color, t float64) colorful.Color {
-	return colorful.Color{
-		R: math.Sqrt(math.Pow(a.R, 2)*(1-t) + math.Pow(b.R, 2)*t),
-		G: math.Sqrt(math.Pow(a.G, 2)*(1-t) + math.Pow(b.G, 2)*t),
-		B: math.Sqrt(math.Pow(a.B, 2)*(1-t) + math.Pow(b.B, 2)*t),
-	}
+	r1, g1, b1 := a.LinearRgb()
+	r2, g2, b2 := b.LinearRgb()
+	return colorful.LinearRgb(
+		r1+t*(r2-r1),
+		g1+t*(g2-g1),
+		b1+t*(b2-b1),
+	)
 }
