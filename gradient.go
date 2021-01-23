@@ -17,6 +17,7 @@ const (
 	LRGB
 	LUV
 	RGB
+	OKLAB
 )
 
 type gradientBase interface {
@@ -119,6 +120,8 @@ func (gx gradientX) At(t float64) colorful.Color {
 				return a.BlendLuv(b, t)
 			case RGB:
 				return a.BlendRgb(b, t)
+			case OKLAB:
+				return blendOklab(a, b, t)
 			}
 		}
 	}
