@@ -161,6 +161,18 @@ func TestError(t *testing.T) {
 	if !isZeroGradient(grad) {
 		t.Errorf("It should zeroGradient")
 	}
+
+	// Wrong domain 3
+	grad, err = NewGradient().
+		HtmlColors("#777", "#fff", "#ccc", "#222").
+		Domain(1, 0).
+		Build()
+	if err == nil {
+		t.Errorf("It should error")
+	}
+	if !isZeroGradient(grad) {
+		t.Errorf("It should zeroGradient")
+	}
 }
 
 func TestDomain(t *testing.T) {

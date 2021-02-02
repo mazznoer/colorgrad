@@ -309,32 +309,33 @@ func (gb *GradientBuilder) Build() (Gradient, error) {
 	if len(gb.pos) == 0 {
 		pos = linspace(0, 1, uint(len(gb.colors)))
 	} else if len(gb.pos) == len(gb.colors) {
+		for i := 0; i < len(gb.pos)-1; i++ {
+			if gb.pos[i] > gb.pos[i+1] {
+				return zgrad, fmt.Errorf("Domain number %v (%v) is bigger than the next domain (%v)", i+1, gb.pos[i], gb.pos[i+1])
+			}
+		}
 		pos = gb.pos
 	} else if len(gb.pos) == 2 {
+		if gb.pos[0] >= gb.pos[1] {
+			return zgrad, fmt.Errorf("Wrong domain.")
+		}
 		pos = linspace(gb.pos[0], gb.pos[1], uint(len(gb.colors)))
 	} else {
 		return zgrad, fmt.Errorf("Wrong domain.")
 	}
-	gb.pos = pos
-
-	for i := 0; i < len(gb.pos)-1; i++ {
-		if gb.pos[i] > gb.pos[i+1] {
-			return zgrad, fmt.Errorf("Domain number %v (%v) is bigger than the next domain (%v)", i+1, gb.pos[i], gb.pos[i+1])
-		}
-	}
 
 	gradbase := gradientX{
 		colors: gb.colors,
-		pos:    gb.pos,
-		dmin:   gb.pos[0],
-		dmax:   gb.pos[len(gb.pos)-1],
+		pos:    pos,
+		dmin:   pos[0],
+		dmax:   pos[len(pos)-1],
 		count:  len(gb.colors) - 1,
 		mode:   gb.mode,
 	}
 
 	return Gradient{
 		grad: gradbase,
-		min:  gb.pos[0],
-		max:  gb.pos[len(gb.pos)-1],
+		min:  pos[0],
+		max:  pos[len(pos)-1],
 	}, nil
 }
