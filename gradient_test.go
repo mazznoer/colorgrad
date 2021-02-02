@@ -33,49 +33,49 @@ func TestBasic1(t *testing.T) {
 	// Blend mode
 	grad, _ = NewGradient().
 		HtmlColors("#333", "#bbb").
-		Mode(HCL).
+		Mode(BlendHcl).
 		Build()
 	testStr(t, grad.At(0).Hex(), "#333333")
 	testStr(t, grad.At(1).Hex(), "#bbbbbb")
 
 	grad, _ = NewGradient().
 		HtmlColors("#333", "#bbb").
-		Mode(HSV).
+		Mode(BlendHsv).
 		Build()
 	testStr(t, grad.At(0).Hex(), "#333333")
 	testStr(t, grad.At(1).Hex(), "#bbbbbb")
 
 	grad, _ = NewGradient().
 		HtmlColors("#333", "#bbb").
-		Mode(LAB).
+		Mode(BlendLab).
 		Build()
 	testStr(t, grad.At(0).Hex(), "#333333")
 	testStr(t, grad.At(1).Hex(), "#bbbbbb")
 
 	grad, _ = NewGradient().
 		HtmlColors("#333", "#bbb").
-		Mode(LRGB).
+		Mode(BlendLinearRgb).
 		Build()
 	testStr(t, grad.At(0).Hex(), "#333333")
 	testStr(t, grad.At(1).Hex(), "#bbbbbb")
 
 	grad, _ = NewGradient().
 		HtmlColors("#333", "#bbb").
-		Mode(LUV).
+		Mode(BlendLuv).
 		Build()
 	testStr(t, grad.At(0).Hex(), "#333333")
 	testStr(t, grad.At(1).Hex(), "#bbbbbb")
 
 	grad, _ = NewGradient().
 		HtmlColors("#333", "#bbb").
-		Mode(RGB).
+		Mode(BlendRgb).
 		Build()
 	testStr(t, grad.At(0).Hex(), "#333333")
 	testStr(t, grad.At(1).Hex(), "#bbbbbb")
 
 	grad, _ = NewGradient().
 		HtmlColors("#333", "#bbb").
-		Mode(OKLAB).
+		Mode(BlendOklab).
 		Build()
 	testStr(t, grad.At(0).Hex(), "#333333")
 	testStr(t, grad.At(1).Hex(), "#bbbbbb")

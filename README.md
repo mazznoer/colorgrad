@@ -139,8 +139,8 @@ grad, err := colorgrad.NewGradient().
 
 ```go
 grad, err := colorgrad.NewGradient().
-    HtmlColors("#ff0", "#008ae5").
-    Mode(colorgrad.LRGB).
+    HtmlColors("#fff", "#00f").
+    Mode(colorgrad.BlendOklab).
     Build()
 ```
 ![blend-modes](doc/images/blend-modes.png)
@@ -151,7 +151,7 @@ Read it [here](https://github.com/lucasb-eyer/go-colorful#blending-colors).
 ```go
 grad, err := colorgrad.NewGradient().
     HtmlColors("#DC143C", "#FFD700", "#4682b4").
-    Mode(colorgrad.HCL).
+    Mode(colorgrad.BlendHcl).
     Build()
 
 grad.At(t) // might get invalid RGB color
@@ -363,21 +363,16 @@ Output:
 
 ### Hard-Edged Gradient
 
-```go
-grad1, err := colorgrad.NewGradient().
-    HtmlColors("#18dbf4", "#f6ff56").
-    Build()
-
-grad2 := grad1.Sharp(7)
-```
-![img](doc/images/gradient-normal.png)
-
-![img](doc/images/gradient-sharp.png)
+Converting gradient to hard-edged gradient with 11 segments and 0 smoothness.
 
 ```go
-grad := colorgrad.Spectral().Sharp(19)
+grad := colorgrad.Rainbow().Sharp(11, 0)
 ```
-![img](doc/images/spectral-sharp.png)
+![img](doc/images/rainbow-sharp.png)
+
+This is the effect of different smoothness.
+
+![img](doc/images/sharp-gradients.png)
 
 ## Color Schemes
 
@@ -490,7 +485,7 @@ func main() {
     h := 350
     scale := 0.02
 
-    grad := colorgrad.Rainbow().Sharp(7)
+    grad := colorgrad.Rainbow().Sharp(7, 0.2)
     noise := opensimplex.NewNormalized(996)
     img := image.NewRGBA(image.Rect(0, 0, w, h))
 

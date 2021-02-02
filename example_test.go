@@ -21,7 +21,7 @@ func Example_customGradient() {
 	grad, err := colorgrad.NewGradient().
 		HtmlColors("red", "#FFD700", "lime").
 		Domain(0, 0.35, 1).
-		Mode(colorgrad.LRGB).
+		Mode(colorgrad.BlendOklab).
 		Build()
 
 	if err != nil {

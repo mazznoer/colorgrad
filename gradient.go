@@ -11,13 +11,13 @@ import (
 type BlendMode int
 
 const (
-	HCL BlendMode = iota
-	HSV
-	LAB
-	LRGB
-	LUV
-	RGB
-	OKLAB
+	BlendHcl BlendMode = iota
+	BlendHsv
+	BlendLab
+	BlendLinearRgb
+	BlendLuv
+	BlendRgb
+	BlendOklab
 )
 
 type gradientBase interface {
@@ -108,19 +108,19 @@ func (gx gradientX) At(t float64) colorful.Color {
 			a := gx.colors[i]
 			b := gx.colors[i+1]
 			switch gx.mode {
-			case HCL:
+			case BlendHcl:
 				return a.BlendHcl(b, t)
-			case HSV:
+			case BlendHsv:
 				return a.BlendHsv(b, t)
-			case LAB:
+			case BlendLab:
 				return a.BlendLab(b, t)
-			case LRGB:
+			case BlendLinearRgb:
 				return blendLrgb(a, b, t)
-			case LUV:
+			case BlendLuv:
 				return a.BlendLuv(b, t)
-			case RGB:
+			case BlendRgb:
 				return a.BlendRgb(b, t)
-			case OKLAB:
+			case BlendOklab:
 				return blendOklab(a, b, t)
 			}
 		}
@@ -249,7 +249,7 @@ type GradientBuilder struct {
 
 func NewGradient() *GradientBuilder {
 	return &GradientBuilder{
-		mode: RGB,
+		mode: BlendRgb,
 	}
 }
 
