@@ -27,8 +27,8 @@ type gradientBase interface {
 
 type Gradient struct {
 	grad gradientBase
-	min  float64
-	max  float64
+	dmin float64
+	dmax float64
 }
 
 // Get color at certain position
@@ -38,11 +38,11 @@ func (g Gradient) At(t float64) colorful.Color {
 
 // Get n colors evenly spaced across gradient
 func (g Gradient) ColorfulColors(count uint) []colorful.Color {
-	d := g.max - g.min
+	d := g.dmax - g.dmin
 	l := float64(count) - 1
 	colors := make([]colorful.Color, count)
 	for i := range colors {
-		colors[i] = g.grad.At(g.min + (float64(i)*d)/l).Clamped()
+		colors[i] = g.grad.At(g.dmin + (float64(i)*d)/l).Clamped()
 	}
 	return colors
 }
@@ -58,22 +58,22 @@ func (g Gradient) Colors(count uint) []color.Color {
 
 // Get the gradient domain min and max
 func (g Gradient) Domain() (float64, float64) {
-	return g.min, g.max
+	return g.dmin, g.dmax
 }
 
 // Return a new hard-edge gradient
-func (g Gradient) Sharp(n uint, t float64) Gradient {
-	if n < 2 {
+func (g Gradient) Sharp(segment uint, smoothness float64) Gradient {
+	if segment < 2 {
 		return Gradient{
-			grad: zeroGradient{color: g.grad.At(g.min)},
-			min:  g.min,
-			max:  g.max,
+			grad: zeroGradient{color: g.grad.At(g.dmin)},
+			dmin: g.dmin,
+			dmax: g.dmax,
 		}
 	}
-	if t > 0 {
-		return newSharpGradientX(g, n, t)
+	if smoothness > 0 {
+		return newSharpGradientX(g, segment, smoothness)
 	}
-	return newSharpGradient(g, n)
+	return newSharpGradient(g, segment)
 }
 
 type zeroGradient struct {
@@ -151,19 +151,19 @@ func (sg sharpGradient) At(t float64) colorful.Color {
 	return sg.colors[0]
 }
 
-func newSharpGradient(grad Gradient, n uint) Gradient {
+func newSharpGradient(grad Gradient, segment uint) Gradient {
 	dmin, dmax := grad.Domain()
 	gradbase := sharpGradient{
-		colors: grad.ColorfulColors(n),
-		pos:    linspace(dmin, dmax, n+1),
-		n:      int(n),
+		colors: grad.ColorfulColors(segment),
+		pos:    linspace(dmin, dmax, segment+1),
+		n:      int(segment),
 		dmin:   dmin,
 		dmax:   dmax,
 	}
 	return Gradient{
 		grad: gradbase,
-		min:  dmin,
-		max:  dmax,
+		dmin: dmin,
+		dmax: dmax,
 	}
 }
 
@@ -198,22 +198,22 @@ func (sg sharpGradientX) At(t float64) colorful.Color {
 	return sg.colors[0]
 }
 
-func newSharpGradientX(grad Gradient, n uint, t float64) Gradient {
-	colors := make([]colorful.Color, n*2)
+func newSharpGradientX(grad Gradient, segment uint, smoothness float64) Gradient {
+	colors := make([]colorful.Color, segment*2)
 	i := 0
-	for _, c := range grad.ColorfulColors(n) {
+	for _, c := range grad.ColorfulColors(segment) {
 		colors[i] = c
 		i++
 		colors[i] = c
 		i++
 	}
 	dmin, dmax := grad.Domain()
-	t = clamp01(t) * (dmax - dmin) / float64(n) / 4
-	p := linspace(dmin, dmax, n+1)
-	pos := make([]float64, n*2)
+	t := clamp01(smoothness) * (dmax - dmin) / float64(segment) / 4
+	p := linspace(dmin, dmax, segment+1)
+	pos := make([]float64, segment*2)
 	i = 0
 	j := 0
-	for x := 0; x < int(n); x++ {
+	for x := 0; x < int(segment); x++ {
 		pos[i] = p[j]
 		if i > 0 {
 			pos[i] += t
@@ -229,14 +229,14 @@ func newSharpGradientX(grad Gradient, n uint, t float64) Gradient {
 	gradbase := sharpGradientX{
 		colors: colors,
 		pos:    pos,
-		last:   int(n*2 - 1),
+		last:   int(segment*2 - 1),
 		dmin:   dmin,
 		dmax:   dmax,
 	}
 	return Gradient{
 		grad: gradbase,
-		min:  dmin,
-		max:  dmax,
+		dmin: dmin,
+		dmax: dmax,
 	}
 }
 
@@ -286,8 +286,8 @@ func (gb *GradientBuilder) Mode(mode BlendMode) *GradientBuilder {
 func (gb *GradientBuilder) Build() (Gradient, error) {
 	zgrad := Gradient{
 		grad: zeroGradient{},
-		min:  0,
-		max:  1,
+		dmin: 0,
+		dmax: 1,
 	}
 
 	if gb.invalidHtmlColors != nil {
@@ -335,7 +335,7 @@ func (gb *GradientBuilder) Build() (Gradient, error) {
 
 	return Gradient{
 		grad: gradbase,
-		min:  pos[0],
-		max:  pos[len(pos)-1],
+		dmin: pos[0],
+		dmax: pos[len(pos)-1],
 	}, nil
 }
