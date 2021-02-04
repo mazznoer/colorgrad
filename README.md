@@ -145,27 +145,6 @@ grad, err := colorgrad.NewGradient().
 ```
 ![blend-modes](doc/images/blend-modes.png)
 
-### Beware of Invalid RGB Color
-Read it [here](https://github.com/lucasb-eyer/go-colorful#blending-colors).
-
-```go
-grad, err := colorgrad.NewGradient().
-    HtmlColors("#DC143C", "#FFD700", "#4682b4").
-    Mode(colorgrad.BlendHcl).
-    Build()
-
-grad.At(t) // might get invalid RGB color
-grad.At(t).Clamped() // return closest valid RGB color
-```
-
-Without `Clamped()`
-
-![invalid rgb](doc/images/custom-invalid-colors.png)
-
-With `Clamped()`
-
-![valid rgb](doc/images/custom-clamped.png)
-
 ## Preset Gradients
 
 All preset gradients are in the domain [0..1].
@@ -363,7 +342,7 @@ Output:
 
 ### Hard-Edged Gradient
 
-Converting gradient to hard-edged gradient with 11 segments and 0 smoothness.
+Convert gradient to hard-edged gradient with 11 segments and 0 smoothness.
 
 ```go
 grad := colorgrad.Rainbow().Sharp(11, 0)

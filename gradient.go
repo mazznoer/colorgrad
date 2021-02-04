@@ -109,19 +109,19 @@ func (gx gradientX) At(t float64) colorful.Color {
 			b := gx.colors[i+1]
 			switch gx.mode {
 			case BlendHcl:
-				return a.BlendHcl(b, t)
+				return a.BlendHcl(b, t).Clamped()
 			case BlendHsv:
 				return a.BlendHsv(b, t)
 			case BlendLab:
-				return a.BlendLab(b, t)
+				return a.BlendLab(b, t).Clamped()
 			case BlendLinearRgb:
 				return blendLrgb(a, b, t)
 			case BlendLuv:
-				return a.BlendLuv(b, t)
+				return a.BlendLuv(b, t).Clamped()
 			case BlendRgb:
 				return a.BlendRgb(b, t)
 			case BlendOklab:
-				return blendOklab(a, b, t)
+				return blendOklab(a, b, t).Clamped()
 			}
 		}
 	}
