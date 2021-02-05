@@ -490,7 +490,7 @@ Example output:
 
 ## Playground
 
-* [Basic](https://play.golang.org/p/qoUQvzOkceg)
+* [Basic](https://play.golang.org/p/PlMov8BKfRc)
 * [Random colors](https://play.golang.org/p/d67x9di4sAF)
 
 ## Dependencies
