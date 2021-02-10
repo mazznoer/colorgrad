@@ -350,9 +350,10 @@ func TestGetColors(t *testing.T) {
 	testStr(t, colors5[4].Hex(), "#0000ff")
 }
 
-func testStr(t *testing.T, result, expected string) {
-	if result != expected {
-		t.Errorf("Expected %v, got %v", expected, result)
+func testStr(t *testing.T, a, b string) {
+	if a != b {
+		t.Helper()
+		t.Errorf("Left: %s, right: %s", a, b)
 	}
 }
 

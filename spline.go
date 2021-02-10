@@ -1,6 +1,8 @@
 package colorgrad
 
 import (
+	"math"
+
 	"github.com/lucasb-eyer/go-colorful"
 	"github.com/mazznoer/csscolorparser"
 )
@@ -51,6 +53,9 @@ type splineGradient struct {
 }
 
 func (sg splineGradient) At(t float64) colorful.Color {
+	if math.IsNaN(t) {
+		t = 0
+	}
 	return colorful.Color{
 		R: sg.r.at(t),
 		G: sg.g.at(t),

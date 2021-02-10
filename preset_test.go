@@ -1,6 +1,7 @@
 package colorgrad
 
 import (
+	"math"
 	"testing"
 )
 
@@ -39,20 +40,19 @@ func TestPreset(t *testing.T) {
 	testGrad(t, YlGn(), "#ffffe5", "#004529")
 	testGrad(t, YlOrBr(), "#ffffe5", "#662506")
 	testGrad(t, YlOrRd(), "#ffffcc", "#800026")
+
+	grad := Viridis()
+	testStr(t, grad.At(0.5).Hex(), "#27838e")
 }
 
 func testGrad(t *testing.T, grad Gradient, start, end string) {
-	if isZeroGradient(grad) {
-		t.Errorf("Grad is zeroGradient")
-	}
-
-	a := grad.At(0).Hex()
-	if a != start {
-		t.Errorf("Expected %v, got %v", start, a)
-	}
-
-	b := grad.At(1).Hex()
-	if b != end {
-		t.Errorf("Expected %v, got %v", end, b)
-	}
+	testStr(t, grad.At(0).Hex(), start)
+	testStr(t, grad.At(1).Hex(), end)
+	testStr(t, grad.At(-0.8).Hex(), start)
+	testStr(t, grad.At(-0.5).Hex(), start)
+	testStr(t, grad.At(-0.2).Hex(), start)
+	testStr(t, grad.At(1.2).Hex(), end)
+	testStr(t, grad.At(1.5).Hex(), end)
+	testStr(t, grad.At(1.8).Hex(), end)
+	testStr(t, grad.At(math.NaN()).Hex(), start)
 }
