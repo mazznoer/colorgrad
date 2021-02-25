@@ -84,7 +84,7 @@ func (zg zeroGradient) At(t float64) colorful.Color {
 	return zg.color
 }
 
-type gradientX struct {
+type linearGradient struct {
 	colors []colorful.Color
 	pos    []float64
 	dmin   float64
@@ -93,21 +93,21 @@ type gradientX struct {
 	mode   BlendMode
 }
 
-func (gx gradientX) At(t float64) colorful.Color {
-	if t < gx.dmin {
-		return gx.colors[0]
+func (lg linearGradient) At(t float64) colorful.Color {
+	if t < lg.dmin {
+		return lg.colors[0]
 	}
-	if t > gx.dmax {
-		return gx.colors[gx.count]
+	if t > lg.dmax {
+		return lg.colors[lg.count]
 	}
-	for i := 0; i < gx.count; i++ {
-		p1 := gx.pos[i]
-		p2 := gx.pos[i+1]
+	for i := 0; i < lg.count; i++ {
+		p1 := lg.pos[i]
+		p2 := lg.pos[i+1]
 		if (p1 <= t) && (t <= p2) {
 			t := (t - p1) / (p2 - p1)
-			a := gx.colors[i]
-			b := gx.colors[i+1]
-			switch gx.mode {
+			a := lg.colors[i]
+			b := lg.colors[i+1]
+			switch lg.mode {
 			case BlendHcl:
 				return a.BlendHcl(b, t).Clamped()
 			case BlendHsv:
@@ -125,7 +125,7 @@ func (gx gradientX) At(t float64) colorful.Color {
 			}
 		}
 	}
-	return gx.colors[0]
+	return lg.colors[0]
 }
 
 type sharpGradient struct {
@@ -324,7 +324,7 @@ func (gb *GradientBuilder) Build() (Gradient, error) {
 		return zgrad, fmt.Errorf("Wrong domain.")
 	}
 
-	gradbase := gradientX{
+	gradbase := linearGradient{
 		colors: gb.colors,
 		pos:    pos,
 		dmin:   pos[0],
