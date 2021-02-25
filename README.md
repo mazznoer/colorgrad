@@ -1,13 +1,17 @@
 # colorgrad 🎨
 
+[![Release](https://img.shields.io/github/release/mazznoer/colorgrad.svg)](https://github.com/mazznoer/colorgrad/releases/latest)
 [![PkgGoDev](https://pkg.go.dev/badge/github.com/mazznoer/colorgrad)](https://pkg.go.dev/github.com/mazznoer/colorgrad)
 [![Build Status](https://travis-ci.org/mazznoer/colorgrad.svg?branch=master)](https://travis-ci.org/mazznoer/colorgrad)
 [![Build Status](https://github.com/mazznoer/colorgrad/workflows/Go/badge.svg)](https://github.com/mazznoer/colorgrad/actions)
 [![go report](https://goreportcard.com/badge/github.com/mazznoer/colorgrad)](https://goreportcard.com/report/github.com/mazznoer/colorgrad)
 [![codecov](https://codecov.io/gh/mazznoer/colorgrad/branch/master/graph/badge.svg)](https://codecov.io/gh/mazznoer/colorgrad)
-[![Release](https://img.shields.io/github/release/mazznoer/colorgrad.svg)](https://github.com/mazznoer/colorgrad/releases/latest)
 
-Go (Golang) _color scales_ library.
+Go (Golang) _color scales_ library for data visualization, charts, games, maps, generative art and others.
+
+## Support This Project
+
+[![Donate](https://liberapay.com/assets/widgets/donate.svg)](https://liberapay.com/mazznoer/donate)
 
 ## Index
 
@@ -28,10 +32,6 @@ import "github.com/mazznoer/colorgrad"
 
 ```go
 grad, err := colorgrad.NewGradient().Build()
-
-if err != nil {
-    panic(err)
-}
 ```
 ![img](doc/images/custom-default.png)
 
@@ -139,8 +139,8 @@ grad, err := colorgrad.NewGradient().
 
 ```go
 grad, err := colorgrad.NewGradient().
-    HtmlColors("#fff", "#00f").
-    Mode(colorgrad.BlendOklab).
+    HtmlColors("#FFF", "#00F").
+    Mode(colorgrad.BlendRgb).
     Build()
 ```
 ![blend-modes](doc/images/blend-modes.png)
