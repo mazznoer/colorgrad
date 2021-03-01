@@ -154,7 +154,7 @@ func Cool() Gradient {
 }
 
 func (cg cubehelixGradient) At(t float64) colorful.Color {
-	return cg.start.interpolate(cg.end, t).toColorful()
+	return cg.start.interpolate(cg.end, clamp01(t)).toColorful()
 }
 
 // Rainbow
