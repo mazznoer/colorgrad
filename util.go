@@ -19,6 +19,15 @@ func linspace(min, max float64, n uint) []float64 {
 	return res
 }
 
+// Map t from range [a, b] to range [0, 1]
+func norm(t, a, b float64) float64 {
+	return (t - a) * (1 / (b - a))
+}
+
+func modulo(x, y float64) float64 {
+	return math.Mod(math.Mod(x, y)+y, y)
+}
+
 func blendLrgb(a, b colorful.Color, t float64) colorful.Color {
 	r1, g1, b1 := a.LinearRgb()
 	r2, g2, b2 := b.LinearRgb()

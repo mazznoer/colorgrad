@@ -350,6 +350,68 @@ func TestGetColors(t *testing.T) {
 	testStr(t, colors5[4].Hex(), "#0000ff")
 }
 
+func TestSpreadRepeat(t *testing.T) {
+	grad, _ := NewGradient().
+		HtmlColors("#000", "#fff").
+		Build()
+
+	testStr(t, grad.RepeatAt(-2.0).Hex(), "#000000")
+	testStr(t, grad.RepeatAt(-1.9).Hex(), "#1a1a1a")
+	testStr(t, grad.RepeatAt(-1.5).Hex(), "#808080")
+	testStr(t, grad.RepeatAt(-1.1).Hex(), "#e5e5e5")
+
+	testStr(t, grad.RepeatAt(-1.0).Hex(), "#000000")
+	testStr(t, grad.RepeatAt(-0.9).Hex(), "#191919")
+	testStr(t, grad.RepeatAt(-0.5).Hex(), "#808080")
+	testStr(t, grad.RepeatAt(-0.1).Hex(), "#e6e6e6")
+
+	testStr(t, grad.RepeatAt(0.0).Hex(), "#000000")
+	testStr(t, grad.RepeatAt(0.1).Hex(), "#1a1a1a")
+	testStr(t, grad.RepeatAt(0.5).Hex(), "#808080")
+	testStr(t, grad.RepeatAt(0.9).Hex(), "#e5e5e5")
+
+	testStr(t, grad.RepeatAt(1.0).Hex(), "#000000")
+	testStr(t, grad.RepeatAt(1.1).Hex(), "#1a1a1a")
+	testStr(t, grad.RepeatAt(1.5).Hex(), "#808080")
+	testStr(t, grad.RepeatAt(1.9).Hex(), "#e5e5e5")
+
+	testStr(t, grad.RepeatAt(2.0).Hex(), "#000000")
+	testStr(t, grad.RepeatAt(2.1).Hex(), "#1a1a1a")
+	testStr(t, grad.RepeatAt(2.5).Hex(), "#808080")
+	testStr(t, grad.RepeatAt(2.9).Hex(), "#e5e5e5")
+}
+
+func TestSpreadReflect(t *testing.T) {
+	grad, _ := NewGradient().
+		HtmlColors("#000", "#fff").
+		Build()
+
+	testStr(t, grad.ReflectAt(-2.0).Hex(), "#000000")
+	testStr(t, grad.ReflectAt(-1.9).Hex(), "#1a1a1a")
+	testStr(t, grad.ReflectAt(-1.5).Hex(), "#808080")
+	testStr(t, grad.ReflectAt(-1.1).Hex(), "#e5e5e5")
+
+	testStr(t, grad.ReflectAt(-1.0).Hex(), "#ffffff")
+	testStr(t, grad.ReflectAt(-0.9).Hex(), "#e5e5e5")
+	testStr(t, grad.ReflectAt(-0.5).Hex(), "#808080")
+	testStr(t, grad.ReflectAt(-0.1).Hex(), "#1a1a1a")
+
+	testStr(t, grad.ReflectAt(0.0).Hex(), "#000000")
+	testStr(t, grad.ReflectAt(0.1).Hex(), "#1a1a1a")
+	testStr(t, grad.ReflectAt(0.5).Hex(), "#808080")
+	testStr(t, grad.ReflectAt(0.9).Hex(), "#e5e5e5")
+
+	testStr(t, grad.ReflectAt(1.0).Hex(), "#ffffff")
+	testStr(t, grad.ReflectAt(1.1).Hex(), "#e5e5e5")
+	testStr(t, grad.ReflectAt(1.5).Hex(), "#808080")
+	testStr(t, grad.ReflectAt(1.9).Hex(), "#1a1a1a")
+
+	testStr(t, grad.ReflectAt(2.0).Hex(), "#000000")
+	testStr(t, grad.ReflectAt(2.1).Hex(), "#1a1a1a")
+	testStr(t, grad.ReflectAt(2.5).Hex(), "#808080")
+	testStr(t, grad.ReflectAt(2.9).Hex(), "#e5e5e5")
+}
+
 func testStr(t *testing.T, a, b string) {
 	if a != b {
 		t.Helper()

@@ -3,6 +3,7 @@ package colorgrad
 import (
 	"fmt"
 	"image/color"
+	"math"
 
 	"github.com/lucasb-eyer/go-colorful"
 	"github.com/mazznoer/csscolorparser"
@@ -34,6 +35,18 @@ type Gradient struct {
 // Get color at certain position
 func (g Gradient) At(t float64) colorful.Color {
 	return g.grad.At(t)
+}
+
+// Get color at certain position
+func (g Gradient) RepeatAt(t float64) colorful.Color {
+	t = norm(t, g.dmin, g.dmax)
+	return g.grad.At(g.dmin + modulo(t, 1)*(g.dmax-g.dmin))
+}
+
+// Get color at certain position
+func (g Gradient) ReflectAt(t float64) colorful.Color {
+	t = norm(t, g.dmin, g.dmax)
+	return g.grad.At(g.dmin + math.Abs(modulo(1+t, 2)-1)*(g.dmax-g.dmin))
 }
 
 // Get n colors evenly spaced across gradient
