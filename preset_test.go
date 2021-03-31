@@ -54,5 +54,5 @@ func testGrad(t *testing.T, grad Gradient, start, end string) {
 	testStr(t, grad.At(1.2).Hex(), end)
 	testStr(t, grad.At(1.5).Hex(), end)
 	testStr(t, grad.At(1.8).Hex(), end)
-	testStr(t, grad.At(math.NaN()).Hex(), start)
+	testStr(t, grad.At(math.NaN()).Hex(), "#000000")
 }

@@ -21,6 +21,14 @@ const (
 	BlendOklab
 )
 
+type Interpolation = int
+
+const (
+	InterpolationLinear Interpolation = iota
+	InterpolationCatmullRom
+	InterpolationBasis
+)
+
 type gradientBase interface {
 	// Get color at certain position
 	At(float64) colorful.Color
@@ -257,12 +265,14 @@ type GradientBuilder struct {
 	colors            []colorful.Color
 	pos               []float64
 	mode              BlendMode
+	interpolation     Interpolation
 	invalidHtmlColors []string
 }
 
 func NewGradient() *GradientBuilder {
 	return &GradientBuilder{
-		mode: BlendRgb,
+		mode:          BlendRgb,
+		interpolation: InterpolationLinear,
 	}
 }
 
@@ -293,6 +303,11 @@ func (gb *GradientBuilder) Domain(domain ...float64) *GradientBuilder {
 
 func (gb *GradientBuilder) Mode(mode BlendMode) *GradientBuilder {
 	gb.mode = mode
+	return gb
+}
+
+func (gb *GradientBuilder) Interpolation(mode Interpolation) *GradientBuilder {
+	gb.interpolation = mode
 	return gb
 }
 
@@ -337,18 +352,21 @@ func (gb *GradientBuilder) Build() (Gradient, error) {
 		return zgrad, fmt.Errorf("Wrong domain.")
 	}
 
-	gradbase := linearGradient{
-		colors: gb.colors,
-		pos:    pos,
-		dmin:   pos[0],
-		dmax:   pos[len(pos)-1],
-		count:  len(gb.colors) - 1,
-		mode:   gb.mode,
-	}
+	if gb.interpolation == InterpolationLinear {
+		gradbase := linearGradient{
+			colors: gb.colors,
+			pos:    pos,
+			dmin:   pos[0],
+			dmax:   pos[len(pos)-1],
+			count:  len(gb.colors) - 1,
+			mode:   gb.mode,
+		}
 
-	return Gradient{
-		grad: gradbase,
-		dmin: pos[0],
-		dmax: pos[len(pos)-1],
-	}, nil
+		return Gradient{
+			grad: gradbase,
+			dmin: pos[0],
+			dmax: pos[len(pos)-1],
+		}, nil
+	}
+	return newSplineGradient(gb.colors, pos, gb.mode, gb.interpolation), nil
 }
