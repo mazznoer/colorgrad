@@ -2,6 +2,8 @@ package colorgrad
 
 import (
 	"math"
+	"strconv"
+	"strings"
 
 	"github.com/lucasb-eyer/go-colorful"
 )
@@ -26,6 +28,11 @@ func norm(t, a, b float64) float64 {
 
 func modulo(x, y float64) float64 {
 	return math.Mod(math.Mod(x, y)+y, y)
+}
+
+func parseFloat(s string) (float64, bool) {
+	f, err := strconv.ParseFloat(strings.TrimSpace(s), 64)
+	return f, err == nil
 }
 
 func blendLrgb(a, b colorful.Color, t float64) colorful.Color {
