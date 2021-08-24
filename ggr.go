@@ -3,7 +3,6 @@ package colorgrad
 import (
 	"bufio"
 	"fmt"
-	"image/color"
 	"io"
 	"math"
 	"strings"
@@ -198,7 +197,7 @@ func blendHsvCw(c1, c2 colorful.Color, t float64) colorful.Color {
 	)
 }
 
-func ParseGgr(r io.Reader, fg, bg color.Color) (Gradient, string, error) {
+func ParseGgr(r io.Reader, fg, bg colorful.Color) (Gradient, string, error) {
 	zgrad := Gradient{
 		grad: zeroGradient{},
 		dmin: 0,
@@ -210,8 +209,6 @@ func ParseGgr(r io.Reader, fg, bg color.Color) (Gradient, string, error) {
 	var name string
 	xseg := 0
 	i := 0
-	fgc, _ := colorful.MakeColor(fg)
-	bgc, _ := colorful.MakeColor(bg)
 	scanner := bufio.NewScanner(r)
 
 	for scanner.Scan() {
@@ -238,7 +235,7 @@ func ParseGgr(r io.Reader, fg, bg color.Color) (Gradient, string, error) {
 				break
 			}
 
-			seg, ok := parseSegment(scanner.Text(), fgc, bgc)
+			seg, ok := parseSegment(scanner.Text(), fg, bg)
 
 			if ok {
 				segments = append(segments, seg)
