@@ -1,3 +1,4 @@
+//go:build ignore
 // +build ignore
 
 package main
@@ -165,6 +166,25 @@ func main() {
 		Mode(colorgrad.BlendOklab).
 		Build()
 
+	// Interpolation modes
+
+	colors = []string{"#C41189", "#00BFFF", "#FFD700"}
+
+	interpLinear, _ := colorgrad.NewGradient().
+		HtmlColors(colors...).
+		Interpolation(colorgrad.InterpolationLinear).
+		Build()
+
+	interpCatmullRom, _ := colorgrad.NewGradient().
+		HtmlColors(colors...).
+		Interpolation(colorgrad.InterpolationCatmullRom).
+		Build()
+
+	interpBasis, _ := colorgrad.NewGradient().
+		HtmlColors(colors...).
+		Interpolation(colorgrad.InterpolationBasis).
+		Build()
+
 	customGradients := []data{
 		{grad1, "custom-default"},
 		{grad2, "custom-colors"},
@@ -185,6 +205,9 @@ func main() {
 		{blendHsv, "blend-hsv"},
 		{blendLab, "blend-lab"},
 		{blendLuv, "blend-luv"},
+		{interpLinear, "interpolation-linear"},
+		{interpCatmullRom, "interpolation-catmull-rom"},
+		{interpBasis, "interpolation-basis"},
 	}
 
 	// Sharp gradients
