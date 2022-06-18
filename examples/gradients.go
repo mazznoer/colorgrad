@@ -185,6 +185,11 @@ func main() {
 		Interpolation(colorgrad.InterpolationBasis).
 		Build()
 
+	// GIMP gradients
+
+	ggr1 := parseGgr("Abstract_1.ggr")
+	ggr2 := parseGgr("Full_saturation_spectrum_CW.ggr")
+
 	customGradients := []data{
 		{grad1, "custom-default"},
 		{grad2, "custom-colors"},
@@ -208,6 +213,8 @@ func main() {
 		{interpLinear, "interpolation-linear"},
 		{interpCatmullRom, "interpolation-catmull-rom"},
 		{interpBasis, "interpolation-basis"},
+		{ggr1, "ggr-abstract-1"},
+		{ggr2, "ggr-full-saturation-spectrum-cw"},
 	}
 
 	// Sharp gradients
@@ -252,6 +259,21 @@ func main() {
 		fmt.Println(filepath)
 		savePNG(img, filepath)
 	}
+}
+
+func parseGgr(filepath string) colorgrad.Gradient {
+	black := colorful.Color{R: 0, G: 0, B: 0}
+	white := colorful.Color{R: 1, G: 1, B: 1}
+	file, err := os.Open(filepath)
+	if err != nil {
+		panic(err)
+	}
+	defer file.Close()
+	grad, _, err2 := colorgrad.ParseGgr(file, black, white)
+	if err2 != nil {
+		panic(err2)
+	}
+	return grad
 }
 
 func gradientImage(gradient colorgrad.Gradient, width, height int) image.Image {
