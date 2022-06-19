@@ -33,21 +33,21 @@ func (lg linearGradient) At(t float64) colorful.Color {
 			switch lg.mode {
 			case BlendHcl:
 				hue := interpAngle(lg.colors[i][0], lg.colors[i+1][0], t)
-				return colorful.Hcl(hue, y, z)
+				return colorful.Hcl(hue, y, z).Clamped()
 			case BlendHsv:
 				hue := interpAngle(lg.colors[i][0], lg.colors[i+1][0], t)
 				return colorful.Hsv(hue, y, z)
 			case BlendLab:
-				return colorful.Lab(x, y, z)
+				return colorful.Lab(x, y, z).Clamped()
 			case BlendLinearRgb:
 				return colorful.LinearRgb(x, y, z)
 			case BlendLuv:
-				return colorful.Luv(x, y, z)
+				return colorful.Luv(x, y, z).Clamped()
 			case BlendRgb:
 				return colorful.Color{R: x, G: y, B: z}
 			case BlendOklab:
 				a, b, c := oklabToLrgb(x, y, z)
-				return colorful.LinearRgb(a, b, c)
+				return colorful.LinearRgb(a, b, c).Clamped()
 			}
 		}
 	}
