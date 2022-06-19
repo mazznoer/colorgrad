@@ -111,7 +111,7 @@ func TestBasic2(t *testing.T) {
 	testStr(t, colors[1].Hex(), "#ffff00")
 	testStr(t, colors[2].Hex(), "#0000ff")
 
-	testStr(t, grad.At(math.NaN()).Hex(), "#ff0000")
+	testStr(t, grad.At(math.NaN()).Hex(), "#000000")
 
 	// Custom colors #2
 	grad, _ = NewGradient().

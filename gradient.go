@@ -194,20 +194,7 @@ func (gb *GradientBuilder) Build() (Gradient, error) {
 	}
 
 	if gb.interpolation == InterpolationLinear {
-		gradbase := linearGradient{
-			colors: gb.colors,
-			pos:    pos,
-			dmin:   pos[0],
-			dmax:   pos[len(pos)-1],
-			count:  len(gb.colors) - 1,
-			mode:   gb.mode,
-		}
-
-		return Gradient{
-			grad: gradbase,
-			dmin: pos[0],
-			dmax: pos[len(pos)-1],
-		}, nil
+		return newLinearGradient(gb.colors, pos, gb.mode), nil
 	}
 	return newSplineGradient(gb.colors, pos, gb.mode, gb.interpolation), nil
 }
