@@ -145,6 +145,24 @@ grad, err := colorgrad.NewGradient().
 ```
 ![blend-modes](doc/images/blend-modes.png)
 
+### Interpolation Mode
+
+```go
+grad, err := colorgrad.NewGradient().
+    HtmlColors("#C41189", "#00BFFF", "#FFD700").
+    Interpolation(colorgrad.InterpolationLinear).
+    Build()
+```
+
+`InterpolationLinear`
+![interpolation-linear](doc/images/interpolation-linear.png)
+
+`InterpolationCatmullRom`
+![interpolation-catmull-rom](doc/images/interpolation-catmull-rom.png)
+
+`InterpolationBasis`
+![interpolation-basis](doc/images/interpolation-basis.png)
+
 ## Preset Gradients
 
 All preset gradients are in the domain [0..1].
@@ -270,6 +288,27 @@ All preset gradients are in the domain [0..1].
 
 `colorgrad.Sinebow()`
 ![img](doc/images/preset/Sinebow.png)
+
+## Parsing GIMP Gradient
+
+```go
+import "os"
+import "github.com/lucasb-eyer/go-colorful"
+
+foreground := colorful.Color{R: 0, G: 0, B: 0}
+background := colorful.Color{R: 1, G: 1, B: 1}
+file, err := os.Open("Abstract_1.ggr")
+
+if err != nil {
+	panic(err)
+}
+
+defer file.Close()
+grad, name, err2 := colorgrad.ParseGgr(file, foreground, background)
+fmt.Println(name) // Abstract 1
+```
+
+![gimp-gradient](doc/images/ggr-abstract-1.png)
 
 ## Using the Gradient
 
