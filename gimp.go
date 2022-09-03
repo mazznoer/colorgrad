@@ -61,68 +61,87 @@ type gimpGradient struct {
 }
 
 func (ggr gimpGradient) At(t float64) colorful.Color {
-	if t < ggr.dmin {
+	if t <= ggr.dmin {
 		return ggr.segments[0].lcolor
 	}
 
-	if t > ggr.dmax {
+	if t >= ggr.dmax {
 		return ggr.segments[len(ggr.segments)-1].rcolor
 	}
 
-	for _, seg := range ggr.segments {
-		if seg.lpos <= t && t <= seg.rpos {
-			seg_len := seg.rpos - seg.lpos
+	if math.IsNaN(t) {
+		return colorful.Color{R: 0, G: 0, B: 0}
+	}
 
-			var middle float64
-			var pos float64
+	low := 0
+	high := len(ggr.segments)
+	mid := 0
 
-			if seg_len < epsilon {
-				middle = 0.5
-				pos = 0.5
-			} else {
-				middle = (seg.mpos - seg.lpos) / seg_len
-				pos = (t - seg.lpos) / seg_len
-			}
-
-			var f float64
-
-			switch seg.blending {
-			case linear:
-				f = calc_linear_factor(middle, pos)
-			case curved:
-				if middle < epsilon {
-					return seg.rcolor
-				} else if math.Abs(1-middle) < epsilon {
-					return seg.lcolor
-				} else {
-					f = math.Exp(-math.Ln2 * math.Log10(pos) / math.Log10(middle))
-				}
-			case sinusoidal:
-				x := calc_linear_factor(middle, pos)
-				f = (math.Sin(-fracPi2+math.Pi*x) + 1) / 2
-			case sphericalIncreasing:
-				x := calc_linear_factor(middle, pos) - 1
-				f = math.Sqrt(1 - x*x)
-			case sphericalDecreasing:
-				x := calc_linear_factor(middle, pos)
-				f = 1 - math.Sqrt(1-x*x)
-			case step:
-				if pos >= middle {
-					return seg.rcolor
-				} else {
-					return seg.lcolor
-				}
-			}
-
-			switch seg.coloring {
-			case rgb:
-				return seg.lcolor.BlendRgb(seg.rcolor, f)
-			case hsvCcw:
-				return blendHsvCcw(seg.lcolor, seg.rcolor, f)
-			case hsvCw:
-				return blendHsvCw(seg.lcolor, seg.rcolor, f)
-			}
+	for {
+		if low >= high {
+			break
 		}
+		mid = (low + high) / 2
+		if t > ggr.segments[mid].rpos {
+			low = mid + 1
+		} else if t < ggr.segments[mid].lpos {
+			high = mid
+		} else {
+			break
+		}
+	}
+
+	seg := ggr.segments[mid]
+	seg_len := seg.rpos - seg.lpos
+
+	var middle float64
+	var pos float64
+
+	if seg_len < epsilon {
+		middle = 0.5
+		pos = 0.5
+	} else {
+		middle = (seg.mpos - seg.lpos) / seg_len
+		pos = (t - seg.lpos) / seg_len
+	}
+
+	var f float64
+
+	switch seg.blending {
+	case linear:
+		f = calc_linear_factor(middle, pos)
+	case curved:
+		if middle < epsilon {
+			return seg.rcolor
+		} else if math.Abs(1-middle) < epsilon {
+			return seg.lcolor
+		} else {
+			f = math.Exp(-math.Ln2 * math.Log10(pos) / math.Log10(middle))
+		}
+	case sinusoidal:
+		x := calc_linear_factor(middle, pos)
+		f = (math.Sin(-fracPi2+math.Pi*x) + 1) / 2
+	case sphericalIncreasing:
+		x := calc_linear_factor(middle, pos) - 1
+		f = math.Sqrt(1 - x*x)
+	case sphericalDecreasing:
+		x := calc_linear_factor(middle, pos)
+		f = 1 - math.Sqrt(1-x*x)
+	case step:
+		if pos >= middle {
+			return seg.rcolor
+		} else {
+			return seg.lcolor
+		}
+	}
+
+	switch seg.coloring {
+	case rgb:
+		return seg.lcolor.BlendRgb(seg.rcolor, f)
+	case hsvCcw:
+		return blendHsvCcw(seg.lcolor, seg.rcolor, f)
+	case hsvCw:
+		return blendHsvCw(seg.lcolor, seg.rcolor, f)
 	}
 
 	return ggr.segments[0].lcolor

@@ -36,7 +36,7 @@ func TestSharpGradient(t *testing.T) {
 
 	testStr(t, grad3.At(-0.1).Hex(), "#ff0000")
 	testStr(t, grad3.At(1.1).Hex(), "#0000ff")
-	testStr(t, grad3.At(math.NaN()).Hex(), "#ff0000")
+	testStr(t, grad3.At(math.NaN()).Hex(), "#000000")
 
 	// Sharp(2)
 	grad, _ = NewGradient().
@@ -85,5 +85,5 @@ func TestSharpGradientSmoothness(t *testing.T) {
 
 	testStr(t, grad.At(-0.01).Hex(), "#ff0000")
 	testStr(t, grad.At(1.01).Hex(), "#0000ff")
-	testStr(t, grad.At(math.NaN()).Hex(), "#ff0000")
+	testStr(t, grad.At(math.NaN()).Hex(), "#000000")
 }

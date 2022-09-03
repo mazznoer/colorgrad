@@ -11,7 +11,6 @@ type linearGradient struct {
 	pos        []float64
 	dmin       float64
 	dmax       float64
-	count      int
 	mode       BlendMode
 	firstColor colorful.Color
 	lastColor  colorful.Color
@@ -21,36 +20,59 @@ func (lg linearGradient) At(t float64) colorful.Color {
 	if t <= lg.dmin {
 		return lg.firstColor
 	}
+
 	if t >= lg.dmax {
 		return lg.lastColor
 	}
-	for i := 0; i < lg.count; i++ {
-		p1 := lg.pos[i]
-		p2 := lg.pos[i+1]
-		if (p1 <= t) && (t <= p2) {
-			t := (t - p1) / (p2 - p1)
-			x, y, z := linearInterpolate(lg.colors[i], lg.colors[i+1], t)
-			switch lg.mode {
-			case BlendHcl:
-				hue := interpAngle(lg.colors[i][0], lg.colors[i+1][0], t)
-				return colorful.Hcl(hue, y, z).Clamped()
-			case BlendHsv:
-				hue := interpAngle(lg.colors[i][0], lg.colors[i+1][0], t)
-				return colorful.Hsv(hue, y, z)
-			case BlendLab:
-				return colorful.Lab(x, y, z).Clamped()
-			case BlendLinearRgb:
-				return colorful.LinearRgb(x, y, z)
-			case BlendLuv:
-				return colorful.Luv(x, y, z).Clamped()
-			case BlendRgb:
-				return colorful.Color{R: x, G: y, B: z}
-			case BlendOklab:
-				a, b, c := oklabToLrgb(x, y, z)
-				return colorful.LinearRgb(a, b, c).Clamped()
-			}
+
+	if math.IsNaN(t) {
+		return colorful.Color{R: 0, G: 0, B: 0}
+	}
+
+	low := 0
+	high := len(lg.pos)
+
+	for {
+		if low >= high {
+			break
+		}
+		mid := (low + high) / 2
+		if lg.pos[mid] < t {
+			low = mid + 1
+		} else {
+			high = mid
 		}
 	}
+
+	if low == 0 {
+		low = 1
+	}
+
+	p1 := lg.pos[low-1]
+	p2 := lg.pos[low]
+	t = (t - p1) / (p2 - p1)
+	x, y, z := linearInterpolate(lg.colors[low-1], lg.colors[low], t)
+
+	switch lg.mode {
+	case BlendHcl:
+		hue := interpAngle(lg.colors[low-1][0], lg.colors[low][0], t)
+		return colorful.Hcl(hue, y, z).Clamped()
+	case BlendHsv:
+		hue := interpAngle(lg.colors[low-1][0], lg.colors[low][0], t)
+		return colorful.Hsv(hue, y, z)
+	case BlendLab:
+		return colorful.Lab(x, y, z).Clamped()
+	case BlendLinearRgb:
+		return colorful.LinearRgb(x, y, z)
+	case BlendLuv:
+		return colorful.Luv(x, y, z).Clamped()
+	case BlendRgb:
+		return colorful.Color{R: x, G: y, B: z}
+	case BlendOklab:
+		a, b, c := oklabToLrgb(x, y, z)
+		return colorful.LinearRgb(a, b, c).Clamped()
+	}
+
 	return colorful.Color{R: 0, G: 0, B: 0}
 }
 
@@ -60,7 +82,6 @@ func newLinearGradient(colors []colorful.Color, pos []float64, mode BlendMode) G
 		pos:        pos,
 		dmin:       pos[0],
 		dmax:       pos[len(pos)-1],
-		count:      len(colors) - 1,
 		mode:       mode,
 		firstColor: colors[0],
 		lastColor:  colors[len(colors)-1],
