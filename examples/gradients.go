@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"image"
 	"image/color"
+	"image/draw"
 	"image/png"
 	"os"
 	"path/filepath"
@@ -230,8 +231,9 @@ func main() {
 		{grad.Sharp(segments, 1.0), "1.0"},
 	}
 
-	width := 1200
-	height := 100
+	width := 1000
+	height := 150
+	padding := 10
 
 	err := os.Mkdir("output", 0750)
 	if err != nil && !os.IsExist(err) {
@@ -239,21 +241,21 @@ func main() {
 	}
 
 	for _, d := range presetGradients {
-		img := gradientImage(d.gradient, width, height)
+		img := gradRgbPlot(d.gradient, width, height, padding)
 		filepath := fmt.Sprintf("output/preset-%s.png", d.name)
 		fmt.Println(filepath)
 		savePNG(img, filepath)
 	}
 
 	for _, d := range customGradients {
-		img := gradientImage(d.gradient, width, height)
+		img := gradRgbPlot(d.gradient, width, height, padding)
 		filepath := fmt.Sprintf("output/%s.png", d.name)
 		fmt.Println(filepath)
 		savePNG(img, filepath)
 	}
 
 	for _, d := range sharpGradients {
-		img := gradientImage(d.gradient, width, height)
+		img := gradRgbPlot(d.gradient, width, height, padding)
 		filepath := fmt.Sprintf("output/sharp-smoothness-%s.png", d.name)
 		fmt.Println(filepath)
 		savePNG(img, filepath)
@@ -268,7 +270,7 @@ func main() {
 	if ggrsErr == nil {
 		for _, s := range ggrs {
 			grad := parseGgr(s)
-			img := gradientImage(grad, width, height)
+			img := gradRgbPlot(grad, width, height, padding)
 			filepath := fmt.Sprintf("output/ggr_%s.png", filepath.Base(s))
 			fmt.Println(filepath)
 			savePNG(img, filepath)
@@ -303,6 +305,51 @@ func gradientImage(gradient colorgrad.Gradient, width, height int) image.Image {
 			img.Set(x, y, col)
 		}
 	}
+	return img
+}
+
+func rgbPlot(gradient colorgrad.Gradient, width, height int) image.Image {
+	img := image.NewRGBA(image.Rect(0, 0, width, height))
+	draw.Draw(img, img.Bounds(), &image.Uniform{color.Gray{235}}, image.Point{}, draw.Src)
+
+	dmin, dmax := gradient.Domain()
+	fw := float64(width)
+	y1 := 0.0
+	y2 := float64(height)
+
+	for x := 0; x < width; x++ {
+		col := gradient.At(remap(float64(x), 0, fw, dmin, dmax))
+
+		r := remap(col.R, 0, 1, y2, y1)
+		g := remap(col.G, 0, 1, y2, y1)
+		b := remap(col.B, 0, 1, y2, y1)
+
+		img.Set(x, int(r), color.NRGBA{255, 0, 0, 255})
+		img.Set(x, int(g), color.NRGBA{0, 128, 0, 255})
+		img.Set(x, int(b), color.NRGBA{0, 0, 255, 255})
+	}
+	return img
+}
+
+func gradRgbPlot(gradient colorgrad.Gradient, width, height, padding int) image.Image {
+	w := width + padding*2
+	h := height*2 + padding*3
+
+	img := image.NewRGBA(image.Rect(0, 0, w, h))
+	draw.Draw(img, img.Bounds(), &image.Uniform{color.Gray{255}}, image.Point{}, draw.Src)
+
+	gradImg := gradientImage(gradient, width, height)
+	plotImg := rgbPlot(gradient, width, height)
+
+	x1 := padding
+	y1 := padding
+	x2 := x1 + width
+	y2 := y1 + height
+	draw.Draw(img, image.Rect(x1, y1, x2, y2), gradImg, image.Point{}, draw.Src)
+
+	y1 = y2 + padding
+	y2 = y1 + height
+	draw.Draw(img, image.Rect(x1, y1, x2, y2), plotImg, image.Point{}, draw.Src)
 	return img
 }
 
