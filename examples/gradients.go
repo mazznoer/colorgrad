@@ -9,6 +9,7 @@ import (
 	"image/color"
 	"image/png"
 	"os"
+	"path/filepath"
 
 	"github.com/lucasb-eyer/go-colorful"
 	"github.com/mazznoer/colorgrad"
@@ -185,11 +186,6 @@ func main() {
 		Interpolation(colorgrad.InterpolationBasis).
 		Build()
 
-	// GIMP gradients
-
-	ggr1 := parseGgr("Abstract_1.ggr")
-	ggr2 := parseGgr("Full_saturation_spectrum_CW.ggr")
-
 	customGradients := []data{
 		{grad1, "custom-default"},
 		{grad2, "custom-colors"},
@@ -213,8 +209,6 @@ func main() {
 		{interpLinear, "interpolation-linear"},
 		{interpCatmullRom, "interpolation-catmull-rom"},
 		{interpBasis, "interpolation-basis"},
-		{ggr1, "ggr-abstract-1"},
-		{ggr2, "ggr-full-saturation-spectrum-cw"},
 	}
 
 	// Sharp gradients
@@ -236,8 +230,13 @@ func main() {
 		{grad.Sharp(segments, 1.0), "1.0"},
 	}
 
-	width := 1500
-	height := 70
+	width := 1200
+	height := 100
+
+	err := os.Mkdir("output", 0750)
+	if err != nil && !os.IsExist(err) {
+		panic(err)
+	}
 
 	for _, d := range presetGradients {
 		img := gradientImage(d.gradient, width, height)
@@ -258,6 +257,24 @@ func main() {
 		filepath := fmt.Sprintf("output/sharp-smoothness-%s.png", d.name)
 		fmt.Println(filepath)
 		savePNG(img, filepath)
+	}
+
+	// GIMP gradients
+
+	ggrPath := "./ggr/*.ggr"
+	//ggrPath = "/usr/share/gimp/2.0/gradients/*.ggr"
+	ggrs, ggrsErr := filepath.Glob(ggrPath)
+
+	if ggrsErr == nil {
+		for _, s := range ggrs {
+			grad := parseGgr(s)
+			img := gradientImage(grad, width, height)
+			filepath := fmt.Sprintf("output/ggr_%s.png", filepath.Base(s))
+			fmt.Println(filepath)
+			savePNG(img, filepath)
+		}
+	} else {
+		fmt.Println(ggrsErr)
 	}
 }
 
