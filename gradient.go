@@ -19,13 +19,45 @@ const (
 	BlendOklab
 )
 
-type Interpolation = int
+func (b BlendMode) String() string {
+	switch b {
+	case BlendHcl:
+		return "BlendHcl"
+	case BlendHsv:
+		return "BlendHsv"
+	case BlendLab:
+		return "BlendLab"
+	case BlendLinearRgb:
+		return "BlendLinearRgb"
+	case BlendLuv:
+		return "BlendLuv"
+	case BlendRgb:
+		return "BlendRgb"
+	case BlendOklab:
+		return "BlendOklab"
+	}
+	return ""
+}
+
+type Interpolation int
 
 const (
 	InterpolationLinear Interpolation = iota
 	InterpolationCatmullRom
 	InterpolationBasis
 )
+
+func (i Interpolation) String() string {
+	switch i {
+	case InterpolationLinear:
+		return "InterpolationLinear"
+	case InterpolationCatmullRom:
+		return "InterpolationCatmullRom"
+	case InterpolationBasis:
+		return "InterpolationBasis"
+	}
+	return ""
+}
 
 type gradientBase interface {
 	// Get color at certain position
