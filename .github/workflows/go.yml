@@ -1,4 +1,4 @@
-name: Go
+name: CI
 
 on:
   push:
@@ -35,3 +35,7 @@ jobs:
 
     - name: Test
       run: go test -v .
+
+    - name: Format
+      run: if [ "$(gofmt -s -l . | wc -l)" -gt 0 ]; then exit 1; fi
+
