@@ -6,7 +6,9 @@ import (
 	"github.com/lucasb-eyer/go-colorful"
 )
 
-type linearGradient struct {
+// https://github.com/d3/d3-interpolate/blob/master/src/basis.js
+
+type basisGradient struct {
 	colors     [][3]float64
 	pos        []float64
 	dmin       float64
@@ -16,7 +18,7 @@ type linearGradient struct {
 	lastColor  colorful.Color
 }
 
-func (lg linearGradient) At(t float64) colorful.Color {
+func (lg basisGradient) At(t float64) colorful.Color {
 	if t <= lg.dmin {
 		return lg.firstColor
 	}
@@ -31,6 +33,7 @@ func (lg linearGradient) At(t float64) colorful.Color {
 
 	low := 0
 	high := len(lg.pos)
+	n := high - 1
 
 	for low < high {
 		mid := (low + high) / 2
@@ -47,8 +50,28 @@ func (lg linearGradient) At(t float64) colorful.Color {
 
 	p1 := lg.pos[low-1]
 	p2 := lg.pos[low]
+	val0 := lg.colors[low-1]
+	val1 := lg.colors[low]
+	i := low - 1
 	t = (t - p1) / (p2 - p1)
-	x, y, z := linearInterpolate(lg.colors[low-1], lg.colors[low], t)
+
+	xx := func(v1, v2 float64, j int) float64 {
+		v0 := 2*v1 - v2
+		if i > 0 {
+			v0 = lg.colors[i-1][j]
+		}
+
+		v3 := 2*v2 - v1
+		if i < n-1 {
+			v3 = lg.colors[i+2][j]
+		}
+
+		return basis(t, v0, v1, v2, v3)
+	}
+
+	x := xx(val0[0], val1[0], 0)
+	y := xx(val0[1], val1[1], 1)
+	z := xx(val0[2], val1[2], 2)
 
 	switch lg.mode {
 	case BlendHcl:
@@ -73,8 +96,8 @@ func (lg linearGradient) At(t float64) colorful.Color {
 	return colorful.Color{R: 0, G: 0, B: 0}
 }
 
-func newLinearGradient(colors []colorful.Color, pos []float64, mode BlendMode) Gradient {
-	gradbase := linearGradient{
+func newBasisGradient(colors []colorful.Color, pos []float64, mode BlendMode) Gradient {
+	gradbase := basisGradient{
 		colors:     convertColors(colors, mode),
 		pos:        pos,
 		dmin:       pos[0],
@@ -91,40 +114,8 @@ func newLinearGradient(colors []colorful.Color, pos []float64, mode BlendMode) G
 	}
 }
 
-func convertColors(colorsIn []colorful.Color, mode BlendMode) [][3]float64 {
-	colors := make([][3]float64, len(colorsIn))
-	for i, col := range colorsIn {
-		var c1, c2, c3 float64
-		switch mode {
-		case BlendLinearRgb:
-			c1, c2, c3 = col.LinearRgb()
-		case BlendLab:
-			c1, c2, c3 = col.Lab()
-		case BlendLuv:
-			c1, c2, c3 = col.Luv()
-		case BlendHcl:
-			c1, c2, c3 = col.Hcl()
-		case BlendHsv:
-			c1, c2, c3 = col.Hsv()
-		case BlendOklab:
-			lr, lg, lb := col.LinearRgb()
-			c1, c2, c3 = lrgbToOklab(lr, lg, lb)
-		case BlendRgb:
-			c1, c2, c3 = col.R, col.G, col.B
-		}
-		colors[i] = [3]float64{c1, c2, c3}
-	}
-	return colors
-}
-
-func linearInterpolate(a, b [3]float64, t float64) (x, y, z float64) {
-	x = a[0] + t*(b[0]-a[0])
-	y = a[1] + t*(b[1]-a[1])
-	z = a[2] + t*(b[2]-a[2])
-	return
-}
-
-func interpAngle(a, b, t float64) float64 {
-	delta := math.Mod(((math.Mod(b-a, 360))+540), 360) - 180
-	return math.Mod((a + t*delta + 360), 360)
+func basis(t1, v0, v1, v2, v3 float64) float64 {
+	t2 := t1 * t1
+	t3 := t2 * t1
+	return ((1-3*t1+3*t2-t3)*v0 + (4-6*t2+3*t3)*v1 + (1+3*t1+3*t2-3*t3)*v2 + t3*v3) / 6
 }

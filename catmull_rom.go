@@ -4,12 +4,7 @@ import (
 	"math"
 
 	"github.com/lucasb-eyer/go-colorful"
-	"github.com/mazznoer/csscolorparser"
 )
-
-type interpolator interface {
-	at(float64) float64
-}
 
 // Adapted from https://qroph.github.io/2018/07/30/smooth-paths-using-catmull-rom-splines.html
 
@@ -66,10 +61,7 @@ func (cr catmullRomInterpolator) at(t float64) float64 {
 	low := 0
 	high := len(cr.pos)
 
-	for {
-		if low >= high {
-			break
-		}
+	for low < high {
 		mid := (low + high) / 2
 		if cr.pos[mid] < t {
 			low = mid + 1
@@ -91,80 +83,16 @@ func (cr catmullRomInterpolator) at(t float64) float64 {
 	return seg[0]*t3 + seg[1]*t2 + seg[2]*t1 + seg[3]
 }
 
-// Adapted from https://github.com/d3/d3-interpolate/blob/master/src/basis.js
-
-func basis(t1, v0, v1, v2, v3 float64) float64 {
-	t2 := t1 * t1
-	t3 := t2 * t1
-	return ((1-3*t1+3*t2-t3)*v0 + (4-6*t2+3*t3)*v1 + (1+3*t1+3*t2-3*t3)*v2 + t3*v3) / 6
-}
-
-type basisInterpolator struct {
-	values []float64
-	pos    []float64
-}
-
-func newBasisInterpolator(values, pos []float64) basisInterpolator {
-	return basisInterpolator{
-		values, pos,
-	}
-}
-
-func (b basisInterpolator) at(t float64) float64 {
-	low := 0
-	high := len(b.pos)
-
-	for {
-		if low >= high {
-			break
-		}
-		mid := (low + high) / 2
-		if b.pos[mid] < t {
-			low = mid + 1
-		} else {
-			high = mid
-		}
-	}
-
-	if low == 0 {
-		low = 1
-	}
-
-	i := low - 1
-	n := len(b.values) - 1
-	p1 := b.pos[i]
-	p2 := b.pos[low]
-	t = (t - p1) / (p2 - p1)
-	v1 := b.values[i]
-	v2 := b.values[low]
-
-	var v0, v3 float64
-
-	if i > 0 {
-		v0 = b.values[i-1]
-	} else {
-		v0 = 2*v1 - v2
-	}
-
-	if i < (n - 1) {
-		v3 = b.values[i+2]
-	} else {
-		v3 = 2*v2 - v1
-	}
-
-	return basis(t, v0, v1, v2, v3)
-}
-
-type splineGradient struct {
-	a    interpolator
-	b    interpolator
-	c    interpolator
+type catmullRomGradient struct {
+	a    catmullRomInterpolator
+	b    catmullRomInterpolator
+	c    catmullRomInterpolator
 	dmin float64
 	dmax float64
 	mode BlendMode
 }
 
-func (s splineGradient) At(t float64) colorful.Color {
+func (s catmullRomGradient) At(t float64) colorful.Color {
 	if math.IsNaN(t) {
 		return colorful.Color{R: 0, G: 0, B: 0}
 	}
@@ -188,7 +116,7 @@ func (s splineGradient) At(t float64) colorful.Color {
 	}
 }
 
-func newSplineGradient(colors []colorful.Color, pos []float64, space BlendMode, interpolation Interpolation) Gradient {
+func newCatmullRomGradient(colors []colorful.Color, pos []float64, space BlendMode) Gradient {
 	n := len(colors)
 	a := make([]float64, n)
 	b := make([]float64, n)
@@ -218,42 +146,17 @@ func newSplineGradient(colors []colorful.Color, pos []float64, space BlendMode, 
 	}
 	dmin := pos[0]
 	dmax := pos[n-1]
-	var gradbase gradientBase
-	switch interpolation {
-	case InterpolationBasis:
-		gradbase = splineGradient{
-			a:    newBasisInterpolator(a, pos),
-			b:    newBasisInterpolator(b, pos),
-			c:    newBasisInterpolator(c, pos),
-			dmin: dmin,
-			dmax: dmax,
-			mode: space,
-		}
-	case InterpolationCatmullRom:
-		gradbase = splineGradient{
-			a:    newCatmullRomInterpolator(a, pos),
-			b:    newCatmullRomInterpolator(b, pos),
-			c:    newCatmullRomInterpolator(c, pos),
-			dmin: dmin,
-			dmax: dmax,
-			mode: space,
-		}
+	gradbase := catmullRomGradient{
+		a:    newCatmullRomInterpolator(a, pos),
+		b:    newCatmullRomInterpolator(b, pos),
+		c:    newCatmullRomInterpolator(c, pos),
+		dmin: dmin,
+		dmax: dmax,
+		mode: space,
 	}
 	return Gradient{
 		grad: gradbase,
 		dmin: dmin,
 		dmax: dmax,
 	}
-}
-
-func presetSpline(htmlColors []string) Gradient {
-	var colors []colorful.Color
-	for _, s := range htmlColors {
-		c, err := csscolorparser.Parse(s)
-		if err == nil {
-			colors = append(colors, colorful.Color{R: c.R, G: c.G, B: c.B})
-		}
-	}
-	pos := linspace(0, 1, uint(len(colors)))
-	return newSplineGradient(colors, pos, BlendRgb, InterpolationBasis)
 }

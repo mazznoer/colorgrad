@@ -77,10 +77,7 @@ func (ggr gimpGradient) At(t float64) colorful.Color {
 	high := len(ggr.segments)
 	mid := 0
 
-	for {
-		if low >= high {
-			break
-		}
+	for low < high {
 		mid = (low + high) / 2
 		if t > ggr.segments[mid].rpos {
 			low = mid + 1

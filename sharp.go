@@ -30,10 +30,7 @@ func (sg sharpGradient) At(t float64) colorful.Color {
 	low := 0
 	high := len(sg.pos)
 
-	for {
-		if low >= high {
-			break
-		}
+	for low < high {
 		mid := (low + high) / 2
 		if sg.pos[mid] < t {
 			low = mid + 1

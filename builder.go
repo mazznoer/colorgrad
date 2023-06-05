@@ -102,5 +102,10 @@ func (gb *GradientBuilder) Build() (Gradient, error) {
 	if gb.interpolation == InterpolationLinear {
 		return newLinearGradient(gb.colors, pos, gb.mode), nil
 	}
-	return newSplineGradient(gb.colors, pos, gb.mode, gb.interpolation), nil
+
+	if gb.interpolation == InterpolationBasis {
+		return newBasisGradient(gb.colors, pos, gb.mode), nil
+	}
+
+	return newCatmullRomGradient(gb.colors, pos, gb.mode), nil
 }
