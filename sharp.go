@@ -2,19 +2,17 @@ package colorgrad
 
 import (
 	"math"
-
-	"github.com/lucasb-eyer/go-colorful"
 )
 
 type sharpGradient struct {
-	colors []colorful.Color
+	colors []Color
 	pos    []float64
 	last   int
 	dmin   float64
 	dmax   float64
 }
 
-func (sg sharpGradient) At(t float64) colorful.Color {
+func (sg sharpGradient) At(t float64) Color {
 	if t <= sg.dmin {
 		return sg.colors[0]
 	}
@@ -24,7 +22,7 @@ func (sg sharpGradient) At(t float64) colorful.Color {
 	}
 
 	if math.IsNaN(t) {
-		return colorful.Color{R: 0, G: 0, B: 0}
+		return Color{R: 0, G: 0, B: 0, A: 0}
 	}
 
 	low := 0
@@ -54,12 +52,12 @@ func (sg sharpGradient) At(t float64) colorful.Color {
 	t = (t - p1) / (p2 - p1)
 	a := sg.colors[i]
 	b := sg.colors[low]
-	return a.BlendRgb(b, t)
+	return blendRgb(a, b, t)
 }
 
-func newSharpGradient(colorsIn []colorful.Color, dmin, dmax float64, smoothness float64) Gradient {
+func newSharpGradient(colorsIn []Color, dmin, dmax float64, smoothness float64) Gradient {
 	n := len(colorsIn)
-	colors := make([]colorful.Color, n*2)
+	colors := make([]Color, n*2)
 	i := 0
 	for _, c := range colorsIn {
 		colors[i] = c
