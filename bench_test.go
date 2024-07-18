@@ -1,4 +1,3 @@
-//go:build ignore
 package colorgrad
 
 import (
@@ -21,7 +20,7 @@ var colors = []string{
 	"#f9c0b3", "#9890db", "#d01be8", "#20870e", "#f4426b", "#def260", "#521efc", "#ffbcc6",
 	"#e285b9", "#0ed6f9", "#7825ed", "#f2c6ff", "#cdb2f4", "#5fd374", "#fc838d", "#27bec6",
 }
-var blendModes = []BlendMode{BlendRgb, BlendLinearRgb, BlendOklab, BlendLab, BlendLuv, BlendHcl, BlendHsv}
+var blendModes = []BlendMode{BlendRgb, BlendLinearRgb, BlendOklab}
 var positions = []float64{0.73}
 
 func BenchmarkLinearGradient(b *testing.B) {

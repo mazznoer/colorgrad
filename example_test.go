@@ -1,4 +1,3 @@
-//go:build ignore
 package colorgrad_test
 
 import (
@@ -12,7 +11,7 @@ func Example_presetGradient() {
 	dmin, dmax := grad.Domain()
 
 	fmt.Println(dmin, dmax)
-	fmt.Println(grad.At(0).Hex())
+	fmt.Println(grad.At(0).HexString())
 	// Output:
 	// 0 1
 	// #6e40aa
@@ -29,8 +28,8 @@ func Example_customGradient() {
 		panic(err)
 	}
 
-	fmt.Println(grad.At(0).Hex())
-	fmt.Println(grad.At(1).Hex())
+	fmt.Println(grad.At(0).HexString())
+	fmt.Println(grad.At(1).HexString())
 	// Output:
 	// #ff0000
 	// #00ff00
