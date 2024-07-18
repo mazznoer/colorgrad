@@ -1,16 +1,13 @@
-//go:build ignore
 package colorgrad
 
 import (
 	"fmt"
-	"image/color"
 
-	"github.com/lucasb-eyer/go-colorful"
 	"github.com/mazznoer/csscolorparser"
 )
 
 type GradientBuilder struct {
-	colors            []colorful.Color
+	colors            []Color
 	pos               []float64
 	mode              BlendMode
 	interpolation     Interpolation
@@ -24,9 +21,8 @@ func NewGradient() *GradientBuilder {
 	}
 }
 
-func (gb *GradientBuilder) Colors(colors ...color.Color) *GradientBuilder {
-	for _, c := range colors {
-		col, _ := colorful.MakeColor(c)
+func (gb *GradientBuilder) Colors(colors ...Color) *GradientBuilder {
+	for _, col := range colors {
 		gb.colors = append(gb.colors, col)
 	}
 	return gb
@@ -39,7 +35,7 @@ func (gb *GradientBuilder) HtmlColors(htmlColors ...string) *GradientBuilder {
 			gb.invalidHtmlColors = append(gb.invalidHtmlColors, s)
 			continue
 		}
-		gb.colors = append(gb.colors, colorful.Color{R: c.R, G: c.G, B: c.B})
+		gb.colors = append(gb.colors, c)
 	}
 	return gb
 }
@@ -72,9 +68,9 @@ func (gb *GradientBuilder) Build() (Gradient, error) {
 
 	if len(gb.colors) == 0 {
 		// Default colors
-		gb.colors = []colorful.Color{
-			{R: 0, G: 0, B: 0}, // black
-			{R: 1, G: 1, B: 1}, // white
+		gb.colors = []Color{
+			{R: 0, G: 0, B: 0, A: 1}, // black
+			{R: 1, G: 1, B: 1, A: 1}, // white
 		}
 	} else if len(gb.colors) == 1 {
 		gb.colors = append(gb.colors, gb.colors[0])

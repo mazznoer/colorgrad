@@ -1,11 +1,10 @@
-//go:build ignore
 package colorgrad
 
 import (
 	"math"
-
-	"github.com/lucasb-eyer/go-colorful"
 )
+
+// TODO refactor + alpha
 
 // Adapted from https://qroph.github.io/2018/07/30/smooth-paths-using-catmull-rom-splines.html
 
@@ -93,57 +92,39 @@ type catmullRomGradient struct {
 	mode BlendMode
 }
 
-func (s catmullRomGradient) At(t float64) colorful.Color {
+func (s catmullRomGradient) At(t float64) Color {
 	if math.IsNaN(t) {
-		return colorful.Color{R: 0, G: 0, B: 0}
+		return Color{R: 0, G: 0, B: 0, A: 0}
 	}
 	t = math.Max(s.dmin, math.Min(s.dmax, t))
 	switch s.mode {
 	case BlendLinearRgb:
-		return colorful.LinearRgb(s.a.at(t), s.b.at(t), s.c.at(t))
-	case BlendLab:
-		return colorful.Lab(s.a.at(t), s.b.at(t), s.c.at(t)).Clamped()
-	case BlendLuv:
-		return colorful.Luv(s.a.at(t), s.b.at(t), s.c.at(t)).Clamped()
-	case BlendHcl:
-		return colorful.Hcl(s.a.at(t), s.b.at(t), s.c.at(t)).Clamped()
-	case BlendHsv:
-		return colorful.Hsv(s.a.at(t), s.b.at(t), s.c.at(t))
+		return LinearRgb(s.a.at(t), s.b.at(t), s.c.at(t), 1)
 	case BlendOklab:
-		r, g, b := oklabToLrgb(s.a.at(t), s.b.at(t), s.c.at(t))
-		return colorful.LinearRgb(r, g, b).Clamped()
+		return Oklab(s.a.at(t), s.b.at(t), s.c.at(t), 1) //.Clamped
 	default:
-		return colorful.Color{R: s.a.at(t), G: s.b.at(t), B: s.c.at(t)}
+		return Color{R: s.a.at(t), G: s.b.at(t), B: s.c.at(t), A: 1}
 	}
 }
 
-func newCatmullRomGradient(colors []colorful.Color, pos []float64, space BlendMode) Gradient {
+func newCatmullRomGradient(colors []Color, pos []float64, space BlendMode) Gradient {
 	n := len(colors)
 	a := make([]float64, n)
 	b := make([]float64, n)
 	c := make([]float64, n)
 	for i, col := range colors {
-		var c1, c2, c3 float64
+		var arr [4]float64
 		switch space {
-		case BlendLinearRgb:
-			c1, c2, c3 = col.LinearRgb()
-		case BlendLab:
-			c1, c2, c3 = col.Lab()
-		case BlendLuv:
-			c1, c2, c3 = col.Luv()
-		case BlendHcl:
-			c1, c2, c3 = col.Hcl()
-		case BlendHsv:
-			c1, c2, c3 = col.Hsv()
-		case BlendOklab:
-			lr, lg, lb := col.LinearRgb()
-			c1, c2, c3 = lrgbToOklab(lr, lg, lb)
 		case BlendRgb:
-			c1, c2, c3 = col.R, col.G, col.B
+			arr = [4]float64{col.R, col.G, col.B, col.A}
+		case BlendLinearRgb:
+			arr = col2linearRgb(col)
+		case BlendOklab:
+			arr = col2oklab(col)
 		}
-		a[i] = c1
-		b[i] = c2
-		c[i] = c3
+		a[i] = arr[0]
+		b[i] = arr[1]
+		c[i] = arr[2]
 	}
 	dmin := pos[0]
 	dmax := pos[n-1]

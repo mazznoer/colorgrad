@@ -1,25 +1,22 @@
-//go:build ignore
 package colorgrad
 
 import (
 	"math"
-
-	"github.com/lucasb-eyer/go-colorful"
 )
 
 // https://github.com/d3/d3-interpolate/blob/master/src/basis.js
 
 type basisGradient struct {
-	colors     [][3]float64
+	colors     [][4]float64
 	pos        []float64
 	dmin       float64
 	dmax       float64
 	mode       BlendMode
-	firstColor colorful.Color
-	lastColor  colorful.Color
+	firstColor Color
+	lastColor  Color
 }
 
-func (lg basisGradient) At(t float64) colorful.Color {
+func (lg basisGradient) At(t float64) Color {
 	if t <= lg.dmin {
 		return lg.firstColor
 	}
@@ -29,7 +26,7 @@ func (lg basisGradient) At(t float64) colorful.Color {
 	}
 
 	if math.IsNaN(t) {
-		return colorful.Color{R: 0, G: 0, B: 0}
+		return Color{R: 0, G: 0, B: 0, A: 0}
 	}
 
 	low := 0
@@ -70,34 +67,24 @@ func (lg basisGradient) At(t float64) colorful.Color {
 		return basis(t, v0, v1, v2, v3)
 	}
 
-	x := xx(val0[0], val1[0], 0)
-	y := xx(val0[1], val1[1], 1)
-	z := xx(val0[2], val1[2], 2)
+	a := xx(val0[0], val1[0], 0)
+	b := xx(val0[1], val1[1], 1)
+	c := xx(val0[2], val1[2], 2)
+	d := xx(val0[3], val1[3], 3)
 
 	switch lg.mode {
-	case BlendHcl:
-		hue := interpAngle(lg.colors[low-1][0], lg.colors[low][0], t)
-		return colorful.Hcl(hue, y, z).Clamped()
-	case BlendHsv:
-		hue := interpAngle(lg.colors[low-1][0], lg.colors[low][0], t)
-		return colorful.Hsv(hue, y, z)
-	case BlendLab:
-		return colorful.Lab(x, y, z).Clamped()
-	case BlendLinearRgb:
-		return colorful.LinearRgb(x, y, z)
-	case BlendLuv:
-		return colorful.Luv(x, y, z).Clamped()
 	case BlendRgb:
-		return colorful.Color{R: x, G: y, B: z}
+		return Color{R: a, G: b, B: c, A: d}
+	case BlendLinearRgb:
+		return LinearRgb(a, b, c, d)
 	case BlendOklab:
-		a, b, c := oklabToLrgb(x, y, z)
-		return colorful.LinearRgb(a, b, c).Clamped()
+		return Oklab(a, b, c, d) //.Clamped()
 	}
 
-	return colorful.Color{R: 0, G: 0, B: 0}
+	return Color{R: 0, G: 0, B: 0, A: 0}
 }
 
-func newBasisGradient(colors []colorful.Color, pos []float64, mode BlendMode) Gradient {
+func newBasisGradient(colors []Color, pos []float64, mode BlendMode) Gradient {
 	gradbase := basisGradient{
 		colors:     convertColors(colors, mode),
 		pos:        pos,
