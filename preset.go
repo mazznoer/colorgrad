@@ -1,17 +1,15 @@
-//go:build ignore
 package colorgrad
 
 import (
-	"github.com/lucasb-eyer/go-colorful"
 	"github.com/mazznoer/csscolorparser"
 )
 
 func preset(htmlColors []string) Gradient {
-	var colors []colorful.Color
+	var colors []Color
 	for _, s := range htmlColors {
 		c, err := csscolorparser.Parse(s)
 		if err == nil {
-			colors = append(colors, colorful.Color{R: c.R, G: c.G, B: c.B})
+			colors = append(colors, c)
 		}
 	}
 	pos := linspace(0, 1, uint(len(colors)))

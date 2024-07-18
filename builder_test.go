@@ -1,8 +1,6 @@
-//go:build ignore
 package colorgrad
 
 import (
-	"image/color"
 	"math"
 	"testing"
 )
@@ -10,74 +8,46 @@ import (
 func TestBasic1(t *testing.T) {
 	// Single color
 	grad, _ := NewGradient().
-		Colors(color.RGBA{0, 255, 0, 255}).
+		Colors(Color{R: 0, G: 1, B: 0, A: 1}).
 		Build()
 	dmin, dmax := grad.Domain()
 	if dmin != 0 || dmax != 1 {
 		t.Errorf("Domain got: (%v, %v), expected: (0, 1)", dmin, dmax)
 	}
-	testStr(t, grad.At(0).Hex(), "#00ff00")
-	testStr(t, grad.At(1).Hex(), "#00ff00")
+	testStr(t, grad.At(0).HexString(), "#00ff00")
+	testStr(t, grad.At(1).HexString(), "#00ff00")
 
 	// Named colors
 	grad, _ = NewGradient().
 		HtmlColors("tomato", "skyblue", "gold", "springgreen").
 		Build()
 	colors := grad.ColorfulColors(4)
-	testStr(t, colors[0].Hex(), "#ff6347")
-	testStr(t, colors[1].Hex(), "#87ceeb")
-	testStr(t, colors[2].Hex(), "#ffd700")
-	testStr(t, colors[3].Hex(), "#00ff7f")
+	testStr(t, colors[0].HexString(), "#ff6347")
+	testStr(t, colors[1].HexString(), "#87ceeb")
+	testStr(t, colors[2].HexString(), "#ffd700")
+	testStr(t, colors[3].HexString(), "#00ff7f")
 
 	// Blend mode
 	grad, _ = NewGradient().
 		HtmlColors("#333", "#bbb").
-		Mode(BlendHcl).
+		Mode(BlendRgb).
 		Build()
-	testStr(t, grad.At(0).Hex(), "#333333")
-	testStr(t, grad.At(1).Hex(), "#bbbbbb")
-
-	grad, _ = NewGradient().
-		HtmlColors("#333", "#bbb").
-		Mode(BlendHsv).
-		Build()
-	testStr(t, grad.At(0).Hex(), "#333333")
-	testStr(t, grad.At(1).Hex(), "#bbbbbb")
-
-	grad, _ = NewGradient().
-		HtmlColors("#333", "#bbb").
-		Mode(BlendLab).
-		Build()
-	testStr(t, grad.At(0).Hex(), "#333333")
-	testStr(t, grad.At(1).Hex(), "#bbbbbb")
+	testStr(t, grad.At(0).HexString(), "#333333")
+	testStr(t, grad.At(1).HexString(), "#bbbbbb")
 
 	grad, _ = NewGradient().
 		HtmlColors("#333", "#bbb").
 		Mode(BlendLinearRgb).
 		Build()
-	testStr(t, grad.At(0).Hex(), "#333333")
-	testStr(t, grad.At(1).Hex(), "#bbbbbb")
-
-	grad, _ = NewGradient().
-		HtmlColors("#333", "#bbb").
-		Mode(BlendLuv).
-		Build()
-	testStr(t, grad.At(0).Hex(), "#333333")
-	testStr(t, grad.At(1).Hex(), "#bbbbbb")
-
-	grad, _ = NewGradient().
-		HtmlColors("#333", "#bbb").
-		Mode(BlendRgb).
-		Build()
-	testStr(t, grad.At(0).Hex(), "#333333")
-	testStr(t, grad.At(1).Hex(), "#bbbbbb")
+	testStr(t, grad.At(0).HexString(), "#333333")
+	testStr(t, grad.At(1).HexString(), "#bbbbbb")
 
 	grad, _ = NewGradient().
 		HtmlColors("#333", "#bbb").
 		Mode(BlendOklab).
 		Build()
-	testStr(t, grad.At(0).Hex(), "#333333")
-	testStr(t, grad.At(1).Hex(), "#bbbbbb")
+	testStr(t, grad.At(0).HexString(), "#333333")
+	testStr(t, grad.At(1).HexString(), "#bbbbbb")
 }
 
 func TestBasic2(t *testing.T) {
@@ -88,13 +58,13 @@ func TestBasic2(t *testing.T) {
 	if len(colors) != 2 {
 		t.Errorf("Expected 2, got %v", len(colors))
 	}
-	testStr(t, colors[0].Hex(), "#000000")
-	testStr(t, colors[1].Hex(), "#ffffff")
+	testStr(t, colors[0].HexString(), "#000000")
+	testStr(t, colors[1].HexString(), "#ffffff")
 
-	testStr(t, grad.At(math.NaN()).Hex(), "#000000")
+	testStr(t, grad.At(math.NaN()).HexString(), "#00000000")
 
 	// Custom colors
-	grad, _ = NewGradient().
+	/*grad, _ = NewGradient().
 		Colors(
 			color.RGBA{255, 0, 0, 255},
 			color.RGBA{255, 255, 0, 255},
@@ -106,11 +76,11 @@ func TestBasic2(t *testing.T) {
 	if len(colors) != 3 {
 		t.Errorf("Expected 3, got %v", len(colors))
 	}
-	testStr(t, colors[0].Hex(), "#ff0000")
-	testStr(t, colors[1].Hex(), "#ffff00")
-	testStr(t, colors[2].Hex(), "#0000ff")
+	testStr(t, colors[0].HexString(), "#ff0000")
+	testStr(t, colors[1].HexString(), "#ffff00")
+	testStr(t, colors[2].HexString(), "#0000ff")
 
-	testStr(t, grad.At(math.NaN()).Hex(), "#000000")
+	testStr(t, grad.At(math.NaN()).HexString(), "#00000000")
 
 	// Custom colors #2
 	grad, _ = NewGradient().
@@ -119,10 +89,10 @@ func TestBasic2(t *testing.T) {
 		HtmlColors("lime").
 		Build()
 	colors = grad.ColorfulColors(4)
-	testStr(t, colors[0].Hex(), "#0000ff")
-	testStr(t, colors[1].Hex(), "#00ffff")
-	testStr(t, colors[2].Hex(), "#ffff00")
-	testStr(t, colors[3].Hex(), "#00ff00")
+	testStr(t, colors[0].HexString(), "#0000ff")
+	testStr(t, colors[1].HexString(), "#00ffff")
+	testStr(t, colors[2].HexString(), "#ffff00")
+	testStr(t, colors[3].HexString(), "#00ff00")*/
 }
 
 func TestError(t *testing.T) {

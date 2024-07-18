@@ -1,4 +1,3 @@
-//go:build ignore
 package colorgrad
 
 import (
@@ -20,10 +19,10 @@ func TestCyclicalGradient(t *testing.T) {
 	var grad Gradient
 
 	grad = Rainbow()
-	testStr(t, grad.At(0).Hex(), grad.At(1).Hex())
+	testStr(t, grad.At(0).HexString(), grad.At(1).HexString())
 
 	grad = Sinebow()
-	testStr(t, grad.At(0).Hex(), grad.At(1).Hex())
+	testStr(t, grad.At(0).HexString(), grad.At(1).HexString())
 }
 
 func testFn(t *testing.T, grad Gradient) {

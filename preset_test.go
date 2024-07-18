@@ -1,4 +1,3 @@
-//go:build ignore
 package colorgrad
 
 import (
@@ -43,17 +42,17 @@ func TestPreset(t *testing.T) {
 	testGrad(t, YlOrRd(), "#ffffcc", "#800026")
 
 	grad := Viridis()
-	testStr(t, grad.At(0.5).Hex(), "#27838e")
+	testStr(t, grad.At(0.5).HexString(), "#27838e")
 }
 
 func testGrad(t *testing.T, grad Gradient, start, end string) {
-	testStr(t, grad.At(0).Hex(), start)
-	testStr(t, grad.At(1).Hex(), end)
-	testStr(t, grad.At(-0.8).Hex(), start)
-	testStr(t, grad.At(-0.5).Hex(), start)
-	testStr(t, grad.At(-0.2).Hex(), start)
-	testStr(t, grad.At(1.2).Hex(), end)
-	testStr(t, grad.At(1.5).Hex(), end)
-	testStr(t, grad.At(1.8).Hex(), end)
-	testStr(t, grad.At(math.NaN()).Hex(), "#000000")
+	testStr(t, grad.At(0).HexString(), start)
+	testStr(t, grad.At(1).HexString(), end)
+	testStr(t, grad.At(-0.8).HexString(), start)
+	testStr(t, grad.At(-0.5).HexString(), start)
+	testStr(t, grad.At(-0.2).HexString(), start)
+	testStr(t, grad.At(1.2).HexString(), end)
+	testStr(t, grad.At(1.5).HexString(), end)
+	testStr(t, grad.At(1.8).HexString(), end)
+	testStr(t, grad.At(math.NaN()).HexString(), "#00000000")
 }
