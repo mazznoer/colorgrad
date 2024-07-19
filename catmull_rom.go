@@ -94,14 +94,14 @@ type catmullRomGradient struct {
 
 func (s catmullRomGradient) At(t float64) Color {
 	if math.IsNaN(t) {
-		return Color{R: 0, G: 0, B: 0, A: 0}
+		return Color{R: 0, G: 0, B: 0, A: 1}
 	}
 	t = math.Max(s.dmin, math.Min(s.dmax, t))
 	switch s.mode {
 	case BlendLinearRgb:
 		return LinearRgb(s.a.at(t), s.b.at(t), s.c.at(t), 1)
 	case BlendOklab:
-		return Oklab(s.a.at(t), s.b.at(t), s.c.at(t), 1) //.Clamped
+		return Oklab(s.a.at(t), s.b.at(t), s.c.at(t), 1).Clamp()
 	default:
 		return Color{R: s.a.at(t), G: s.b.at(t), B: s.c.at(t), A: 1}
 	}

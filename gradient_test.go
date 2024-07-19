@@ -1,7 +1,6 @@
 package colorgrad
 
 import (
-	"image/color"
 	"testing"
 )
 
@@ -58,28 +57,19 @@ func TestDomain(t *testing.T) {
 
 func TestGetColors(t *testing.T) {
 	grad, _ := NewGradient().Build()
-	colorsA := grad.ColorfulColors(5) // []colorful.Color
-	colorsB := grad.Colors(5)         // []color.Color
 
-	for i, c2 := range colorsB {
-		var c1 color.Color = colorsA[i]
-		if c1 != c2 {
-			t.Errorf("%v != %v", c1, c2)
-		}
-	}
-
-	colors0 := grad.ColorfulColors(0)
+	colors0 := grad.Colors(0)
 	if len(colors0) != 0 {
 		t.Errorf("Error.")
 	}
-	//colors1 := grad.ColorfulColors(1)
+	//colors1 := grad.Colors(1)
 	//testStr(t, colors1[0].HexString(), "#000000")
 
-	colors2 := grad.ColorfulColors(2)
+	colors2 := grad.Colors(2)
 	testStr(t, colors2[0].HexString(), "#000000")
 	testStr(t, colors2[1].HexString(), "#ffffff")
 
-	colors3 := grad.ColorfulColors(3)
+	colors3 := grad.Colors(3)
 	testStr(t, colors3[0].HexString(), "#000000")
 	testStr(t, colors3[1].HexString(), "#808080")
 	testStr(t, colors3[2].HexString(), "#ffffff")
@@ -89,7 +79,7 @@ func TestGetColors(t *testing.T) {
 		Domain(-1, 1).
 		Build()
 
-	colors5 := grad.ColorfulColors(5)
+	colors5 := grad.Colors(5)
 	testStr(t, colors5[0].HexString(), "#ff0000")
 	testStr(t, colors5[1].HexString(), "#808000")
 	testStr(t, colors5[2].HexString(), "#00ff00")
@@ -171,7 +161,7 @@ func isZeroGradient(grad Gradient) bool {
 	if dmin != 0 || dmax != 1 {
 		return false
 	}
-	colors := grad.ColorfulColors(13)
+	colors := grad.Colors(13)
 	black := Color{R: 0, G: 0, B: 0, A: 0}
 	for _, col := range colors {
 		if col != black {

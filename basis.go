@@ -26,7 +26,7 @@ func (lg basisGradient) At(t float64) Color {
 	}
 
 	if math.IsNaN(t) {
-		return Color{R: 0, G: 0, B: 0, A: 0}
+		return Color{R: 0, G: 0, B: 0, A: 1}
 	}
 
 	low := 0
@@ -78,7 +78,7 @@ func (lg basisGradient) At(t float64) Color {
 	case BlendLinearRgb:
 		return LinearRgb(a, b, c, d)
 	case BlendOklab:
-		return Oklab(a, b, c, d) //.Clamped()
+		return Oklab(a, b, c, d).Clamp()
 	}
 
 	return Color{R: 0, G: 0, B: 0, A: 0}

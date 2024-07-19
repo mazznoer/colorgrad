@@ -1,7 +1,6 @@
 package colorgrad
 
 import (
-	"image/color"
 	"math"
 
 	"github.com/mazznoer/csscolorparser"
@@ -93,21 +92,12 @@ func (g Gradient) ReflectAt(t float64) Color {
 }
 
 // Get n colors evenly spaced across gradient
-func (g Gradient) ColorfulColors(count uint) []Color {
+func (g Gradient) Colors(count uint) []Color {
 	d := g.dmax - g.dmin
 	l := float64(count) - 1
 	colors := make([]Color, count)
 	for i := range colors {
-		colors[i] = g.grad.At(g.dmin + (float64(i)*d)/l) //.Clamped()
-	}
-	return colors
-}
-
-// Get n colors evenly spaced across gradient
-func (g Gradient) Colors(count uint) []color.Color {
-	colors := make([]color.Color, count)
-	for i, col := range g.ColorfulColors(count) {
-		colors[i] = col
+		colors[i] = g.grad.At(g.dmin + (float64(i)*d)/l).Clamp()
 	}
 	return colors
 }
@@ -121,7 +111,7 @@ func (g Gradient) Domain() (float64, float64) {
 func (g Gradient) Sharp(segment uint, smoothness float64) Gradient {
 	colors := []Color{}
 	if segment >= 2 {
-		colors = g.ColorfulColors(segment)
+		colors = g.Colors(segment)
 	} else {
 		colors = append(colors, g.At(g.dmin))
 		colors = append(colors, g.At(g.dmin))
