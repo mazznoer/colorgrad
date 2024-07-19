@@ -49,8 +49,20 @@ func (i Interpolation) String() string {
 
 type Color = csscolorparser.Color
 
+var Hwb = csscolorparser.FromHwb
+var Hsv = csscolorparser.FromHsv
+var Hsl = csscolorparser.FromHsl
 var LinearRgb = csscolorparser.FromLinearRGB
 var Oklab = csscolorparser.FromOklab
+var Oklch = csscolorparser.FromOklch
+
+func Rgb(r, g, b, a float64) Color {
+	return Color{R: r, G: g, B: b, A: a}
+}
+
+func Rgb8(r, g, b, a uint8) Color {
+	return Color{R: float64(r) / 255, G: float64(g) / 255, B: float64(b) / 255, A: float64(a) / 255}
+}
 
 type gradientBase interface {
 	// Get color at certain position

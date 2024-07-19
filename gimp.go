@@ -1,4 +1,3 @@
-//go:build ignore
 package colorgrad
 
 import (
@@ -7,8 +6,6 @@ import (
 	"io"
 	"math"
 	"strings"
-
-	"github.com/lucasb-eyer/go-colorful"
 )
 
 // References:
@@ -40,9 +37,9 @@ const (
 
 type gimpSegment struct {
 	// Left endpoint color
-	lcolor colorful.Color
+	lcolor Color
 	// Right endpoint color
-	rcolor colorful.Color
+	rcolor Color
 	// Left endpoint coordinate
 	lpos float64
 	// Midpoint coordinate
@@ -61,7 +58,7 @@ type gimpGradient struct {
 	dmax     float64
 }
 
-func (ggr gimpGradient) At(t float64) colorful.Color {
+func (ggr gimpGradient) At(t float64) Color {
 	if t <= ggr.dmin {
 		return ggr.segments[0].lcolor
 	}
@@ -71,7 +68,7 @@ func (ggr gimpGradient) At(t float64) colorful.Color {
 	}
 
 	if math.IsNaN(t) {
-		return colorful.Color{R: 0, G: 0, B: 0}
+		return Color{R: 0, G: 0, B: 0, A: 1}
 	}
 
 	low := 0
@@ -135,7 +132,7 @@ func (ggr gimpGradient) At(t float64) colorful.Color {
 
 	switch seg.coloring {
 	case rgb:
-		return seg.lcolor.BlendRgb(seg.rcolor, f)
+		return blendRgb(seg.lcolor, seg.rcolor, f)
 	case hsvCcw:
 		return blendHsvCcw(seg.lcolor, seg.rcolor, f)
 	case hsvCw:
@@ -164,16 +161,16 @@ func calc_linear_factor(middle, pos float64) float64 {
 	}
 }
 
-func blendHsvCcw(c1, c2 colorful.Color, t float64) colorful.Color {
-	h1, s1, v1 := c1.Hsv()
-	h2, s2, v2 := c2.Hsv()
+func blendHsvCcw(c1, c2 Color, t float64) Color {
+	hsvA := col2hsv(c1)
+	hsvB := col2hsv(c2)
 
 	var hue float64
 
-	if h1 < h2 {
-		hue = h1 + ((h2 - h1) * t)
+	if hsvA[0] < hsvB[0] {
+		hue = hsvA[0] + ((hsvB[0] - hsvA[0]) * t)
 	} else {
-		h := h1 + ((360 - (h1 - h2)) * t)
+		h := hsvA[0] + ((360 - (hsvA[0] - hsvB[0])) * t)
 
 		if h > 360 {
 			hue = h - 360
@@ -182,23 +179,24 @@ func blendHsvCcw(c1, c2 colorful.Color, t float64) colorful.Color {
 		}
 	}
 
-	return colorful.Hsv(
+	return Hsv(
 		hue,
-		s1+t*(s2-s1),
-		v1+t*(v2-v1),
+		hsvA[1]+t*(hsvB[1]-hsvA[1]),
+		hsvA[2]+t*(hsvB[2]-hsvA[2]),
+		hsvA[3]+t*(hsvB[3]-hsvA[3]),
 	)
 }
 
-func blendHsvCw(c1, c2 colorful.Color, t float64) colorful.Color {
-	h1, s1, v1 := c1.Hsv()
-	h2, s2, v2 := c2.Hsv()
+func blendHsvCw(c1, c2 Color, t float64) Color {
+	hsvA := col2hsv(c1)
+	hsvB := col2hsv(c2)
 
 	var hue float64
 
-	if h2 < h1 {
-		hue = h1 - ((h1 - h2) * t)
+	if hsvB[0] < hsvA[0] {
+		hue = hsvA[0] - ((hsvA[0] - hsvB[0]) * t)
 	} else {
-		h := h1 - ((360 - (h2 - h1)) * t)
+		h := hsvA[0] - ((360 - (hsvB[0] - hsvA[0])) * t)
 
 		if h < 0 {
 			hue = h + 360
@@ -207,14 +205,15 @@ func blendHsvCw(c1, c2 colorful.Color, t float64) colorful.Color {
 		}
 	}
 
-	return colorful.Hsv(
+	return Hsv(
 		hue,
-		s1+t*(s2-s1),
-		v1+t*(v2-v1),
+		hsvA[1]+t*(hsvB[1]-hsvA[1]),
+		hsvA[2]+t*(hsvB[2]-hsvA[2]),
+		hsvA[3]+t*(hsvB[3]-hsvA[3]),
 	)
 }
 
-func ParseGgr(r io.Reader, fg, bg colorful.Color) (Gradient, string, error) {
+func ParseGgr(r io.Reader, fg, bg Color) (Gradient, string, error) {
 	zgrad := Gradient{
 		grad: zeroGradient{},
 		dmin: 0,
@@ -289,7 +288,7 @@ func ParseGgr(r io.Reader, fg, bg colorful.Color) (Gradient, string, error) {
 	}, name, nil
 }
 
-func parseSegment(s string, fg, bg colorful.Color) (gimpSegment, bool) {
+func parseSegment(s string, fg, bg Color) (gimpSegment, bool) {
 	params := strings.Fields(s)
 	plen := len(params)
 
@@ -347,36 +346,36 @@ func parseSegment(s string, fg, bg colorful.Color) (gimpSegment, bool) {
 		return gimpSegment{}, false
 	}
 
-	var lcolor colorful.Color
+	var lcolor Color
 
 	switch int(d[13]) {
 	case 0:
-		lcolor = colorful.Color{R: d[3], G: d[4], B: d[5]}
+		lcolor = Color{R: d[3], G: d[4], B: d[5], A: d[6]}
 	case 1:
 		lcolor = fg
 	case 2:
-		lcolor = fg // TODO transparent
+		lcolor = Rgb(fg.R, fg.G, fg.B, 0)
 	case 3:
 		lcolor = bg
 	case 4:
-		lcolor = bg // TODO transparent
+		lcolor = Rgb(bg.R, bg.G, bg.B, 0)
 	default:
 		return gimpSegment{}, false
 	}
 
-	var rcolor colorful.Color
+	var rcolor Color
 
 	switch int(d[14]) {
 	case 0:
-		rcolor = colorful.Color{R: d[7], G: d[8], B: d[9]}
+		rcolor = Color{R: d[7], G: d[8], B: d[9], A: d[10]}
 	case 1:
 		rcolor = fg
 	case 2:
-		rcolor = fg // TODO transparent
+		rcolor = Rgb(fg.R, fg.G, fg.B, 0)
 	case 3:
 		rcolor = bg
 	case 4:
-		rcolor = bg // TODO transparent
+		rcolor = Rgb(bg.R, bg.G, bg.B, 0)
 	default:
 		return gimpSegment{}, false
 	}

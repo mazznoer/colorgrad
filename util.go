@@ -68,6 +68,41 @@ func col2oklab(col Color) [4]float64 {
 	}
 }
 
+func col2hsv(col Color) [4]float64 {
+	v := math.Max(col.R, math.Max(col.G, col.B))
+	d := v - math.Min(col.R, math.Min(col.G, col.B))
+
+	if math.Abs(d) < epsilon {
+		return [4]float64{0, 0, v, col.A}
+	}
+
+	s := d / v
+	dr := (v - col.R) / d
+	dg := (v - col.G) / d
+	db := (v - col.B) / d
+
+	var h float64
+
+	if math.Abs(col.R-v) < epsilon {
+		h = db - dg
+	} else if math.Abs(col.G-v) < epsilon {
+		h = 2.0 + dr - db
+	} else {
+		h = 4.0 + dg - dr
+	}
+
+	h = math.Mod(h*60.0, 360.0)
+	return [4]float64{normalizeAngle(h), s, v, col.A}
+}
+
+func normalizeAngle(t float64) float64 {
+	t = math.Mod(t, 360.0)
+	if t < 0.0 {
+		t += 360.0
+	}
+	return t
+}
+
 func convertColors(colorsIn []Color, mode BlendMode) [][4]float64 {
 	colors := make([][4]float64, len(colorsIn))
 	for i, col := range colorsIn {
