@@ -4,16 +4,9 @@ import (
 	"math"
 )
 
-// TODO refactor + alpha
-
 // Adapted from https://qroph.github.io/2018/07/30/smooth-paths-using-catmull-rom-splines.html
 
-type catmullRomInterpolator struct {
-	segments [][4]float64
-	pos      []float64
-}
-
-func newCatmullRomInterpolator(values, pos []float64) catmullRomInterpolator {
+func toCatmullRomSegments(values []float64) [][4]float64 {
 	alpha := 0.5
 	tension := 0.0
 	n := len(values)
@@ -50,61 +43,17 @@ func newCatmullRomInterpolator(values, pos []float64) catmullRomInterpolator {
 		d := v1
 		segments = append(segments, [4]float64{a, b, c, d})
 	}
-
-	return catmullRomInterpolator{
-		segments,
-		pos,
-	}
-}
-
-func (cr catmullRomInterpolator) at(t float64) float64 {
-	low := 0
-	high := len(cr.pos)
-
-	for low < high {
-		mid := (low + high) / 2
-		if cr.pos[mid] < t {
-			low = mid + 1
-		} else {
-			high = mid
-		}
-	}
-
-	if low == 0 {
-		low = 1
-	}
-
-	p1 := cr.pos[low-1]
-	p2 := cr.pos[low]
-	seg := cr.segments[low-1]
-	t1 := (t - p1) / (p2 - p1)
-	t2 := t1 * t1
-	t3 := t2 * t1
-	return seg[0]*t3 + seg[1]*t2 + seg[2]*t1 + seg[3]
+	return segments
 }
 
 type catmullRomGradient struct {
-	a    catmullRomInterpolator
-	b    catmullRomInterpolator
-	c    catmullRomInterpolator
-	dmin float64
-	dmax float64
-	mode BlendMode
-}
-
-func (s catmullRomGradient) At(t float64) Color {
-	if math.IsNaN(t) {
-		return Color{R: 0, G: 0, B: 0, A: 1}
-	}
-	t = math.Max(s.dmin, math.Min(s.dmax, t))
-	switch s.mode {
-	case BlendLinearRgb:
-		return LinearRgb(s.a.at(t), s.b.at(t), s.c.at(t), 1)
-	case BlendOklab:
-		return Oklab(s.a.at(t), s.b.at(t), s.c.at(t), 1).Clamp()
-	default:
-		return Color{R: s.a.at(t), G: s.b.at(t), B: s.c.at(t), A: 1}
-	}
+	segments   [][4][4]float64
+	positions  []float64
+	dmin       float64
+	dmax       float64
+	mode       BlendMode
+	firstColor Color
+	lastColor  Color
 }
 
 func newCatmullRomGradient(colors []Color, pos []float64, space BlendMode) Gradient {
@@ -112,6 +61,7 @@ func newCatmullRomGradient(colors []Color, pos []float64, space BlendMode) Gradi
 	a := make([]float64, n)
 	b := make([]float64, n)
 	c := make([]float64, n)
+	d := make([]float64, n)
 	for i, col := range colors {
 		var arr [4]float64
 		switch space {
@@ -125,20 +75,92 @@ func newCatmullRomGradient(colors []Color, pos []float64, space BlendMode) Gradi
 		a[i] = arr[0]
 		b[i] = arr[1]
 		c[i] = arr[2]
+		d[i] = arr[3]
+	}
+	s1 := toCatmullRomSegments(a)
+	s2 := toCatmullRomSegments(b)
+	s3 := toCatmullRomSegments(c)
+	s4 := toCatmullRomSegments(d)
+	segments := make([][4][4]float64, len(s1))
+	for i, v1 := range s1 {
+		segments[i] = [4][4]float64{
+			v1,
+			s2[i],
+			s3[i],
+			s4[i],
+		}
 	}
 	dmin := pos[0]
 	dmax := pos[n-1]
 	gradbase := catmullRomGradient{
-		a:    newCatmullRomInterpolator(a, pos),
-		b:    newCatmullRomInterpolator(b, pos),
-		c:    newCatmullRomInterpolator(c, pos),
-		dmin: dmin,
-		dmax: dmax,
-		mode: space,
+		segments:   segments,
+		positions:  pos,
+		dmin:       dmin,
+		dmax:       dmax,
+		mode:       space,
+		firstColor: colors[0],
+		lastColor:  colors[len(colors)-1],
 	}
 	return Gradient{
 		grad: gradbase,
 		dmin: dmin,
 		dmax: dmax,
 	}
+}
+
+func (g catmullRomGradient) At(t float64) Color {
+	if math.IsNaN(t) {
+		return Color{R: 0, G: 0, B: 0, A: 1}
+	}
+
+	if t <= g.dmin {
+		return g.firstColor
+	}
+
+	if t >= g.dmax {
+		return g.lastColor
+	}
+
+	low := 0
+	high := len(g.positions)
+
+	for low < high {
+		mid := (low + high) / 2
+		if g.positions[mid] < t {
+			low = mid + 1
+		} else {
+			high = mid
+		}
+	}
+
+	if low == 0 {
+		low = 1
+	}
+
+	pos0 := g.positions[low-1]
+	pos1 := g.positions[low]
+	seg_a := g.segments[low-1][0]
+	seg_b := g.segments[low-1][1]
+	seg_c := g.segments[low-1][2]
+	seg_d := g.segments[low-1][3]
+
+	t1 := (t - pos0) / (pos1 - pos0)
+	t2 := t1 * t1
+	t3 := t2 * t1
+
+	a := seg_a[0]*t3 + seg_a[1]*t2 + seg_a[2]*t1 + seg_a[3]
+	b := seg_b[0]*t3 + seg_b[1]*t2 + seg_b[2]*t1 + seg_b[3]
+	c := seg_c[0]*t3 + seg_c[1]*t2 + seg_c[2]*t1 + seg_c[3]
+	d := seg_d[0]*t3 + seg_d[1]*t2 + seg_d[2]*t1 + seg_d[3]
+
+	switch g.mode {
+	case BlendRgb:
+		return Color{R: a, G: b, B: c, A: d}
+	case BlendLinearRgb:
+		return LinearRgb(a, b, c, d)
+	case BlendOklab:
+		return Oklab(a, b, c, d).Clamp()
+	}
+
+	return Color{R: 0, G: 0, B: 0, A: 0}
 }
