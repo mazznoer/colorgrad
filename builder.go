@@ -8,16 +8,18 @@ import (
 
 type GradientBuilder struct {
 	colors            []Color
-	pos               []float64
+	positions         []float64
 	mode              BlendMode
 	interpolation     Interpolation
 	invalidHtmlColors []string
+	clean             bool
 }
 
 func NewGradient() *GradientBuilder {
 	return &GradientBuilder{
 		mode:          BlendRgb,
 		interpolation: InterpolationLinear,
+		clean:         false,
 	}
 }
 
@@ -25,6 +27,7 @@ func (gb *GradientBuilder) Colors(colors ...Color) *GradientBuilder {
 	for _, col := range colors {
 		gb.colors = append(gb.colors, col)
 	}
+	gb.clean = false
 	return gb
 }
 
@@ -37,11 +40,13 @@ func (gb *GradientBuilder) HtmlColors(htmlColors ...string) *GradientBuilder {
 		}
 		gb.colors = append(gb.colors, c)
 	}
+	gb.clean = false
 	return gb
 }
 
-func (gb *GradientBuilder) Domain(domain ...float64) *GradientBuilder {
-	gb.pos = domain
+func (gb *GradientBuilder) Domain(positions ...float64) *GradientBuilder {
+	gb.positions = positions
+	gb.clean = false
 	return gb
 }
 
@@ -55,15 +60,13 @@ func (gb *GradientBuilder) Interpolation(mode Interpolation) *GradientBuilder {
 	return gb
 }
 
-func (gb *GradientBuilder) Build() (Gradient, error) {
-	zgrad := Gradient{
-		grad: zeroGradient{},
-		dmin: 0,
-		dmax: 1,
+func (gb *GradientBuilder) prepareBuild() error {
+	if gb.clean {
+		return nil
 	}
 
 	if gb.invalidHtmlColors != nil {
-		return zgrad, fmt.Errorf("Invalid HTML colors: %q", gb.invalidHtmlColors)
+		return fmt.Errorf("invalid HTML colors: %q", gb.invalidHtmlColors)
 	}
 
 	if len(gb.colors) == 0 {
@@ -76,33 +79,57 @@ func (gb *GradientBuilder) Build() (Gradient, error) {
 		gb.colors = append(gb.colors, gb.colors[0])
 	}
 
-	var pos []float64
+	var positions []float64
 
-	if len(gb.pos) == 0 {
-		pos = linspace(0, 1, uint(len(gb.colors)))
-	} else if len(gb.pos) == len(gb.colors) {
-		for i := 0; i < len(gb.pos)-1; i++ {
-			if gb.pos[i] > gb.pos[i+1] {
-				return zgrad, fmt.Errorf("Domain number %v (%v) is bigger than the next domain (%v)", i+1, gb.pos[i], gb.pos[i+1])
+	if len(gb.positions) == 0 {
+		positions = linspace(0, 1, uint(len(gb.colors)))
+	} else if len(gb.positions) == len(gb.colors) {
+		for i := 0; i < len(gb.positions)-1; i++ {
+			if gb.positions[i] > gb.positions[i+1] {
+				return fmt.Errorf("invalid domain")
 			}
 		}
-		pos = gb.pos
-	} else if len(gb.pos) == 2 {
-		if gb.pos[0] >= gb.pos[1] {
-			return zgrad, fmt.Errorf("Wrong domain.")
+		positions = gb.positions
+	} else if len(gb.positions) == 2 {
+		if gb.positions[0] >= gb.positions[1] {
+			return fmt.Errorf("invalid domain")
 		}
-		pos = linspace(gb.pos[0], gb.pos[1], uint(len(gb.colors)))
+		positions = linspace(gb.positions[0], gb.positions[1], uint(len(gb.colors)))
 	} else {
-		return zgrad, fmt.Errorf("Wrong domain.")
+		return fmt.Errorf("invalid domain")
+	}
+
+	gb.positions = positions
+	gb.clean = true
+	return nil
+}
+
+func (gb *GradientBuilder) Build() (Gradient, error) {
+	if err := gb.prepareBuild(); err != nil {
+		return Gradient{
+			grad: zeroGradient{},
+			dmin: 0,
+			dmax: 1,
+		}, err
 	}
 
 	if gb.interpolation == InterpolationLinear {
-		return newLinearGradient(gb.colors, pos, gb.mode), nil
+		return newLinearGradient(gb.colors, gb.positions, gb.mode), nil
 	}
 
 	if gb.interpolation == InterpolationBasis {
-		return newBasisGradient(gb.colors, pos, gb.mode), nil
+		return newBasisGradient(gb.colors, gb.positions, gb.mode), nil
 	}
 
-	return newCatmullRomGradient(gb.colors, pos, gb.mode), nil
+	return newCatmullRomGradient(gb.colors, gb.positions, gb.mode), nil
+}
+
+// For testing purposes
+func (gb *GradientBuilder) GetColors() *[]Color {
+	return &gb.colors
+}
+
+// For testing purposes
+func (gb *GradientBuilder) GetPositions() *[]float64 {
+	return &gb.positions
 }

@@ -120,9 +120,8 @@ func (g Gradient) Sharp(segment uint, smoothness float64) Gradient {
 }
 
 type zeroGradient struct {
-	color Color
 }
 
 func (zg zeroGradient) At(t float64) Color {
-	return zg.color
+	return Color{R: 0, G: 0, B: 0, A: 0}
 }
