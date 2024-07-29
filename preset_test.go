@@ -42,17 +42,17 @@ func TestPreset(t *testing.T) {
 	testGrad(t, YlOrRd(), "#ffffcc", "#800026")
 
 	grad := Viridis()
-	testStr(t, grad.At(0.5).HexString(), "#27838e")
+	test(t, grad.At(0.5).HexString(), "#27838e")
 }
 
 func testGrad(t *testing.T, grad Gradient, start, end string) {
-	testStr(t, grad.At(0).HexString(), start)
-	testStr(t, grad.At(1).HexString(), end)
-	testStr(t, grad.At(-0.8).HexString(), start)
-	testStr(t, grad.At(-0.5).HexString(), start)
-	testStr(t, grad.At(-0.2).HexString(), start)
-	testStr(t, grad.At(1.2).HexString(), end)
-	testStr(t, grad.At(1.5).HexString(), end)
-	testStr(t, grad.At(1.8).HexString(), end)
-	testStr(t, grad.At(math.NaN()).HexString(), "#000000")
+	test(t, grad.At(0).HexString(), start)
+	test(t, grad.At(1).HexString(), end)
+	test(t, grad.At(-0.8).HexString(), start)
+	test(t, grad.At(-0.5).HexString(), start)
+	test(t, grad.At(-0.2).HexString(), start)
+	test(t, grad.At(1.2).HexString(), end)
+	test(t, grad.At(1.5).HexString(), end)
+	test(t, grad.At(1.8).HexString(), end)
+	test(t, grad.At(math.NaN()).HexString(), "#000000")
 }

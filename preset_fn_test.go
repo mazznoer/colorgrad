@@ -19,19 +19,13 @@ func TestCyclicalGradient(t *testing.T) {
 	var grad Gradient
 
 	grad = Rainbow()
-	testStr(t, grad.At(0).HexString(), grad.At(1).HexString())
+	test(t, grad.At(0).HexString(), grad.At(1).HexString())
 
 	grad = Sinebow()
-	testStr(t, grad.At(0).HexString(), grad.At(1).HexString())
+	test(t, grad.At(0).HexString(), grad.At(1).HexString())
 }
 
 func testFn(t *testing.T, grad Gradient) {
-	if isZeroGradient(grad) {
-		t.Error("grad is zeroGradient")
-	}
-
-	n := len(grad.Colors(9))
-	if n != 9 {
-		t.Errorf("Expected 9, got %v", n)
-	}
+	testTrue(t, !isZeroGradient(grad))
+	test(t, len(grad.Colors(9)), 9)
 }
