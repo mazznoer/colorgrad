@@ -69,37 +69,68 @@ func (gb *GradientBuilder) prepareBuild() error {
 		return fmt.Errorf("invalid HTML colors: %q", gb.invalidHtmlColors)
 	}
 
+	var colors []Color
+	var positions []float64
+
 	if len(gb.colors) == 0 {
 		// Default colors
-		gb.colors = []Color{
+		colors = []Color{
 			{R: 0, G: 0, B: 0, A: 1}, // black
 			{R: 1, G: 1, B: 1, A: 1}, // white
 		}
 	} else if len(gb.colors) == 1 {
-		gb.colors = append(gb.colors, gb.colors[0])
+		colors = []Color{gb.colors[0], gb.colors[0]}
+	} else {
+		colors = make([]Color, len(gb.colors))
+		copy(colors, gb.colors)
 	}
 
-	var positions []float64
-
 	if len(gb.positions) == 0 {
-		positions = linspace(0, 1, uint(len(gb.colors)))
-	} else if len(gb.positions) == len(gb.colors) {
+		positions = linspace(0, 1, uint(len(colors)))
+	} else if len(gb.positions) == len(colors) {
 		for i := 0; i < len(gb.positions)-1; i++ {
 			if gb.positions[i] > gb.positions[i+1] {
 				return fmt.Errorf("invalid domain")
 			}
 		}
-		positions = gb.positions
+		positions = make([]float64, len(gb.positions))
+		copy(positions, gb.positions)
 	} else if len(gb.positions) == 2 {
 		if gb.positions[0] >= gb.positions[1] {
 			return fmt.Errorf("invalid domain")
 		}
-		positions = linspace(gb.positions[0], gb.positions[1], uint(len(gb.colors)))
+		positions = linspace(gb.positions[0], gb.positions[1], uint(len(colors)))
 	} else {
 		return fmt.Errorf("invalid domain")
 	}
 
-	gb.positions = positions
+	gb.colors = nil
+	gb.positions = nil
+
+	prev := positions[0]
+	lastIdx := len(positions) - 1
+
+	for i, col := range colors {
+		pos := positions[i]
+		var next float64
+		if i == lastIdx {
+			next = positions[lastIdx]
+		} else {
+			next = positions[i+1]
+		}
+		if (pos-prev)+(next-pos) < epsilon {
+			// skip
+		} else {
+			gb.colors = append(gb.colors, col)
+			gb.positions = append(gb.positions, pos)
+		}
+		prev = pos
+	}
+
+	if len(gb.colors) != len(gb.positions) || len(gb.colors) < 2 {
+		return fmt.Errorf("invalid stops")
+	}
+
 	gb.clean = true
 	return nil
 }
