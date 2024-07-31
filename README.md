@@ -1,10 +1,9 @@
-# colorgrad 🎨
+# colorgrad
 
 [![Release](https://img.shields.io/github/release/mazznoer/colorgrad.svg)](https://github.com/mazznoer/colorgrad/releases/latest)
 [![PkgGoDev](https://pkg.go.dev/badge/github.com/mazznoer/colorgrad)](https://pkg.go.dev/github.com/mazznoer/colorgrad)
-[![Build Status](https://github.com/mazznoer/colorgrad/workflows/Go/badge.svg)](https://github.com/mazznoer/colorgrad/actions)
+![Build Status](https://github.com/mazznoer/colorgrad/actions/workflows/go.yml/badge.svg)
 [![go report](https://goreportcard.com/badge/github.com/mazznoer/colorgrad)](https://goreportcard.com/report/github.com/mazznoer/colorgrad)
-[![codecov](https://codecov.io/gh/mazznoer/colorgrad/branch/master/graph/badge.svg)](https://codecov.io/gh/mazznoer/colorgrad)
 
 Go (Golang) _color scales_ library for data visualization, charts, games, maps, generative art and others.
 
@@ -17,7 +16,6 @@ Go (Golang) _color scales_ library for data visualization, charts, games, maps, 
 * [Custom Gradient](#custom-gradient)
 * [Preset Gradients](#preset-gradients)
 * [Using the Gradient](#using-the-gradient)
-* [Color Schemes](#color-schemes)
 * [Examples](#examples)
 * [Playground](#playground)
 
@@ -36,19 +34,14 @@ grad, err := colorgrad.NewGradient().Build()
 
 ### Custom Colors
 
-`Colors()` method accept anything that implement [color.Color](https://golang.org/pkg/image/color/#Color) interface.
-
 ```go
-import "image/color"
-import "github.com/lucasb-eyer/go-colorful"
-
 grad, err := colorgrad.NewGradient().
     Colors(
-        color.RGBA{0, 206, 209, 255},
-        color.RGBA{255, 105, 180, 255},
-        colorful.Color{R: 0.274, G: 0.5, B: 0.7},
-        colorful.Hsv(50, 1, 1),
-        colorful.Hsv(348, 0.9, 0.8),
+        colorgrad.Rgb8(0, 206, 209, 255),
+        colorgrad.Rgb8(255, 105, 180, 255),
+        colorgrad.Rgb(0.274, 0.5, 0.7, 1),
+        colorgrad.Hsv(50, 1, 1, 1),
+        colorgrad.Hsv(348, 0.9, 0.8, 1),
     ).
     Build()
 ```
@@ -164,138 +157,15 @@ grad, err := colorgrad.NewGradient().
 
 ## Preset Gradients
 
-All preset gradients are in the domain [0..1].
-
-### Diverging
-
-`colorgrad.BrBG()`
-![img](doc/images/preset/BrBG.png)
-
-`colorgrad.PRGn()`
-![img](doc/images/preset/PRGn.png)
-
-`colorgrad.PiYG()`
-![img](doc/images/preset/PiYG.png)
-
-`colorgrad.PuOr()`
-![img](doc/images/preset/PuOr.png)
-
-`colorgrad.RdBu()`
-![img](doc/images/preset/RdBu.png)
-
-`colorgrad.RdGy()`
-![img](doc/images/preset/RdGy.png)
-
-`colorgrad.RdYlBu()`
-![img](doc/images/preset/RdYlBu.png)
-
-`colorgrad.RdYlGn()`
-![img](doc/images/preset/RdYlGn.png)
-
-`colorgrad.Spectral()`
-![img](doc/images/preset/Spectral.png)
-
-### Sequential (Single Hue)
-
-`colorgrad.Blues()`
-![img](doc/images/preset/Blues.png)
-
-`colorgrad.Greens()`
-![img](doc/images/preset/Greens.png)
-
-`colorgrad.Greys()`
-![img](doc/images/preset/Greys.png)
-
-`colorgrad.Oranges()`
-![img](doc/images/preset/Oranges.png)
-
-`colorgrad.Purples()`
-![img](doc/images/preset/Purples.png)
-
-`colorgrad.Reds()`
-![img](doc/images/preset/Reds.png)
-
-### Sequential (Multi-Hue)
-
-`colorgrad.Turbo()`
-![img](doc/images/preset/Turbo.png)
-
-`colorgrad.Viridis()`
-![img](doc/images/preset/Viridis.png)
-
-`colorgrad.Inferno()`
-![img](doc/images/preset/Inferno.png)
-
-`colorgrad.Magma()`
-![img](doc/images/preset/Magma.png)
-
-`colorgrad.Plasma()`
-![img](doc/images/preset/Plasma.png)
-
-`colorgrad.Cividis()`
-![img](doc/images/preset/Cividis.png)
-
-`colorgrad.Warm()`
-![img](doc/images/preset/Warm.png)
-
-`colorgrad.Cool()`
-![img](doc/images/preset/Cool.png)
-
-`colorgrad.CubehelixDefault()`
-![img](doc/images/preset/CubehelixDefault.png)
-
-`colorgrad.BuGn()`
-![img](doc/images/preset/BuGn.png)
-
-`colorgrad.BuPu()`
-![img](doc/images/preset/BuPu.png)
-
-`colorgrad.GnBu()`
-![img](doc/images/preset/GnBu.png)
-
-`colorgrad.OrRd()`
-![img](doc/images/preset/OrRd.png)
-
-`colorgrad.PuBuGn()`
-![img](doc/images/preset/PuBuGn.png)
-
-`colorgrad.PuBu()`
-![img](doc/images/preset/PuBu.png)
-
-`colorgrad.PuRd()`
-![img](doc/images/preset/PuRd.png)
-
-`colorgrad.RdPu()`
-![img](doc/images/preset/RdPu.png)
-
-`colorgrad.YlGnBu()`
-![img](doc/images/preset/YlGnBu.png)
-
-`colorgrad.YlGn()`
-![img](doc/images/preset/YlGn.png)
-
-`colorgrad.YlOrBr()`
-![img](doc/images/preset/YlOrBr.png)
-
-`colorgrad.YlOrRd()`
-![img](doc/images/preset/YlOrRd.png)
-
-### Cyclical
-
-`colorgrad.Rainbow()`
-![img](doc/images/preset/Rainbow.png)
-
-`colorgrad.Sinebow()`
-![img](doc/images/preset/Sinebow.png)
+See [PRESET.md](PRESET.md)
 
 ## Parsing GIMP Gradient
 
 ```go
 import "os"
-import "github.com/lucasb-eyer/go-colorful"
 
-foreground := colorful.Color{R: 0, G: 0, B: 0}
-background := colorful.Color{R: 1, G: 1, B: 1}
+foreground := colorgrad.Rgb(0, 0, 0, 1)
+background := colorgrad.Rgb(1, 1, 1, 1)
 file, err := os.Open("Abstract_1.ggr")
 
 if err != nil {
@@ -324,42 +194,18 @@ fmt.Println(grad.Domain()) // 0 1
 ```go
 grad := colorgrad.Rainbow()
 
-fmt.Println(grad.At(0.0).Hex()) // #6e40aa
-fmt.Println(grad.At(0.5).Hex()) // #aff05b
-fmt.Println(grad.At(1.0).Hex()) // #6e40aa
+fmt.Println(grad.At(0.0).HexString()) // #6e40aa
+fmt.Println(grad.At(0.5).HexString()) // #aff05b
+fmt.Println(grad.At(1.0).HexString()) // #6e40aa
 ```
 
 ### Get n colors evenly spaced across gradient
 
-`.Colors()` will return `[]color.Color`.
-
 ```go
 grad := colorgrad.Rainbow()
 
-for _, c := range grad.Colors(7) {
-    fmt.Println(c)
-}
-```
-
-Output:
-
-```console
-{0.43021004989867906 0.25023866753368473 0.6663314402976028}
-{0.9324699655386229 0.2641323667713124 0.5856493589115485}
-{1 0.5479694546462268 0.220207078599215}
-{0.68717707266999 0.9403236324800919 0.355050281779196}
-{0.36562500000000014 0.9182994327976323 0.5525738542381139}
-{0.25 0.589697182728592 0.877839930901789}
-{0.4302100498986791 0.2502386675336847 0.6663314402976028}
-```
-
-`.ColorfulColors()` will return `[]colorful.Color`.
-
-```go
-grad := colorgrad.Rainbow()
-
-for _, c := range grad.ColorfulColors(10) {
-    fmt.Println(c.Hex())
+for _, c := range grad.Colors(10) {
+    fmt.Println(c.HexString())
 }
 ```
 
@@ -390,52 +236,6 @@ grad := colorgrad.Rainbow().Sharp(11, 0)
 This is the effect of different smoothness.
 
 ![img](doc/images/sharp-gradients.png)
-
-## Color Schemes
-
-```go
-import "github.com/mazznoer/colorgrad/scheme"
-```
-
-`scheme.Category10`
-
-![img](doc/images/scheme/Category10.png)
-
-`scheme.Accent`
-
-![img](doc/images/scheme/Accent.png)
-
-`scheme.Dark2`
-
-![img](doc/images/scheme/Dark2.png)
-
-`scheme.Paired`
-
-![img](doc/images/scheme/Paired.png)
-
-`scheme.Pastel1`
-
-![img](doc/images/scheme/Pastel1.png)
-
-`scheme.Pastel2`
-
-![img](doc/images/scheme/Pastel2.png)
-
-`scheme.Set1`
-
-![img](doc/images/scheme/Set1.png)
-
-`scheme.Set2`
-
-![img](doc/images/scheme/Set2.png)
-
-`scheme.Set3`
-
-![img](doc/images/scheme/Set3.png)
-
-`scheme.Tableau10`
-
-![img](doc/images/scheme/Tableau10.png)
 
 ## Examples
 
@@ -533,7 +333,6 @@ Example output:
 
 ## Dependencies
 
-* [colorful](https://github.com/lucasb-eyer/go-colorful)
 * [csscolorparser](https://github.com/mazznoer/csscolorparser)
 
 ## Inspirations
@@ -545,5 +344,3 @@ Example output:
 ## Links
 
 * [colorgrad-rs](https://github.com/mazznoer/colorgrad-rs) - Rust port of this library
-* [https://www.color-blindness.com/coblis-color-blindness-simulator/](https://www.color-blindness.com/coblis-color-blindness-simulator/)
-* [https://github.com/UniStuttgart-VISUS/visual-system-simulator](https://github.com/UniStuttgart-VISUS/visual-system-simulator)
