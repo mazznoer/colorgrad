@@ -1,77 +1,25 @@
 package colorgrad
 
 import (
+	"fmt"
 	"testing"
 )
 
-func TestDomain(t *testing.T) {
-	grad, _ := NewGradient().
-		HtmlColors("yellow", "blue", "lime").
-		Domain(0, 100).
-		Build()
+func Test_Basic(t *testing.T) {
+	test(t, Rgb(1, 0.8431, 0, 1).HexString(), "#ffd700")
+	test(t, Rgb8(46, 139, 87, 255).HexString(), "#2e8b57")
+	test(t, Hwb(330, 0.4118, 0, 1).HexString(), "#ff69b4")
 
-	dmin, dmax := grad.Domain()
-	test(t, dmin, 0.0)
-	test(t, dmax, 100.0)
+	test(t, BlendRgb.String(), "BlendRgb")
+	test(t, fmt.Sprintf("%s", BlendLinearRgb), "BlendLinearRgb")
+	test(t, fmt.Sprintf("%v", BlendOklab), "BlendOklab")
 
-	test(t, grad.At(0).HexString(), "#ffff00")
-	test(t, grad.At(50).HexString(), "#0000ff")
-	test(t, grad.At(100).HexString(), "#00ff00")
-	// outside domain
-	test(t, grad.At(-10).HexString(), "#ffff00")
-	test(t, grad.At(150).HexString(), "#00ff00")
-
-	grad, _ = NewGradient().
-		HtmlColors("yellow", "blue", "lime").
-		Domain(-1, 1).
-		Build()
-
-	dmin, dmax = grad.Domain()
-	test(t, dmin, -1.0)
-	test(t, dmax, 1.0)
-
-	test(t, grad.At(-1).HexString(), "#ffff00")
-	test(t, grad.At(0).HexString(), "#0000ff")
-	test(t, grad.At(1).HexString(), "#00ff00")
-	// outside domain
-	test(t, grad.At(-1.5).HexString(), "#ffff00")
-	test(t, grad.At(1.5).HexString(), "#00ff00")
-
-	grad, _ = NewGradient().
-		HtmlColors("#00ff00", "#ff0000", "#ffff00").
-		Domain(0, 0.75, 1).
-		Build()
-
-	dmin, dmax = grad.Domain()
-	test(t, dmin, 0.0)
-	test(t, dmax, 1.0)
-
-	test(t, grad.At(0).HexString(), "#00ff00")
-	test(t, grad.At(0.75).HexString(), "#ff0000")
-	test(t, grad.At(1).HexString(), "#ffff00")
-	// outside domain
-	test(t, grad.At(-1).HexString(), "#00ff00")
-	test(t, grad.At(1.5).HexString(), "#ffff00")
-
-	grad, _ = NewGradient().
-		HtmlColors("#00ff00", "#ff0000", "#0000ff", "#ffff00").
-		Domain(15, 25, 29, 63).
-		Build()
-
-	dmin, dmax = grad.Domain()
-	test(t, dmin, 15.0)
-	test(t, dmax, 63.0)
-
-	test(t, grad.At(15).HexString(), "#00ff00")
-	test(t, grad.At(25).HexString(), "#ff0000")
-	test(t, grad.At(29).HexString(), "#0000ff")
-	test(t, grad.At(63).HexString(), "#ffff00")
-	// outside domain
-	test(t, grad.At(10).HexString(), "#00ff00")
-	test(t, grad.At(67).HexString(), "#ffff00")
+	test(t, InterpolationLinear.String(), "InterpolationLinear")
+	test(t, fmt.Sprintf("%s", InterpolationCatmullRom), "InterpolationCatmullRom")
+	test(t, fmt.Sprintf("%v", InterpolationBasis), "InterpolationBasis")
 }
 
-func TestGetColors(t *testing.T) {
+func Test_GetColors(t *testing.T) {
 	grad, _ := NewGradient().Build()
 	test(t, len(grad.Colors(0)), 0)
 	test(t, grad.Colors(1)[0].HexString(), "#000000")
@@ -99,7 +47,7 @@ func TestGetColors(t *testing.T) {
 	})
 }
 
-func TestSpreadRepeat(t *testing.T) {
+func Test_SpreadRepeat(t *testing.T) {
 	grad, _ := NewGradient().
 		HtmlColors("#000", "#fff").
 		Build()
@@ -130,7 +78,7 @@ func TestSpreadRepeat(t *testing.T) {
 	test(t, grad.RepeatAt(2.9).HexString(), "#e5e5e5")
 }
 
-func TestSpreadReflect(t *testing.T) {
+func Test_SpreadReflect(t *testing.T) {
 	grad, _ := NewGradient().
 		HtmlColors("#000", "#fff").
 		Build()

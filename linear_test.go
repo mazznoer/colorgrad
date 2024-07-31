@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-func TestLinearGradient(t *testing.T) {
+func Test_LinearGradient(t *testing.T) {
 	grad, err := NewGradient().
 		HtmlColors("#f00", "#0f0", "#00f").
 		Mode(BlendRgb).

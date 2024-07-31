@@ -1,106 +1,87 @@
 package colorgrad
 
 import (
-	"math"
 	"testing"
 )
 
-func TestBasic1(t *testing.T) {
-	// Single color
-	grad, err := NewGradient().
-		Colors(Color{R: 0, G: 1, B: 0, A: 1}).
-		Build()
-	dmin, dmax := grad.Domain()
+func domain(min, max float64) [2]float64 {
+	return [2]float64{min, max}
+}
+
+func Test_Builder(t *testing.T) {
+	var grad Gradient
+	var err error
+
+	// Default colors
+	grad, err = NewGradient().Build()
 	test(t, err, nil)
-	test(t, dmin, 0.0)
-	test(t, dmax, 1.0)
+	test(t, domain(grad.Domain()), [2]float64{0, 1})
+	test(t, grad.At(0).HexString(), "#000000")
+	test(t, grad.At(1).HexString(), "#ffffff")
+
+	// Single color
+	grad, err = NewGradient().
+		Colors(Rgb8(0, 255, 0, 255)).
+		Build()
+	test(t, err, nil)
+	test(t, domain(grad.Domain()), [2]float64{0, 1})
 	test(t, grad.At(0).HexString(), "#00ff00")
 	test(t, grad.At(1).HexString(), "#00ff00")
 
-	// Named colors
+	// Default domain
 	grad, err = NewGradient().
-		HtmlColors("tomato", "skyblue", "gold", "springgreen").
+		HtmlColors("red", "lime", "blue").
 		Build()
 	test(t, err, nil)
-	testSlice(t, colors2hex(grad.Colors(4)), []string{
-		"#ff6347",
-		"#87ceeb",
-		"#ffd700",
-		"#00ff7f",
-	})
+	test(t, domain(grad.Domain()), [2]float64{0, 1})
+	test(t, grad.At(0.0).HexString(), "#ff0000")
+	test(t, grad.At(0.5).HexString(), "#00ff00")
+	test(t, grad.At(1.0).HexString(), "#0000ff")
 
-	// Blend mode
+	// Custom domain
 	grad, err = NewGradient().
-		HtmlColors("#333", "#bbb").
-		Mode(BlendRgb).
+		HtmlColors("red", "lime", "blue").
+		Domain(-100, 100).
 		Build()
 	test(t, err, nil)
-	test(t, grad.At(0).HexString(), "#333333")
-	test(t, grad.At(1).HexString(), "#bbbbbb")
+	test(t, domain(grad.Domain()), [2]float64{-100, 100})
+	test(t, grad.At(-100).HexString(), "#ff0000")
+	test(t, grad.At(0).HexString(), "#00ff00")
+	test(t, grad.At(100).HexString(), "#0000ff")
 
+	// Color position
 	grad, err = NewGradient().
-		HtmlColors("#333", "#bbb").
-		Mode(BlendLinearRgb).
+		HtmlColors("red", "lime", "blue").
+		Domain(13, 27.3, 90).
 		Build()
 	test(t, err, nil)
-	test(t, grad.At(0).HexString(), "#333333")
-	test(t, grad.At(1).HexString(), "#bbbbbb")
+	test(t, domain(grad.Domain()), [2]float64{13, 90})
+	test(t, grad.At(13).HexString(), "#ff0000")
+	test(t, grad.At(27.3).HexString(), "#00ff00")
+	test(t, grad.At(90).HexString(), "#0000ff")
 
-	grad, err = NewGradient().
-		HtmlColors("#333", "#bbb").
-		Mode(BlendOklab).
-		Build()
-	test(t, err, nil)
-	test(t, grad.At(0).HexString(), "#333333")
-	test(t, grad.At(1).HexString(), "#bbbbbb")
-}
-
-func TestBasic2(t *testing.T) {
-	// Custom gradient default
-	grad, err := NewGradient().Build()
-	test(t, err, nil)
-	testSlice(t, colors2hex(grad.Colors(2)), []string{
-		"#000000",
-		"#ffffff",
-	})
-	test(t, grad.At(math.NaN()).HexString(), "#000000")
-
-	// Custom colors
-	grad, err = NewGradient().
-		Colors(
-			Rgb8(255, 0, 0, 255),
-			Rgb8(255, 255, 0, 255),
-			Rgb8(0, 0, 255, 255),
-		).
-		Build()
-	test(t, err, nil)
-	testSlice(t, colors2hex(grad.Colors(3)), []string{
-		"#ff0000",
-		"#ffff00",
-		"#0000ff",
-	})
-	test(t, grad.At(math.NaN()).HexString(), "#000000")
-
-	// Custom colors #2
+	// Multiple colors, custom domain
 	grad, err = NewGradient().
 		HtmlColors("#00f", "#00ffff").
-		Colors(Rgb8(255, 255, 0, 255)).
-		HtmlColors("lime").
+		Colors(Rgb8(255, 255, 0, 255), Hwb(0, 0, 0, 1)).
+		HtmlColors("gold").
+		Domain(10, 50).
 		Build()
 	test(t, err, nil)
-	testSlice(t, colors2hex(grad.Colors(4)), []string{
+	test(t, domain(grad.Domain()), [2]float64{10, 50})
+	testSlice(t, colors2hex(grad.Colors(5)), []string{
 		"#0000ff",
 		"#00ffff",
 		"#ffff00",
-		"#00ff00",
+		"#ff0000",
+		"#ffd700",
 	})
-}
 
-func TestFilterStops(t *testing.T) {
+	// Filter stops
 	gb := NewGradient()
 	gb.HtmlColors("gold", "red", "blue", "yellow", "black", "white", "plum")
 	gb.Domain(0, 0, 0.5, 0.5, 0.5, 1, 1)
-	_, err := gb.Build()
+	_, err = gb.Build()
 	test(t, err, nil)
 	testSlice(t, *gb.GetPositions(), []float64{0, 0.5, 0.5, 1})
 	testSlice(t, colors2hex(*gb.GetColors()), []string{
@@ -109,17 +90,17 @@ func TestFilterStops(t *testing.T) {
 		"#000000",
 		"#ffffff",
 	})
-}
 
-func TestError(t *testing.T) {
+	// --- Builder Error
+
 	// Invalid HTML colors
-	grad, err := NewGradient().
+	grad, err = NewGradient().
 		HtmlColors("#777", "bloodred", "#bbb", "#zzz").
 		Build()
 	testTrue(t, err != nil)
 	testTrue(t, isZeroGradient(grad))
 
-	// Wrong domain 1
+	// Invalid domain
 	grad, err = NewGradient().
 		HtmlColors("#777", "#fff", "#ccc", "#222").
 		Domain(0, 0.5, 1).
@@ -127,7 +108,7 @@ func TestError(t *testing.T) {
 	testTrue(t, err != nil)
 	testTrue(t, isZeroGradient(grad))
 
-	// Wrong domain 2
+	// Invalid domain
 	grad, err = NewGradient().
 		HtmlColors("#777", "#fff", "#ccc", "#222").
 		Domain(0, 0.71, 0.70, 1).
@@ -135,7 +116,15 @@ func TestError(t *testing.T) {
 	testTrue(t, err != nil)
 	testTrue(t, isZeroGradient(grad))
 
-	// Wrong domain 3
+	// Invalid domain
+	grad, err = NewGradient().
+		HtmlColors("#f00", "#0f0").
+		Domain(1, 1).
+		Build()
+	testTrue(t, err != nil)
+	testTrue(t, isZeroGradient(grad))
+
+	// Invalid domain
 	grad, err = NewGradient().
 		HtmlColors("#777", "#fff", "#ccc", "#222").
 		Domain(1, 0).

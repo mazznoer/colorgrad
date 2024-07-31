@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-func TestCatmullRomGradient(t *testing.T) {
+func Test_CatmullRomGradient(t *testing.T) {
 	grad, err := NewGradient().
 		HtmlColors("#f00", "#0f0", "#00f").
 		Mode(BlendRgb).

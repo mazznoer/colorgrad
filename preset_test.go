@@ -4,7 +4,7 @@ import (
 	"testing"
 )
 
-func TestPresetGradients(t *testing.T) {
+func Test_PresetGradients(t *testing.T) {
 	var grad Gradient
 
 	grad = CubehelixDefault()

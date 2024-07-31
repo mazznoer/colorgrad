@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-func TestParseGgr(t *testing.T) {
+func Test_GIMPGradient(t *testing.T) {
 	black := Rgb(0, 0, 0, 1)
 	red := Rgb(1, 0, 0, 1)
 	blue := Rgb(0, 0, 1, 1)
@@ -55,10 +55,9 @@ func TestParseGgr(t *testing.T) {
 	test(t, grad.At(0.0).HexString(), "#ffffff")
 	test(t, grad.At(0.5).HexString(), "#ff80ff")
 	test(t, grad.At(1.0).HexString(), "#0000ff")
-}
 
-func TestParseGgrError(t *testing.T) {
-	black := Rgb(0, 0, 0, 1)
+	// Invalid formats
+
 	data := []string{
 		"",
 		"GIMP Pallete",

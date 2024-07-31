@@ -4,7 +4,7 @@ import (
 	"testing"
 )
 
-func TestUtils(t *testing.T) {
+func Test_Utils(t *testing.T) {
 	// linspace
 
 	test(t, len(linspace(0, 1, 0)), 0)
