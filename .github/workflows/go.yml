@@ -33,7 +33,3 @@ jobs:
     - name: Format
       if: matrix.os == 'ubuntu-latest'
       run: if [ "$(gofmt -s -l . | wc -l)" -gt 0 ]; then exit 1; fi
-
-    - name: Upload coverage to Codecov
-      if: matrix.os == 'ubuntu-latest'
-      uses: codecov/codecov-action@v3
