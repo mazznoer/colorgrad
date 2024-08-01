@@ -38,7 +38,7 @@ func Test_SharpGradient(t *testing.T) {
 
 	test(t, grad.At(-0.1).HexString(), "#ff0000")
 	test(t, grad.At(1.1).HexString(), "#0000ff")
-	test(t, grad.At(math.NaN()).HexString(), "#00000000")
+	test(t, grad.At(math.NaN()).HexString(), "#000000")
 
 	// Sharp(2)
 	gradBase, _ = NewGradient().
@@ -87,5 +87,5 @@ func Test_SharpGradient(t *testing.T) {
 
 	test(t, grad.At(-0.01).HexString(), "#ff0000")
 	test(t, grad.At(1.01).HexString(), "#0000ff")
-	test(t, grad.At(math.NaN()).HexString(), "#00000000")
+	test(t, grad.At(math.NaN()).HexString(), "#000000")
 }

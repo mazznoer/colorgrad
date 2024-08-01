@@ -5,34 +5,34 @@ import (
 )
 
 type linearGradient struct {
-	colors     [][4]float64
-	pos        []float64
-	dmin       float64
-	dmax       float64
-	mode       BlendMode
-	firstColor Color
-	lastColor  Color
+	colors    [][4]float64
+	positions []float64
+	min       float64
+	max       float64
+	mode      BlendMode
+	first     Color
+	last      Color
 }
 
 func (lg linearGradient) At(t float64) Color {
-	if t <= lg.dmin {
-		return lg.firstColor
+	if t <= lg.min {
+		return lg.first
 	}
 
-	if t >= lg.dmax {
-		return lg.lastColor
+	if t >= lg.max {
+		return lg.last
 	}
 
 	if math.IsNaN(t) {
-		return Color{R: 0, G: 0, B: 0, A: 1}
+		return Color{A: 1}
 	}
 
 	low := 0
-	high := len(lg.pos)
+	high := len(lg.positions)
 
 	for low < high {
 		mid := (low + high) / 2
-		if lg.pos[mid] < t {
+		if lg.positions[mid] < t {
 			low = mid + 1
 		} else {
 			high = mid
@@ -43,8 +43,8 @@ func (lg linearGradient) At(t float64) Color {
 		low = 1
 	}
 
-	p1 := lg.pos[low-1]
-	p2 := lg.pos[low]
+	p1 := lg.positions[low-1]
+	p2 := lg.positions[low]
 	t = (t - p1) / (p2 - p1)
 	a, b, c, d := linearInterpolate(lg.colors[low-1], lg.colors[low], t)
 
@@ -57,23 +57,23 @@ func (lg linearGradient) At(t float64) Color {
 		return Oklab(a, b, c, d).Clamp()
 	}
 
-	return Color{R: 0, G: 0, B: 0, A: 0}
+	return Color{}
 }
 
-func newLinearGradient(colors []Color, pos []float64, mode BlendMode) Gradient {
+func newLinearGradient(colors []Color, positions []float64, mode BlendMode) Gradient {
 	gradbase := linearGradient{
-		colors:     convertColors(colors, mode),
-		pos:        pos,
-		dmin:       pos[0],
-		dmax:       pos[len(pos)-1],
-		mode:       mode,
-		firstColor: colors[0],
-		lastColor:  colors[len(colors)-1],
+		colors:    convertColors(colors, mode),
+		positions: positions,
+		min:       positions[0],
+		max:       positions[len(positions)-1],
+		mode:      mode,
+		first:     colors[0],
+		last:      colors[len(colors)-1],
 	}
 
 	return Gradient{
 		grad: gradbase,
-		dmin: pos[0],
-		dmax: pos[len(pos)-1],
+		dmin: positions[0],
+		dmax: positions[len(positions)-1],
 	}
 }

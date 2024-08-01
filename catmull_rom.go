@@ -47,16 +47,16 @@ func toCatmullRomSegments(values []float64) [][4]float64 {
 }
 
 type catmullRomGradient struct {
-	segments   [][4][4]float64
-	positions  []float64
-	dmin       float64
-	dmax       float64
-	mode       BlendMode
-	firstColor Color
-	lastColor  Color
+	segments  [][4][4]float64
+	positions []float64
+	min       float64
+	max       float64
+	mode      BlendMode
+	first     Color
+	last      Color
 }
 
-func newCatmullRomGradient(colors []Color, pos []float64, space BlendMode) Gradient {
+func newCatmullRomGradient(colors []Color, positions []float64, space BlendMode) Gradient {
 	n := len(colors)
 	a := make([]float64, n)
 	b := make([]float64, n)
@@ -90,35 +90,35 @@ func newCatmullRomGradient(colors []Color, pos []float64, space BlendMode) Gradi
 			s4[i],
 		}
 	}
-	dmin := pos[0]
-	dmax := pos[n-1]
+	min := positions[0]
+	max := positions[n-1]
 	gradbase := catmullRomGradient{
-		segments:   segments,
-		positions:  pos,
-		dmin:       dmin,
-		dmax:       dmax,
-		mode:       space,
-		firstColor: colors[0],
-		lastColor:  colors[len(colors)-1],
+		segments:  segments,
+		positions: positions,
+		min:       min,
+		max:       max,
+		mode:      space,
+		first:     colors[0],
+		last:      colors[len(colors)-1],
 	}
 	return Gradient{
 		grad: gradbase,
-		dmin: dmin,
-		dmax: dmax,
+		dmin: min,
+		dmax: max,
 	}
 }
 
 func (g catmullRomGradient) At(t float64) Color {
 	if math.IsNaN(t) {
-		return Color{R: 0, G: 0, B: 0, A: 1}
+		return Color{A: 1}
 	}
 
-	if t <= g.dmin {
-		return g.firstColor
+	if t <= g.min {
+		return g.first
 	}
 
-	if t >= g.dmax {
-		return g.lastColor
+	if t >= g.max {
+		return g.last
 	}
 
 	low := 0
@@ -162,5 +162,5 @@ func (g catmullRomGradient) At(t float64) Color {
 		return Oklab(a, b, c, d).Clamp()
 	}
 
-	return Color{R: 0, G: 0, B: 0, A: 0}
+	return Color{}
 }

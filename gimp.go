@@ -54,21 +54,21 @@ type gimpSegment struct {
 
 type gimpGradient struct {
 	segments []gimpSegment
-	dmin     float64
-	dmax     float64
+	min      float64
+	max      float64
 }
 
 func (ggr gimpGradient) At(t float64) Color {
-	if t <= ggr.dmin {
+	if t <= ggr.min {
 		return ggr.segments[0].lcolor
 	}
 
-	if t >= ggr.dmax {
+	if t >= ggr.max {
 		return ggr.segments[len(ggr.segments)-1].rcolor
 	}
 
 	if math.IsNaN(t) {
-		return Color{R: 0, G: 0, B: 0, A: 1}
+		return Color{A: 1}
 	}
 
 	low := 0
@@ -277,8 +277,8 @@ func ParseGgr(r io.Reader, fg, bg Color) (Gradient, string, error) {
 
 	gradbase := gimpGradient{
 		segments: segments,
-		dmin:     0,
-		dmax:     1,
+		min:      0,
+		max:      1,
 	}
 
 	return Gradient{

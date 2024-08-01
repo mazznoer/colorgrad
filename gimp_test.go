@@ -26,6 +26,7 @@ func Test_GIMPGradient(t *testing.T) {
 	ggr = "GIMP Gradient\nName: My Gradient\n1\n0 0.5 1 0 0 0 1 1 1 1 1 0 0 1 3"
 	grad, name, err = ParseGgr(strings.NewReader(ggr), red, blue)
 	test(t, err, nil)
+	test(t, name, "My Gradient")
 	test(t, grad.At(0).HexString(), "#ff0000")
 	test(t, grad.At(1).HexString(), "#0000ff")
 
@@ -33,6 +34,7 @@ func Test_GIMPGradient(t *testing.T) {
 	ggr = "GIMP Gradient\nName: My Gradient\n1\n0 0.5 1 1 0 0 1 0 0 1 1 5 0 0 0"
 	grad, name, err = ParseGgr(strings.NewReader(ggr), black, black)
 	test(t, err, nil)
+	test(t, name, "My Gradient")
 	test(t, grad.At(0.00).HexString(), "#ff0000")
 	test(t, grad.At(0.25).HexString(), "#ff0000")
 	test(t, grad.At(0.49).HexString(), "#ff0000")
@@ -44,6 +46,7 @@ func Test_GIMPGradient(t *testing.T) {
 	ggr = "GIMP Gradient\nName: My Gradient\n1\n0 0.5 1 1 1 1 1 0 0 1 1 0 1 0 0"
 	grad, name, err = ParseGgr(strings.NewReader(ggr), black, black)
 	test(t, err, nil)
+	test(t, name, "My Gradient")
 	test(t, grad.At(0.0).HexString(), "#ffffff")
 	test(t, grad.At(0.5).HexString(), "#80ff80")
 	test(t, grad.At(1.0).HexString(), "#0000ff")
@@ -52,6 +55,7 @@ func Test_GIMPGradient(t *testing.T) {
 	ggr = "GIMP Gradient\nName: My Gradient\n1\n0 0.5 1 1 1 1 1 0 0 1 1 0 2 0 0"
 	grad, name, err = ParseGgr(strings.NewReader(ggr), black, black)
 	test(t, err, nil)
+	test(t, name, "My Gradient")
 	test(t, grad.At(0.0).HexString(), "#ffffff")
 	test(t, grad.At(0.5).HexString(), "#ff80ff")
 	test(t, grad.At(1.0).HexString(), "#0000ff")
@@ -60,7 +64,8 @@ func Test_GIMPGradient(t *testing.T) {
 
 	data := []string{
 		"",
-		"GIMP Pallete",
+		" ",
+		"GIMP Palette\nName: Gold\n#\n252 252 128",
 		"GIMP Gradient\nxx",
 		"GIMP Gradient\nName: Gradient\nx",
 		"GIMP Gradient\nName: Gradient\n1\n0 0 0",
