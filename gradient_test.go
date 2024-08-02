@@ -2,6 +2,7 @@ package colorgrad
 
 import (
 	"fmt"
+	"image/color"
 	"testing"
 )
 
@@ -10,6 +11,18 @@ func Test_Basic(t *testing.T) {
 	test(t, Rgb8(46, 139, 87, 255).HexString(), "#2e8b57")
 	test(t, Hwb(330, 0.4118, 0, 1).HexString(), "#ff69b4")
 
+	// Go color
+	test(t, GoColor(color.RGBA{R: 255, G: 0, B: 0, A: 255}).HexString(), "#ff0000")
+	test(t, GoColor(color.RGBA{R: 127, G: 0, B: 0, A: 127}).HexString(), "#ff00007f")
+	test(t, GoColor(color.RGBA{R: 0, G: 0, B: 0, A: 0}).HexString(), "#00000000")
+
+	test(t, GoColor(color.NRGBA{R: 0, G: 255, B: 0, A: 255}).HexString(), "#00ff00")
+	test(t, GoColor(color.NRGBA{R: 0, G: 255, B: 0, A: 127}).HexString(), "#00ff007f")
+
+	test(t, GoColor(color.Gray{0}).HexString(), "#000000")
+	test(t, GoColor(color.Gray{127}).HexString(), "#7f7f7f")
+
+	// Enums
 	test(t, BlendRgb.String(), "BlendRgb")
 	test(t, fmt.Sprintf("%s", BlendLinearRgb), "BlendLinearRgb")
 	test(t, fmt.Sprintf("%v", BlendOklab), "BlendOklab")

@@ -1,6 +1,7 @@
 package colorgrad
 
 import (
+	"image/color"
 	"testing"
 )
 
@@ -61,24 +62,44 @@ func Test_Builder(t *testing.T) {
 	test(t, grad.At(90).HexString(), "#0000ff")
 
 	// Multiple colors, custom domain
-	grad, err = NewGradient().
-		HtmlColors("#00f", "#00ffff").
-		Colors(Rgb8(255, 255, 0, 255), Hwb(0, 0, 0, 1)).
-		HtmlColors("gold").
+	gb := NewGradient()
+	grad, err = gb.HtmlColors("#00f", "#00ffff").
+		Colors(
+			Rgb8(255, 255, 0, 255),
+			Hwb(320, 0.1, 0.3, 1),
+			GoColor(color.RGBA{R: 127, G: 0, B: 0, A: 127}),
+			GoColor(color.Gray{185}),
+		).
+		HtmlColors("gold", "hwb(320, 10%, 30%)").
 		Domain(10, 50).
+		Mode(BlendRgb).
+		Interpolation(InterpolationLinear).
 		Build()
 	test(t, err, nil)
 	test(t, domain(grad.Domain()), [2]float64{10, 50})
-	testSlice(t, colors2hex(grad.Colors(5)), []string{
+	testSlice(t, colors2hex(grad.Colors(8)), []string{
 		"#0000ff",
 		"#00ffff",
 		"#ffff00",
-		"#ff0000",
+		"#b31980", // xxx
+		"#ff00007f",
+		"#b9b9b9",
 		"#ffd700",
+		"#b31a80",
+	})
+	testSlice(t, colors2hex(*gb.GetColors()), []string{
+		"#0000ff",
+		"#00ffff",
+		"#ffff00",
+		"#b31a80",
+		"#ff00007f",
+		"#b9b9b9",
+		"#ffd700",
+		"#b31a80",
 	})
 
 	// Filter stops
-	gb := NewGradient()
+	gb = NewGradient()
 	gb.HtmlColors("gold", "red", "blue", "yellow", "black", "white", "plum")
 	gb.Domain(0, 0, 0.5, 0.5, 0.5, 1, 1)
 	_, err = gb.Build()

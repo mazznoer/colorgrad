@@ -1,6 +1,7 @@
 package colorgrad
 
 import (
+	"image/color"
 	"math"
 
 	"github.com/mazznoer/csscolorparser"
@@ -61,6 +62,20 @@ func Rgb(r, g, b, a float64) Color {
 
 func Rgb8(r, g, b, a uint8) Color {
 	return Color{R: float64(r) / 255, G: float64(g) / 255, B: float64(b) / 255, A: float64(a) / 255}
+}
+
+func GoColor(col color.Color) Color {
+	r, g, b, a := col.RGBA()
+	if a == 0 {
+		return csscolorparser.Color{}
+	}
+	r *= 0xffff
+	r /= a
+	g *= 0xffff
+	g /= a
+	b *= 0xffff
+	b /= a
+	return csscolorparser.Color{R: float64(r) / 65535.0, G: float64(g) / 65535.0, B: float64(b) / 65535.0, A: float64(a) / 65535.0}
 }
 
 type gradientBase interface {
