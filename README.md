@@ -135,7 +135,7 @@ grad, err := colorgrad.NewGradient().
     Mode(colorgrad.BlendRgb).
     Build()
 ```
-![blend-modes](doc/images/blend-modes.png)
+![blend-modes](doc/images/blend-modes-2.png)
 
 ### Interpolation Mode
 
