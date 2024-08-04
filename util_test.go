@@ -2,6 +2,8 @@ package colorgrad
 
 import (
 	"testing"
+
+	"github.com/mazznoer/csscolorparser"
 )
 
 func Test_Utils(t *testing.T) {
@@ -34,12 +36,10 @@ func Test_Utils(t *testing.T) {
 
 	// parseFloat
 
-	type data struct {
+	validData := []struct {
 		str string
 		num float64
-	}
-
-	validData := []data{
+	}{
 		{"0", 0},
 		{"0.0", 0},
 		{"1234", 1234},
@@ -64,6 +64,75 @@ func Test_Utils(t *testing.T) {
 		_, ok := parseFloat(s)
 		testTrue(t, !ok)
 	}
+
+	// convertColors
+
+	colors := []Color{
+		Rgb(1, 0.7, 0.1, 0.5),
+		//Rgb8(10, 255, 125, 0), //
+		LinearRgb(0.1, 0.9, 1, 1),
+		Hwb(0, 0, 0, 1),
+		Hwb(320, 0.1, 0.3, 1),
+		Hsv(120, 0.3, 0.2, 0.1),
+		Hsl(120, 0.3, 0.2, 1),
+	}
+
+	for i, arr := range convertColors(colors, BlendRgb) {
+		col := Rgb(spreadF64(arr))
+		test(t, colors[i].HexString(), col.HexString())
+	}
+
+	for i, arr := range convertColors(colors, BlendLinearRgb) {
+		col := LinearRgb(spreadF64(arr))
+		test(t, colors[i].HexString(), col.HexString())
+	}
+
+	/*for i, arr := range convertColors(colors, BlendOklab) {
+		col := Oklab(spreadF64(arr))
+		test(t, colors[i].HexString(), col.HexString())
+	}*/
+
+	for _, c := range colors {
+		col, err := csscolorparser.Parse(c.HexString())
+		test(t, err, nil)
+
+		x := Oklab(spreadF64(col2oklab(col)))
+		test(t, x.HexString(), c.HexString())
+
+		y := LinearRgb(spreadF64(col2linearRgb(col)))
+		test(t, y.HexString(), c.HexString())
+	}
+
+	hexColors := []string{
+		"#000000",
+		"#ffffff",
+		"#999999",
+		"#135cdf",
+		"#ff0000",
+		"#00ff7f",
+		//"#0aff7d", //
+		//"#09ff7d", //
+		"#abc5679b",
+	}
+	for _, s := range hexColors {
+		col, err := csscolorparser.Parse(s)
+		test(t, err, nil)
+		test(t, col.HexString(), s)
+
+		x := Oklab(spreadF64(col2oklab(col)))
+		test(t, x.HexString(), s)
+
+		y := LinearRgb(spreadF64(col2linearRgb(col)))
+		test(t, y.HexString(), s)
+	}
+}
+
+func spreadF64(arr [4]float64) (a, b, c, d float64) {
+	a = arr[0]
+	b = arr[1]
+	c = arr[2]
+	d = arr[3]
+	return
 }
 
 // --- Helper functions
