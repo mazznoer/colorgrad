@@ -4,6 +4,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"image"
 	"image/color"
@@ -11,8 +12,8 @@ import (
 	"image/png"
 	"os"
 	"path/filepath"
+	"strings"
 
-	"github.com/lucasb-eyer/go-colorful"
 	"github.com/mazznoer/colorgrad"
 )
 
@@ -21,7 +22,17 @@ type data struct {
 	name     string
 }
 
+type Opt struct {
+	testData  bool
+	saveImage bool
+}
+
 func main() {
+	var opt Opt
+	flag.BoolVar(&opt.testData, "test", false, "generate test data")
+	flag.BoolVar(&opt.saveImage, "save-img", false, "save image file")
+	flag.Parse()
+
 	presetGradients := []data{
 		{colorgrad.CubehelixDefault(), "CubehelixDefault"},
 		{colorgrad.Warm(), "Warm"},
@@ -69,11 +80,11 @@ func main() {
 
 	grad2, _ := colorgrad.NewGradient().
 		Colors(
-			color.RGBA{0, 206, 209, 255},
-			color.RGBA{255, 105, 180, 255},
-			colorful.Color{R: 0.274, G: 0.5, B: 0.7},
-			colorful.Hsv(50, 1, 1),
-			colorful.Hsv(348, 0.9, 0.8),
+			colorgrad.Rgb8(0, 206, 209, 255),
+			colorgrad.Rgb8(255, 105, 180, 255),
+			colorgrad.Rgb(0.274, 0.5, 0.7, 1),
+			colorgrad.Hsv(50, 1, 1, 1),
+			colorgrad.Hsv(348, 0.9, 0.8, 1),
 		).
 		Build()
 
@@ -124,43 +135,18 @@ func main() {
 		Domain(0, 0.7, 0.7, 1).
 		Build()
 
-	invalidRgbTest, _ := colorgrad.NewGradient().
-		HtmlColors("#DC143C", "#FFD700", "#4682B4").
-		Mode(colorgrad.BlendHcl).
-		Build()
-
 	// Blending modes
 
 	colors := []string{"#fff", "#00f"}
 
-	blendHcl, _ := colorgrad.NewGradient().
+	blendRgb, _ := colorgrad.NewGradient().
 		HtmlColors(colors...).
-		Mode(colorgrad.BlendHcl).
-		Build()
-
-	blendHsv, _ := colorgrad.NewGradient().
-		HtmlColors(colors...).
-		Mode(colorgrad.BlendHsv).
-		Build()
-
-	blendLab, _ := colorgrad.NewGradient().
-		HtmlColors(colors...).
-		Mode(colorgrad.BlendLab).
+		Mode(colorgrad.BlendRgb).
 		Build()
 
 	blendLinearRgb, _ := colorgrad.NewGradient().
 		HtmlColors(colors...).
 		Mode(colorgrad.BlendLinearRgb).
-		Build()
-
-	blendLuv, _ := colorgrad.NewGradient().
-		HtmlColors(colors...).
-		Mode(colorgrad.BlendLuv).
-		Build()
-
-	blendRgb, _ := colorgrad.NewGradient().
-		HtmlColors(colors...).
-		Mode(colorgrad.BlendRgb).
 		Build()
 
 	blendOklab, _ := colorgrad.NewGradient().
@@ -199,14 +185,9 @@ func main() {
 		{colorPos1, "color-position-1"},
 		{colorPos2, "color-position-2"},
 		{colorPos3, "color-position-3"},
-		{invalidRgbTest, "invalid-rgb-test"},
 		{blendRgb, "blend-rgb"},
 		{blendLinearRgb, "blend-linear-rgb"},
 		{blendOklab, "blend-oklab"},
-		{blendHcl, "blend-hcl"},
-		{blendHsv, "blend-hsv"},
-		{blendLab, "blend-lab"},
-		{blendLuv, "blend-luv"},
 		{interpLinear, "interpolation-linear"},
 		{interpCatmullRom, "interpolation-catmull-rom"},
 		{interpBasis, "interpolation-basis"},
@@ -219,16 +200,27 @@ func main() {
 
 	sharpGradients := []data{
 		{grad.Sharp(segments, 0.0), "0.0"},
-		{grad.Sharp(segments, 0.1), "0.1"},
-		{grad.Sharp(segments, 0.2), "0.2"},
-		{grad.Sharp(segments, 0.3), "0.3"},
-		{grad.Sharp(segments, 0.4), "0.4"},
+		{grad.Sharp(segments, 0.25), "0.25"},
 		{grad.Sharp(segments, 0.5), "0.5"},
-		{grad.Sharp(segments, 0.6), "0.6"},
-		{grad.Sharp(segments, 0.7), "0.7"},
-		{grad.Sharp(segments, 0.8), "0.8"},
-		{grad.Sharp(segments, 0.9), "0.9"},
+		{grad.Sharp(segments, 0.75), "0.75"},
 		{grad.Sharp(segments, 1.0), "1.0"},
+	}
+
+	if opt.testData {
+		sample := 12
+
+		for _, d := range presetGradients {
+			colors := d.gradient.Colors(uint(sample))
+			hexColors := make([]string, len(colors))
+			for i, c := range colors {
+				hexColors[i] = fmt.Sprintf("%q", c.HexString())
+			}
+			fmt.Printf("grad = %s()\n", d.name)
+			fmt.Printf("testSlice(t, colors2hex(grad.Colors(%v)), []string{\n", sample)
+			fmt.Printf("  %v,\n", strings.Join(hexColors, ", "))
+			fmt.Printf("})\n\n")
+		}
+		return
 	}
 
 	width := 1000
@@ -241,24 +233,30 @@ func main() {
 	}
 
 	for _, d := range presetGradients {
-		img := gradRgbPlot(d.gradient, width, height, padding)
 		filepath := fmt.Sprintf("output/preset-%s.png", d.name)
 		fmt.Println(filepath)
-		savePNG(img, filepath)
+		if opt.saveImage {
+			img := gradRgbPlot(d.gradient, width, height, padding)
+			savePNG(img, filepath)
+		}
 	}
 
 	for _, d := range customGradients {
-		img := gradRgbPlot(d.gradient, width, height, padding)
 		filepath := fmt.Sprintf("output/%s.png", d.name)
 		fmt.Println(filepath)
-		savePNG(img, filepath)
+		if opt.saveImage {
+			img := gradRgbPlot(d.gradient, width, height, padding)
+			savePNG(img, filepath)
+		}
 	}
 
 	for _, d := range sharpGradients {
-		img := gradRgbPlot(d.gradient, width, height, padding)
 		filepath := fmt.Sprintf("output/sharp-smoothness-%s.png", d.name)
 		fmt.Println(filepath)
-		savePNG(img, filepath)
+		if opt.saveImage {
+			img := gradRgbPlot(d.gradient, width, height, padding)
+			savePNG(img, filepath)
+		}
 	}
 
 	// GIMP gradients
@@ -270,10 +268,12 @@ func main() {
 	if ggrsErr == nil {
 		for _, s := range ggrs {
 			grad := parseGgr(s)
-			img := gradRgbPlot(grad, width, height, padding)
 			filepath := fmt.Sprintf("output/ggr_%s.png", filepath.Base(s))
 			fmt.Println(filepath)
-			savePNG(img, filepath)
+			if opt.saveImage {
+				img := gradRgbPlot(grad, width, height, padding)
+				savePNG(img, filepath)
+			}
 		}
 	} else {
 		fmt.Println(ggrsErr)
@@ -281,8 +281,8 @@ func main() {
 }
 
 func parseGgr(filepath string) colorgrad.Gradient {
-	black := colorful.Color{R: 0, G: 0, B: 0}
-	white := colorful.Color{R: 1, G: 1, B: 1}
+	black := colorgrad.Rgb(0, 0, 0, 1)
+	white := colorgrad.Rgb(1, 1, 1, 1)
 	file, err := os.Open(filepath)
 	if err != nil {
 		panic(err)
