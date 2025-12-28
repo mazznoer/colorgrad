@@ -56,8 +56,8 @@ func (gb *GradientBuilder) Css(s string) *GradientBuilder {
 	gb.colors = make([]Color, len(stops))
 	gb.positions = make([]float64, len(stops))
 	for _, st := range stops {
-		gb.colors = append(gb.colors, *st.Color)
-		gb.positions = append(gb.positions, *st.Pos)
+		gb.colors = append(gb.colors, *st.color)
+		gb.positions = append(gb.positions, *st.pos)
 	}
 	return gb
 }

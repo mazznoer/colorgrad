@@ -11,8 +11,8 @@ var eps = math.Nextafter(1.0, 2.0) - 1.0
 
 const tau = math.Pi * 2
 
-func parseCss(s string) ([]Stop, bool) {
-	stops := []Stop{}
+func parseCss(s string) ([]cssGradientStop, bool) {
+	stops := []cssGradientStop{}
 
 	for _, stop := range splitByComma(s) {
 		if !prosesStop(&stops, splitBySpace(stop)) {
@@ -24,73 +24,73 @@ func parseCss(s string) ([]Stop, bool) {
 		return stops, false
 	}
 
-	if stops[0].Color == nil {
+	if stops[0].color == nil {
 		return stops, false
 	}
 
 	for i, stop := range stops {
-		if i == 0 && stop.Pos == nil {
-			stops[i].Pos = ptr(0.0)
+		if i == 0 && stop.pos == nil {
+			stops[i].pos = ptr(0.0)
 		}
 
 		if i == len(stops)-1 {
-			if stop.Pos == nil {
-				stops[i].Pos = ptr(1.0)
+			if stop.pos == nil {
+				stops[i].pos = ptr(1.0)
 			}
 			continue
 		}
 
-		if stop.Color == nil {
-			stops[i].Color = interpolateColor(*stops[i-1].Color, *stops[i+1].Color, 0.5)
+		if stop.color == nil {
+			stops[i].color = ptrColor(blendRgb(*stops[i-1].color, *stops[i+1].color, 0.5))
 		}
 	}
 
-	if *stops[0].Pos > 0.0 {
-		stops = append([]Stop{{ptr(0.0), stops[0].Color}}, stops...)
+	if *stops[0].pos > 0.0 {
+		stops = append([]cssGradientStop{{ptr(0.0), stops[0].color}}, stops...)
 	}
 
-	if *stops[len(stops)-1].Pos < 1.0 {
-		stops = append(stops, Stop{ptr(1.0), stops[len(stops)-1].Color})
+	if *stops[len(stops)-1].pos < 1.0 {
+		stops = append(stops, cssGradientStop{ptr(1.0), stops[len(stops)-1].color})
 	}
 
 	for i, stop := range stops {
-		if stop.Pos == nil {
+		if stop.pos == nil {
 			for j := i + 1; j < len(stops); j++ {
-				if stops[j].Pos != nil {
-					prev := *stops[i-1].Pos
-					next := *stops[j].Pos
-					stops[i].Pos = ptr(prev + (next-prev)/float64(j-i+1))
+				if stops[j].pos != nil {
+					prev := *stops[i-1].pos
+					next := *stops[j].pos
+					stops[i].pos = ptr(prev + (next-prev)/float64(j-i+1))
 					break
 				}
 			}
 		}
 
 		if i > 0 {
-			stops[i].Pos = ptr(math.Max(*stops[i].Pos, *stops[i-1].Pos))
+			stops[i].pos = ptr(math.Max(*stops[i].pos, *stops[i-1].pos))
 		}
 	}
 
 	// Filter Stops
 
-	prev := stops[0].Pos
+	prev := stops[0].pos
 	last := len(stops) - 1
-	newStops := make([]Stop, 0, len(stops))
+	newStops := make([]cssGradientStop, 0, len(stops))
 
 	for i, s := range stops {
 		var next *float64
 
 		if i == last {
-			next = stops[last].Pos
+			next = stops[last].pos
 		} else {
-			next = stops[i+1].Pos
+			next = stops[i+1].pos
 		}
 
-		if (*s.Pos-*prev)+(*next-*s.Pos) < eps {
+		if (*s.pos-*prev)+(*next-*s.pos) < eps {
 			// skip 0 width stop
 		} else {
 			newStops = append(newStops, s)
 		}
-		prev = s.Pos
+		prev = s.pos
 	}
 
 	return newStops, true
@@ -100,23 +100,27 @@ func ptr(f float64) *float64 {
 	return &f
 }
 
-type Stop struct {
-	Pos   *float64
-	Color *Color
+func ptrColor(c Color) *Color {
+	return &c
 }
 
-func prosesStop(stops *[]Stop, arr []string) bool {
+type cssGradientStop struct {
+	pos   *float64
+	color *Color
+}
+
+func prosesStop(stops *[]cssGradientStop, arr []string) bool {
 	switch len(arr) {
 	case 1:
 		col, err := csscolorparser.Parse(arr[0])
 		if err == nil {
-			*stops = append(*stops, Stop{nil, &col})
+			*stops = append(*stops, cssGradientStop{nil, &col})
 			return true
 		}
 
 		pos, ok := parsePos(arr[0])
 		if ok {
-			*stops = append(*stops, Stop{&pos, nil})
+			*stops = append(*stops, cssGradientStop{&pos, nil})
 			return true
 		}
 		return false
@@ -131,7 +135,7 @@ func prosesStop(stops *[]Stop, arr []string) bool {
 			return false
 		}
 
-		*stops = append(*stops, Stop{&pos, &col})
+		*stops = append(*stops, cssGradientStop{&pos, &col})
 	case 3:
 		col, err := csscolorparser.Parse(arr[0])
 		if err != nil {
@@ -148,21 +152,12 @@ func prosesStop(stops *[]Stop, arr []string) bool {
 			return false
 		}
 
-		*stops = append(*stops, Stop{&pos1, &col})
-		*stops = append(*stops, Stop{&pos2, &col})
+		*stops = append(*stops, cssGradientStop{&pos1, &col})
+		*stops = append(*stops, cssGradientStop{&pos2, &col})
 	default:
 		return false
 	}
 	return true
-}
-
-func interpolateColor(a, b Color, t float64) *Color {
-	return &Color{
-		R: a.R + t*(b.R-a.R),
-		G: a.G + t*(b.G-a.G),
-		B: a.B + t*(b.B-a.B),
-		A: a.A + t*(b.A-a.A),
-	}
 }
 
 func splitByComma(s string) []string {
