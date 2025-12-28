@@ -7,19 +7,21 @@ import (
 )
 
 type GradientBuilder struct {
-	colors            []Color
-	positions         []float64
-	mode              BlendMode
-	interpolation     Interpolation
-	invalidHtmlColors []string
-	clean             bool
+	colors             []Color
+	positions          []float64
+	mode               BlendMode
+	interpolation      Interpolation
+	invalidHtmlColors  []string
+	invalidCssGradient bool
+	clean              bool
 }
 
 func NewGradient() *GradientBuilder {
 	return &GradientBuilder{
-		mode:          BlendRgb,
-		interpolation: InterpolationLinear,
-		clean:         false,
+		mode:               BlendRgb,
+		interpolation:      InterpolationLinear,
+		invalidCssGradient: false,
+		clean:              false,
 	}
 }
 
@@ -41,6 +43,22 @@ func (gb *GradientBuilder) HtmlColors(htmlColors ...string) *GradientBuilder {
 		gb.colors = append(gb.colors, c)
 	}
 	gb.clean = false
+	return gb
+}
+
+func (gb *GradientBuilder) Css(s string) *GradientBuilder {
+	gb.clean = false
+	stops, ok := parseCss(s)
+	if !ok {
+		gb.invalidCssGradient = true
+		return gb
+	}
+	gb.colors = make([]Color, len(stops))
+	gb.positions = make([]float64, len(stops))
+	for _, st := range stops {
+		gb.colors = append(gb.colors, *st.Color)
+		gb.positions = append(gb.positions, *st.Pos)
+	}
 	return gb
 }
 
@@ -67,6 +85,10 @@ func (gb *GradientBuilder) prepareBuild() error {
 
 	if gb.invalidHtmlColors != nil {
 		return fmt.Errorf("invalid HTML colors: %q", gb.invalidHtmlColors)
+	}
+
+	if gb.invalidCssGradient {
+		return fmt.Errorf("invalid CSS gradient")
 	}
 
 	var colors []Color

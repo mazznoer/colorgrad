@@ -153,3 +153,40 @@ func Test_Builder(t *testing.T) {
 	testTrue(t, err != nil)
 	testTrue(t, isZeroGradient(grad))
 }
+
+func Test_CssGradient(t *testing.T) {
+	testData := []struct {
+		s        string
+		position []float64
+		colors   []string
+	}{
+		{
+			"blue",
+			[]float64{0, 1},
+			[]string{"#0000ff", "#0000ff"},
+		},
+		{
+			"red, blue",
+			[]float64{0, 1},
+			[]string{"#ff0000", "#0000ff"},
+		},
+		{
+			"red, lime, blue",
+			[]float64{0, 0.5, 1},
+			[]string{"#ff0000", "#00ff00", "#0000ff"},
+		},
+		{
+			"red, lime 75%, blue",
+			[]float64{0, 0.75, 1},
+			[]string{"#ff0000", "#00ff00", "#0000ff"},
+		},
+	}
+	for _, d := range testData {
+		gb := NewGradient()
+		gb.Css(d.s)
+		_, err := gb.Build()
+		test(t, err, nil)
+		testSlice(t, d.position, *gb.GetPositions())
+		testSlice(t, d.colors, colors2hex(*gb.GetColors()))
+	}
+}
