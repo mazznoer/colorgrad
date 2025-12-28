@@ -7,9 +7,7 @@ on:
     branches: [ master ]
 
 jobs:
-
   build:
-
     strategy:
       matrix:
         os: [macos-latest, windows-latest, ubuntu-latest]
@@ -32,6 +30,11 @@ jobs:
 
     - name: Test
       run: go test -v -coverprofile coverage.out && go tool cover -html coverage.out -o coverage.html
+
+    - name: Run examples
+      run: |
+        go run examples/basic.go
+        go run examples/gradients.go
 
     - name: Format
       if: matrix.os == 'ubuntu-latest'
