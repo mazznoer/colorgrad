@@ -2,8 +2,6 @@ package colorgrad
 
 import (
 	"math"
-
-	"github.com/mazznoer/csscolorparser"
 )
 
 // Reference: https://github.com/d3/d3-scale-chromatic
@@ -185,13 +183,17 @@ func (rg rainbowGradient) At(t float64) Color {
 
 // --- Presets from color ramps
 
-func preset(htmlColors []string) Gradient {
-	var colors []Color
-	for _, s := range htmlColors {
-		c, err := csscolorparser.Parse(s)
-		if err == nil {
-			colors = append(colors, c)
-		}
+func u32ToColor(v uint32) Color {
+	r := uint8(v >> 16)
+	g := uint8(v >> 8)
+	b := uint8(v)
+	return Rgb8(r, g, b, 255)
+}
+
+func preset(data []uint32) Gradient {
+	colors := make([]Color, 0, len(data))
+	for _, v := range data {
+		colors = append(colors, u32ToColor(v))
 	}
 	pos := linspace(0, 1, uint(len(colors)))
 	return newBasisGradient(colors, pos, BlendRgb)
@@ -200,160 +202,160 @@ func preset(htmlColors []string) Gradient {
 // Diverging
 
 func BrBG() Gradient {
-	colors := []string{"#543005", "#8c510a", "#bf812d", "#dfc27d", "#f6e8c3", "#f5f5f5", "#c7eae5", "#80cdc1", "#35978f", "#01665e", "#003c30"}
+	colors := []uint32{0x543005, 0x8c510a, 0xbf812d, 0xdfc27d, 0xf6e8c3, 0xf5f5f5, 0xc7eae5, 0x80cdc1, 0x35978f, 0x01665e, 0x003c30}
 	return preset(colors)
 }
 
 func PRGn() Gradient {
-	colors := []string{"#40004b", "#762a83", "#9970ab", "#c2a5cf", "#e7d4e8", "#f7f7f7", "#d9f0d3", "#a6dba0", "#5aae61", "#1b7837", "#00441b"}
+	colors := []uint32{0x40004b, 0x762a83, 0x9970ab, 0xc2a5cf, 0xe7d4e8, 0xf7f7f7, 0xd9f0d3, 0xa6dba0, 0x5aae61, 0x1b7837, 0x00441b}
 	return preset(colors)
 }
 
 func PiYG() Gradient {
-	colors := []string{"#8e0152", "#c51b7d", "#de77ae", "#f1b6da", "#fde0ef", "#f7f7f7", "#e6f5d0", "#b8e186", "#7fbc41", "#4d9221", "#276419"}
+	colors := []uint32{0x8e0152, 0xc51b7d, 0xde77ae, 0xf1b6da, 0xfde0ef, 0xf7f7f7, 0xe6f5d0, 0xb8e186, 0x7fbc41, 0x4d9221, 0x276419}
 	return preset(colors)
 }
 
 func PuOr() Gradient {
-	colors := []string{"#2d004b", "#542788", "#8073ac", "#b2abd2", "#d8daeb", "#f7f7f7", "#fee0b6", "#fdb863", "#e08214", "#b35806", "#7f3b08"}
+	colors := []uint32{0x2d004b, 0x542788, 0x8073ac, 0xb2abd2, 0xd8daeb, 0xf7f7f7, 0xfee0b6, 0xfdb863, 0xe08214, 0xb35806, 0x7f3b08}
 	return preset(colors)
 }
 
 func RdBu() Gradient {
-	colors := []string{"#67001f", "#b2182b", "#d6604d", "#f4a582", "#fddbc7", "#f7f7f7", "#d1e5f0", "#92c5de", "#4393c3", "#2166ac", "#053061"}
+	colors := []uint32{0x67001f, 0xb2182b, 0xd6604d, 0xf4a582, 0xfddbc7, 0xf7f7f7, 0xd1e5f0, 0x92c5de, 0x4393c3, 0x2166ac, 0x053061}
 	return preset(colors)
 }
 
 func RdGy() Gradient {
-	colors := []string{"#67001f", "#b2182b", "#d6604d", "#f4a582", "#fddbc7", "#ffffff", "#e0e0e0", "#bababa", "#878787", "#4d4d4d", "#1a1a1a"}
+	colors := []uint32{0x67001f, 0xb2182b, 0xd6604d, 0xf4a582, 0xfddbc7, 0xffffff, 0xe0e0e0, 0xbababa, 0x878787, 0x4d4d4d, 0x1a1a1a}
 	return preset(colors)
 }
 
 func RdYlBu() Gradient {
-	colors := []string{"#a50026", "#d73027", "#f46d43", "#fdae61", "#fee090", "#ffffbf", "#e0f3f8", "#abd9e9", "#74add1", "#4575b4", "#313695"}
+	colors := []uint32{0xa50026, 0xd73027, 0xf46d43, 0xfdae61, 0xfee090, 0xffffbf, 0xe0f3f8, 0xabd9e9, 0x74add1, 0x4575b4, 0x313695}
 	return preset(colors)
 }
 
 func RdYlGn() Gradient {
-	colors := []string{"#a50026", "#d73027", "#f46d43", "#fdae61", "#fee08b", "#ffffbf", "#d9ef8b", "#a6d96a", "#66bd63", "#1a9850", "#006837"}
+	colors := []uint32{0xa50026, 0xd73027, 0xf46d43, 0xfdae61, 0xfee08b, 0xffffbf, 0xd9ef8b, 0xa6d96a, 0x66bd63, 0x1a9850, 0x006837}
 	return preset(colors)
 }
 
 func Spectral() Gradient {
-	colors := []string{"#9e0142", "#d53e4f", "#f46d43", "#fdae61", "#fee08b", "#ffffbf", "#e6f598", "#abdda4", "#66c2a5", "#3288bd", "#5e4fa2"}
+	colors := []uint32{0x9e0142, 0xd53e4f, 0xf46d43, 0xfdae61, 0xfee08b, 0xffffbf, 0xe6f598, 0xabdda4, 0x66c2a5, 0x3288bd, 0x5e4fa2}
 	return preset(colors)
 }
 
 // Sequential (Single Hue)
 
 func Blues() Gradient {
-	colors := []string{"#f7fbff", "#deebf7", "#c6dbef", "#9ecae1", "#6baed6", "#4292c6", "#2171b5", "#08519c", "#08306b"}
+	colors := []uint32{0xf7fbff, 0xdeebf7, 0xc6dbef, 0x9ecae1, 0x6baed6, 0x4292c6, 0x2171b5, 0x08519c, 0x08306b}
 	return preset(colors)
 }
 
 func Greens() Gradient {
-	colors := []string{"#f7fcf5", "#e5f5e0", "#c7e9c0", "#a1d99b", "#74c476", "#41ab5d", "#238b45", "#006d2c", "#00441b"}
+	colors := []uint32{0xf7fcf5, 0xe5f5e0, 0xc7e9c0, 0xa1d99b, 0x74c476, 0x41ab5d, 0x238b45, 0x006d2c, 0x00441b}
 	return preset(colors)
 }
 
 func Greys() Gradient {
-	colors := []string{"#ffffff", "#f0f0f0", "#d9d9d9", "#bdbdbd", "#969696", "#737373", "#525252", "#252525", "#000000"}
+	colors := []uint32{0xffffff, 0xf0f0f0, 0xd9d9d9, 0xbdbdbd, 0x969696, 0x737373, 0x525252, 0x252525, 0x000000}
 	return preset(colors)
 }
 
 func Oranges() Gradient {
-	colors := []string{"#fff5eb", "#fee6ce", "#fdd0a2", "#fdae6b", "#fd8d3c", "#f16913", "#d94801", "#a63603", "#7f2704"}
+	colors := []uint32{0xfff5eb, 0xfee6ce, 0xfdd0a2, 0xfdae6b, 0xfd8d3c, 0xf16913, 0xd94801, 0xa63603, 0x7f2704}
 	return preset(colors)
 }
 
 func Purples() Gradient {
-	colors := []string{"#fcfbfd", "#efedf5", "#dadaeb", "#bcbddc", "#9e9ac8", "#807dba", "#6a51a3", "#54278f", "#3f007d"}
+	colors := []uint32{0xfcfbfd, 0xefedf5, 0xdadaeb, 0xbcbddc, 0x9e9ac8, 0x807dba, 0x6a51a3, 0x54278f, 0x3f007d}
 	return preset(colors)
 }
 
 func Reds() Gradient {
-	colors := []string{"#fff5f0", "#fee0d2", "#fcbba1", "#fc9272", "#fb6a4a", "#ef3b2c", "#cb181d", "#a50f15", "#67000d"}
+	colors := []uint32{0xfff5f0, 0xfee0d2, 0xfcbba1, 0xfc9272, 0xfb6a4a, 0xef3b2c, 0xcb181d, 0xa50f15, 0x67000d}
 	return preset(colors)
 }
 
 // Sequential (Multi-Hue)
 
 func Viridis() Gradient {
-	colors := []string{"#440154", "#482777", "#3f4a8a", "#31678e", "#26838f", "#1f9d8a", "#6cce5a", "#b6de2b", "#fee825"}
+	colors := []uint32{0x440154, 0x482777, 0x3f4a8a, 0x31678e, 0x26838f, 0x1f9d8a, 0x6cce5a, 0xb6de2b, 0xfee825}
 	return preset(colors)
 }
 
 func Inferno() Gradient {
-	colors := []string{"#000004", "#170b3a", "#420a68", "#6b176e", "#932667", "#bb3654", "#dd513a", "#f3771a", "#fca50a", "#f6d644", "#fcffa4"}
+	colors := []uint32{0x000004, 0x170b3a, 0x420a68, 0x6b176e, 0x932667, 0xbb3654, 0xdd513a, 0xf3771a, 0xfca50a, 0xf6d644, 0xfcffa4}
 	return preset(colors)
 }
 
 func Magma() Gradient {
-	colors := []string{"#000004", "#140e37", "#3b0f70", "#641a80", "#8c2981", "#b63679", "#de4968", "#f66f5c", "#fe9f6d", "#fece91", "#fcfdbf"}
+	colors := []uint32{0x000004, 0x140e37, 0x3b0f70, 0x641a80, 0x8c2981, 0xb63679, 0xde4968, 0xf66f5c, 0xfe9f6d, 0xfece91, 0xfcfdbf}
 	return preset(colors)
 }
 
 func Plasma() Gradient {
-	colors := []string{"#0d0887", "#42039d", "#6a00a8", "#900da3", "#b12a90", "#cb4678", "#e16462", "#f1834b", "#fca636", "#fccd25", "#f0f921"}
+	colors := []uint32{0x0d0887, 0x42039d, 0x6a00a8, 0x900da3, 0xb12a90, 0xcb4678, 0xe16462, 0xf1834b, 0xfca636, 0xfccd25, 0xf0f921}
 	return preset(colors)
 }
 
 func BuGn() Gradient {
-	colors := []string{"#f7fcfd", "#e5f5f9", "#ccece6", "#99d8c9", "#66c2a4", "#41ae76", "#238b45", "#006d2c", "#00441b"}
+	colors := []uint32{0xf7fcfd, 0xe5f5f9, 0xccece6, 0x99d8c9, 0x66c2a4, 0x41ae76, 0x238b45, 0x006d2c, 0x00441b}
 	return preset(colors)
 }
 
 func BuPu() Gradient {
-	colors := []string{"#f7fcfd", "#e0ecf4", "#bfd3e6", "#9ebcda", "#8c96c6", "#8c6bb1", "#88419d", "#810f7c", "#4d004b"}
+	colors := []uint32{0xf7fcfd, 0xe0ecf4, 0xbfd3e6, 0x9ebcda, 0x8c96c6, 0x8c6bb1, 0x88419d, 0x810f7c, 0x4d004b}
 	return preset(colors)
 }
 
 func GnBu() Gradient {
-	colors := []string{"#f7fcf0", "#e0f3db", "#ccebc5", "#a8ddb5", "#7bccc4", "#4eb3d3", "#2b8cbe", "#0868ac", "#084081"}
+	colors := []uint32{0xf7fcf0, 0xe0f3db, 0xccebc5, 0xa8ddb5, 0x7bccc4, 0x4eb3d3, 0x2b8cbe, 0x0868ac, 0x084081}
 	return preset(colors)
 }
 
 func OrRd() Gradient {
-	colors := []string{"#fff7ec", "#fee8c8", "#fdd49e", "#fdbb84", "#fc8d59", "#ef6548", "#d7301f", "#b30000", "#7f0000"}
+	colors := []uint32{0xfff7ec, 0xfee8c8, 0xfdd49e, 0xfdbb84, 0xfc8d59, 0xef6548, 0xd7301f, 0xb30000, 0x7f0000}
 	return preset(colors)
 }
 
 func PuBuGn() Gradient {
-	colors := []string{"#fff7fb", "#ece2f0", "#d0d1e6", "#a6bddb", "#67a9cf", "#3690c0", "#02818a", "#016c59", "#014636"}
+	colors := []uint32{0xfff7fb, 0xece2f0, 0xd0d1e6, 0xa6bddb, 0x67a9cf, 0x3690c0, 0x02818a, 0x016c59, 0x014636}
 	return preset(colors)
 }
 
 func PuBu() Gradient {
-	colors := []string{"#fff7fb", "#ece7f2", "#d0d1e6", "#a6bddb", "#74a9cf", "#3690c0", "#0570b0", "#045a8d", "#023858"}
+	colors := []uint32{0xfff7fb, 0xece7f2, 0xd0d1e6, 0xa6bddb, 0x74a9cf, 0x3690c0, 0x0570b0, 0x045a8d, 0x023858}
 	return preset(colors)
 }
 
 func PuRd() Gradient {
-	colors := []string{"#f7f4f9", "#e7e1ef", "#d4b9da", "#c994c7", "#df65b0", "#e7298a", "#ce1256", "#980043", "#67001f"}
+	colors := []uint32{0xf7f4f9, 0xe7e1ef, 0xd4b9da, 0xc994c7, 0xdf65b0, 0xe7298a, 0xce1256, 0x980043, 0x67001f}
 	return preset(colors)
 }
 
 func RdPu() Gradient {
-	colors := []string{"#fff7f3", "#fde0dd", "#fcc5c0", "#fa9fb5", "#f768a1", "#dd3497", "#ae017e", "#7a0177", "#49006a"}
+	colors := []uint32{0xfff7f3, 0xfde0dd, 0xfcc5c0, 0xfa9fb5, 0xf768a1, 0xdd3497, 0xae017e, 0x7a0177, 0x49006a}
 	return preset(colors)
 }
 
 func YlGnBu() Gradient {
-	colors := []string{"#ffffd9", "#edf8b1", "#c7e9b4", "#7fcdbb", "#41b6c4", "#1d91c0", "#225ea8", "#253494", "#081d58"}
+	colors := []uint32{0xffffd9, 0xedf8b1, 0xc7e9b4, 0x7fcdbb, 0x41b6c4, 0x1d91c0, 0x225ea8, 0x253494, 0x081d58}
 	return preset(colors)
 }
 
 func YlGn() Gradient {
-	colors := []string{"#ffffe5", "#f7fcb9", "#d9f0a3", "#addd8e", "#78c679", "#41ab5d", "#238443", "#006837", "#004529"}
+	colors := []uint32{0xffffe5, 0xf7fcb9, 0xd9f0a3, 0xaddd8e, 0x78c679, 0x41ab5d, 0x238443, 0x006837, 0x004529}
 	return preset(colors)
 }
 
 func YlOrBr() Gradient {
-	colors := []string{"#ffffe5", "#fff7bc", "#fee391", "#fec44f", "#fe9929", "#ec7014", "#cc4c02", "#993404", "#662506"}
+	colors := []uint32{0xffffe5, 0xfff7bc, 0xfee391, 0xfec44f, 0xfe9929, 0xec7014, 0xcc4c02, 0x993404, 0x662506}
 	return preset(colors)
 }
 
 func YlOrRd() Gradient {
-	colors := []string{"#ffffcc", "#ffeda0", "#fed976", "#feb24c", "#fd8d3c", "#fc4e2a", "#e31a1c", "#bd0026", "#800026"}
+	colors := []uint32{0xffffcc, 0xffeda0, 0xfed976, 0xfeb24c, 0xfd8d3c, 0xfc4e2a, 0xe31a1c, 0xbd0026, 0x800026}
 	return preset(colors)
 }
