@@ -180,13 +180,54 @@ func Test_CssGradient(t *testing.T) {
 			[]float64{0, 0.75, 1},
 			[]string{"#ff0000", "#00ff00", "#0000ff"},
 		},
+		{
+			"red 70%, lime, blue",
+			[]float64{0, 0.7, 0.85, 1},
+			[]string{"#ff0000", "#ff0000", "#00ff00", "#0000ff"},
+		},
+		{
+			"#00f, #ff0 10% 35%, #f00",
+			[]float64{0, 0.1, 0.35, 1},
+			[]string{"#0000ff", "#ffff00", "#ffff00", "#ff0000"},
+		},
+		{
+			"red, 75%, #ff0",
+			[]float64{0, 0.75, 1},
+			[]string{"#ff0000", "#ff8000", "#ffff00"},
+		},
 	}
+
 	for _, d := range testData {
 		gb := NewGradient()
 		gb.Css(d.s)
-		_, err := gb.Build()
+		grad, err := gb.Build()
+
 		test(t, err, nil)
 		testSlice(t, d.position, *gb.GetPositions())
 		testSlice(t, d.colors, colors2hex(*gb.GetColors()))
+
+		dmin, dmax := grad.Domain()
+		test(t, 0.0, dmin)
+		test(t, 1.0, dmax)
+	}
+
+	// Invalid format
+	invalid := []string{
+		"",
+		" ",
+		"reds, blue",
+		"0, red, lime",
+		"red, lime, 100%",
+		"deeppink, 0.4, 0.9, pink",
+		"50%",
+		"0%, 100%",
+		"æ",
+		"red â 15%, blue",
+		"red, ä, blue",
+	}
+	for _, s := range invalid {
+		_, err := NewGradient().Css(s).Build()
+		testTrue(t, err != nil)
+		test(t, err.Error(), "invalid CSS gradient")
 	}
 }

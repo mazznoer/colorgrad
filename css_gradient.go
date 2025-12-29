@@ -7,10 +7,6 @@ import (
 	"github.com/mazznoer/csscolorparser"
 )
 
-var eps = math.Nextafter(1.0, 2.0) - 1.0
-
-const tau = math.Pi * 2
-
 func parseCss(s string) ([]cssGradientStop, bool) {
 	stops := []cssGradientStop{}
 
@@ -28,19 +24,22 @@ func parseCss(s string) ([]cssGradientStop, bool) {
 		return stops, false
 	}
 
-	for i, stop := range stops {
-		if i == 0 && stop.pos == nil {
-			stops[i].pos = ptr(0.0)
-		}
+	if stops[0].pos == nil {
+		stops[0].pos = ptr(0.0)
+	}
 
+	for i, stop := range stops {
 		if i == len(stops)-1 {
 			if stop.pos == nil {
 				stops[i].pos = ptr(1.0)
 			}
-			continue
+			break
 		}
 
 		if stop.color == nil {
+			if stops[i+1].color == nil {
+				return stops, false
+			}
 			stops[i].color = ptrColor(blendRgb(*stops[i-1].color, *stops[i+1].color, 0.5))
 		}
 	}
@@ -70,30 +69,13 @@ func parseCss(s string) ([]cssGradientStop, bool) {
 		}
 	}
 
-	// Filter Stops
-
-	prev := stops[0].pos
-	last := len(stops) - 1
-	newStops := make([]cssGradientStop, 0, len(stops))
-
-	for i, s := range stops {
-		var next *float64
-
-		if i == last {
-			next = stops[last].pos
-		} else {
-			next = stops[i+1].pos
+	for _, stop := range stops {
+		if stop.color == nil || stop.pos == nil {
+			return stops, false
 		}
-
-		if (*s.pos-*prev)+(*next-*s.pos) < eps {
-			// skip 0 width stop
-		} else {
-			newStops = append(newStops, s)
-		}
-		prev = s.pos
 	}
 
-	return newStops, true
+	return stops, true
 }
 
 func ptr(f float64) *float64 {
