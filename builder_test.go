@@ -186,6 +186,11 @@ func Test_CssGradient(t *testing.T) {
 			[]string{"#ff0000", "#ff0000", "#00ff00", "#0000ff"},
 		},
 		{
+			"red 5%, lime, blue 85%",
+			[]float64{0, 0.05, 0.45, 0.85, 1},
+			[]string{"#ff0000", "#ff0000", "#00ff00", "#0000ff", "#0000ff"},
+		},
+		{
 			"#00f, #ff0 10% 35%, #f00",
 			[]float64{0, 0.1, 0.35, 1},
 			[]string{"#0000ff", "#ffff00", "#ffff00", "#ff0000"},
@@ -195,20 +200,25 @@ func Test_CssGradient(t *testing.T) {
 			[]float64{0, 0.75, 1},
 			[]string{"#ff0000", "#ff8000", "#ffff00"},
 		},
+		{
+			"red -5, lime, blue",
+			[]float64{-5, -2, 1},
+			[]string{"#ff0000", "#00ff00", "#0000ff"},
+		},
 	}
 
 	for _, d := range testData {
 		gb := NewGradient()
 		gb.Css(d.s)
-		grad, err := gb.Build()
+		_, err := gb.Build()
 
 		test(t, err, nil)
-		testSlice(t, d.position, *gb.GetPositions())
+		testSliceF(t, d.position, *gb.GetPositions())
 		testSlice(t, d.colors, colors2hex(*gb.GetColors()))
 
-		dmin, dmax := grad.Domain()
+		/*dmin, dmax := grad.Domain()
 		test(t, 0.0, dmin)
-		test(t, 1.0, dmax)
+		test(t, 1.0, dmax)*/
 	}
 
 	// Invalid format

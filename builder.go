@@ -53,8 +53,8 @@ func (gb *GradientBuilder) Css(s string) *GradientBuilder {
 		gb.invalidCssGradient = true
 		return gb
 	}
-	gb.colors = make([]Color, len(stops))
-	gb.positions = make([]float64, len(stops))
+	gb.colors = gb.colors[:0]
+	gb.positions = gb.positions[:0]
 	for _, st := range stops {
 		gb.colors = append(gb.colors, *st.color)
 		gb.positions = append(gb.positions, *st.pos)
@@ -126,8 +126,8 @@ func (gb *GradientBuilder) prepareBuild() error {
 		return fmt.Errorf("invalid domain")
 	}
 
-	gb.colors = nil
-	gb.positions = nil
+	gb.colors = gb.colors[:0]
+	gb.positions = gb.positions[:0]
 
 	prev := positions[0]
 	lastIdx := len(positions) - 1

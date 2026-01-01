@@ -1,6 +1,7 @@
 package colorgrad
 
 import (
+	"math"
 	"testing"
 
 	"github.com/mazznoer/csscolorparser"
@@ -159,6 +160,22 @@ func testSlice[S ~[]E, E comparable](t *testing.T, a, b S) {
 	}
 	for i, val := range a {
 		if val != b[i] {
+			t.Helper()
+			t.Errorf("diff at index: %v, left: %v, right: %v", i, val, b[i])
+			return
+		}
+	}
+}
+
+func testSliceF(t *testing.T, a, b []float64) {
+	if len(a) != len(b) {
+		t.Helper()
+		t.Errorf("different length -> left: %v, right: %v", len(a), len(b))
+		return
+	}
+	epsilon := math.Nextafter(1.0, 2.0) - 1.0
+	for i, val := range a {
+		if math.Abs(val-b[i]) > epsilon {
 			t.Helper()
 			t.Errorf("diff at index: %v, left: %v, right: %v", i, val, b[i])
 			return
