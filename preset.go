@@ -191,9 +191,9 @@ func u32ToColor(v uint32) Color {
 }
 
 func preset(data []uint32) Gradient {
-	colors := make([]Color, 0, len(data))
-	for _, v := range data {
-		colors = append(colors, u32ToColor(v))
+	colors := make([]Color, len(data))
+	for i, v := range data {
+		colors[i] = u32ToColor(v)
 	}
 	pos := linspace(0, 1, uint(len(colors)))
 	return newBasisGradient(colors, pos, BlendRgb)
