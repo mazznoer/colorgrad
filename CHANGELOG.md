@@ -2,6 +2,8 @@
 
 ## v0.11.0 (Unreleased)
 
+- New `GradientBuilder.Reset()`
+
 ## v0.10.2
 
 - Fix bug in `GradientBuilder.Css()`

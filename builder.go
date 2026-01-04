@@ -78,6 +78,17 @@ func (gb *GradientBuilder) Interpolation(mode Interpolation) *GradientBuilder {
 	return gb
 }
 
+func (gb *GradientBuilder) Reset() *GradientBuilder {
+	gb.colors = gb.colors[:0]
+	gb.positions = gb.positions[:0]
+	gb.mode = BlendRgb
+	gb.interpolation = InterpolationLinear
+	gb.invalidHtmlColors = gb.invalidHtmlColors[:0]
+	gb.invalidCssGradient = false
+	gb.clean = false
+	return gb
+}
+
 func (gb *GradientBuilder) prepareBuild() error {
 	if gb.clean {
 		return nil

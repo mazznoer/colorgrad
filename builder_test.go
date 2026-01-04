@@ -98,6 +98,13 @@ func Test_Builder(t *testing.T) {
 		"#b31a80",
 	})
 
+	// Reset
+	grad, err = gb.Reset().Build()
+	test(t, err, nil)
+	test(t, domain(grad.Domain()), [2]float64{0, 1})
+	test(t, grad.At(0).HexString(), "#000000")
+	test(t, grad.At(1).HexString(), "#ffffff")
+
 	// Filter stops
 	gb = NewGradient()
 	gb.HtmlColors("gold", "red", "blue", "yellow", "black", "white", "plum")
