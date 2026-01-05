@@ -134,7 +134,7 @@ grad, err := colorgrad.NewGradient().
     Css("deeppink, gold, seagreen").
     Build()
 ```
-![img](https://raw.githubusercontent.com/mazznoer/colorgrad-rs/master/docs/images/css-gradient-1.png)
+![img](https://raw.githubusercontent.com/mazznoer/colorgrad/master/doc/images/css-gradient-1.png)
 
 ```go
 grad, err := colorgrad.NewGradient().
@@ -142,7 +142,7 @@ grad, err := colorgrad.NewGradient().
     Interpolation(colorgrad.InterpolationCatmullRom).
     Build()
 ```
-![img](https://raw.githubusercontent.com/mazznoer/colorgrad-rs/master/docs/images/css-gradient-2.png)
+![img](https://raw.githubusercontent.com/mazznoer/colorgrad/master/doc/images/css-gradient-2.png)
 
 ### Blending Mode
 
