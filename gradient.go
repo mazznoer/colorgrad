@@ -12,6 +12,7 @@ type BlendMode int
 const (
 	BlendRgb BlendMode = iota
 	BlendLinearRgb
+	BlendLab
 	BlendOklab
 )
 
@@ -21,6 +22,8 @@ func (b BlendMode) String() string {
 		return "BlendRgb"
 	case BlendLinearRgb:
 		return "BlendLinearRgb"
+	case BlendLab:
+		return "BlendLab"
 	case BlendOklab:
 		return "BlendOklab"
 	}
@@ -53,6 +56,8 @@ var Hwb = csscolorparser.FromHwb
 var Hsv = csscolorparser.FromHsv
 var Hsl = csscolorparser.FromHsl
 var LinearRgb = csscolorparser.FromLinearRGB
+var Lab = csscolorparser.FromLab
+var Lch = csscolorparser.FromLch
 var Oklab = csscolorparser.FromOklab
 var Oklch = csscolorparser.FromOklch
 

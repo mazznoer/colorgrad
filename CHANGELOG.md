@@ -3,6 +3,7 @@
 ## v0.11.0 (Unreleased)
 
 - New `GradientBuilder.Reset()`
+- New `BlendLab`
 
 ## v0.10.2
 
