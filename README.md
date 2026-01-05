@@ -127,6 +127,23 @@ grad, err := colorgrad.NewGradient().
 ```
 ![img](https://raw.githubusercontent.com/mazznoer/colorgrad-rs/master/docs/images/color-position-2.png)
 
+### CSS Gradient Format
+
+```go
+grad, err := colorgrad.NewGradient().
+    Css("deeppink, gold, seagreen").
+    Build()
+```
+![img](https://raw.githubusercontent.com/mazznoer/colorgrad-rs/master/docs/images/css-gradient-1.png)
+
+```go
+grad, err := colorgrad.NewGradient().
+    Css("purple, gold 35%, green 35%, 55%, gold").
+    Interpolation(colorgrad.InterpolationCatmullRom).
+    Build()
+```
+![img](https://raw.githubusercontent.com/mazznoer/colorgrad-rs/master/docs/images/css-gradient-2.png)
+
 ### Blending Mode
 
 ```go
