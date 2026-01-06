@@ -104,9 +104,9 @@ func newCatmullRomGradient(colors []Color, positions []float64, space BlendMode)
 		last:      colors[len(colors)-1],
 	}
 	return Gradient{
-		grad: gradbase,
-		dmin: min,
-		dmax: max,
+		Core: gradbase,
+		Min:  min,
+		Max:  max,
 	}
 }
 

@@ -91,8 +91,8 @@ func newSharpGradient(colorsIn []Color, dmin, dmax float64, smoothness float64) 
 		max:       dmax,
 	}
 	return Gradient{
-		grad: gradbase,
-		dmin: dmin,
-		dmax: dmax,
+		Core: gradbase,
+		Min:  dmin,
+		Max:  dmax,
 	}
 }

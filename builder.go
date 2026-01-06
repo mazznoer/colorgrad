@@ -171,9 +171,9 @@ func (gb *GradientBuilder) prepareBuild() error {
 func (gb *GradientBuilder) Build() (Gradient, error) {
 	if err := gb.prepareBuild(); err != nil {
 		return Gradient{
-			grad: zeroGradient{},
-			dmin: 0,
-			dmax: 1,
+			Core: zeroGradient{},
+			Min:  0,
+			Max:  1,
 		}, err
 	}
 

@@ -16,9 +16,9 @@ type sinebowGradient struct{}
 
 func Sinebow() Gradient {
 	return Gradient{
-		grad: sinebowGradient{},
-		dmin: 0,
-		dmax: 1,
+		Core: sinebowGradient{},
+		Min:  0,
+		Max:  1,
 	}
 }
 
@@ -38,9 +38,9 @@ type turboGradient struct{}
 
 func Turbo() Gradient {
 	return Gradient{
-		grad: turboGradient{},
-		dmin: 0,
-		dmax: 1,
+		Core: turboGradient{},
+		Min:  0,
+		Max:  1,
 	}
 }
 
@@ -63,9 +63,9 @@ type cividisGradient struct{}
 
 func Cividis() Gradient {
 	return Gradient{
-		grad: cividisGradient{},
-		dmin: 0,
-		dmax: 1,
+		Core: cividisGradient{},
+		Min:  0,
+		Max:  1,
 	}
 }
 
@@ -125,9 +125,9 @@ func CubehelixDefault() Gradient {
 		end:   cubehelix{-240, 0.5, 1.0},
 	}
 	return Gradient{
-		grad: gradbase,
-		dmin: 0,
-		dmax: 1,
+		Core: gradbase,
+		Min:  0,
+		Max:  1,
 	}
 }
 
@@ -137,9 +137,9 @@ func Warm() Gradient {
 		end:   cubehelix{80, 1.50, 0.8},
 	}
 	return Gradient{
-		grad: gradbase,
-		dmin: 0,
-		dmax: 1,
+		Core: gradbase,
+		Min:  0,
+		Max:  1,
 	}
 }
 
@@ -149,9 +149,9 @@ func Cool() Gradient {
 		end:   cubehelix{80, 1.50, 0.8},
 	}
 	return Gradient{
-		grad: gradbase,
-		dmin: 0,
-		dmax: 1,
+		Core: gradbase,
+		Min:  0,
+		Max:  1,
 	}
 }
 
@@ -165,9 +165,9 @@ type rainbowGradient struct{}
 
 func Rainbow() Gradient {
 	return Gradient{
-		grad: rainbowGradient{},
-		dmin: 0,
-		dmax: 1,
+		Core: rainbowGradient{},
+		Min:  0,
+		Max:  1,
 	}
 }
 

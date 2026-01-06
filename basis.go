@@ -98,9 +98,9 @@ func newBasisGradient(colors []Color, positions []float64, mode BlendMode) Gradi
 	}
 
 	return Gradient{
-		grad: gradbase,
-		dmin: positions[0],
-		dmax: positions[len(positions)-1],
+		Core: gradbase,
+		Min:  positions[0],
+		Max:  positions[len(positions)-1],
 	}
 }
 

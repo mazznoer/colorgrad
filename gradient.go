@@ -83,48 +83,48 @@ func GoColor(col color.Color) Color {
 	return csscolorparser.Color{R: float64(r) / 65535.0, G: float64(g) / 65535.0, B: float64(b) / 65535.0, A: float64(a) / 65535.0}
 }
 
-type gradientBase interface {
+type GradientCore interface {
 	// Get color at certain position
 	At(float64) Color
 }
 
 type Gradient struct {
-	grad gradientBase
-	dmin float64
-	dmax float64
+	Core GradientCore
+	Min  float64
+	Max  float64
 }
 
 // Get color at certain position
 func (g Gradient) At(t float64) Color {
-	return g.grad.At(t)
+	return g.Core.At(t)
 }
 
 // Get color at certain position
 func (g Gradient) RepeatAt(t float64) Color {
-	t = norm(t, g.dmin, g.dmax)
-	return g.grad.At(g.dmin + modulo(t, 1)*(g.dmax-g.dmin))
+	t = norm(t, g.Min, g.Max)
+	return g.Core.At(g.Min + modulo(t, 1)*(g.Max-g.Min))
 }
 
 // Get color at certain position
 func (g Gradient) ReflectAt(t float64) Color {
-	t = norm(t, g.dmin, g.dmax)
-	return g.grad.At(g.dmin + math.Abs(modulo(1+t, 2)-1)*(g.dmax-g.dmin))
+	t = norm(t, g.Min, g.Max)
+	return g.Core.At(g.Min + math.Abs(modulo(1+t, 2)-1)*(g.Max-g.Min))
 }
 
 // Get n colors evenly spaced across gradient
 func (g Gradient) Colors(count uint) []Color {
-	d := g.dmax - g.dmin
+	d := g.Max - g.Min
 	l := float64(count) - 1
 	colors := make([]Color, count)
 	for i := range colors {
-		colors[i] = g.grad.At(g.dmin + (float64(i)*d)/l).Clamp()
+		colors[i] = g.Core.At(g.Min + (float64(i)*d)/l).Clamp()
 	}
 	return colors
 }
 
 // Get the gradient domain min and max
 func (g Gradient) Domain() (float64, float64) {
-	return g.dmin, g.dmax
+	return g.Min, g.Max
 }
 
 // Return a new hard-edge gradient
@@ -133,10 +133,10 @@ func (g Gradient) Sharp(segment uint, smoothness float64) Gradient {
 	if segment >= 2 {
 		colors = g.Colors(segment)
 	} else {
-		colors = append(colors, g.At(g.dmin))
-		colors = append(colors, g.At(g.dmin))
+		colors = append(colors, g.At(g.Min))
+		colors = append(colors, g.At(g.Min))
 	}
-	return newSharpGradient(colors, g.dmin, g.dmax, smoothness)
+	return newSharpGradient(colors, g.Min, g.Max, smoothness)
 }
 
 type zeroGradient struct {

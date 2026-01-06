@@ -215,9 +215,9 @@ func blendHsvCw(c1, c2 Color, t float64) Color {
 
 func ParseGgr(r io.Reader, fg, bg Color) (Gradient, string, error) {
 	zgrad := Gradient{
-		grad: zeroGradient{},
-		dmin: 0,
-		dmax: 1,
+		Core: zeroGradient{},
+		Min:  0,
+		Max:  1,
 	}
 
 	segments := []gimpSegment{}
@@ -282,9 +282,9 @@ func ParseGgr(r io.Reader, fg, bg Color) (Gradient, string, error) {
 	}
 
 	return Gradient{
-		grad: gradbase,
-		dmin: 0,
-		dmax: 1,
+		Core: gradbase,
+		Min:  0,
+		Max:  1,
 	}, name, nil
 }
 
