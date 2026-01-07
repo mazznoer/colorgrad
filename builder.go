@@ -181,6 +181,10 @@ func (gb *GradientBuilder) Build() (Gradient, error) {
 		return newLinearGradient(gb.colors, gb.positions, gb.mode), nil
 	}
 
+	if gb.interpolation == InterpolationSmoothstep {
+		return newSmoothstepGradient(gb.colors, gb.positions, gb.mode), nil
+	}
+
 	if gb.interpolation == InterpolationBasis {
 		return newBasisGradient(gb.colors, gb.positions, gb.mode), nil
 	}

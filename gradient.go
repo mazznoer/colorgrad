@@ -34,6 +34,7 @@ type Interpolation int
 
 const (
 	InterpolationLinear Interpolation = iota
+	InterpolationSmoothstep
 	InterpolationCatmullRom
 	InterpolationBasis
 )
@@ -42,6 +43,8 @@ func (i Interpolation) String() string {
 	switch i {
 	case InterpolationLinear:
 		return "InterpolationLinear"
+	case InterpolationSmoothstep:
+		return "InterpolationSmoothstep"
 	case InterpolationCatmullRom:
 		return "InterpolationCatmullRom"
 	case InterpolationBasis:

@@ -166,6 +166,9 @@ grad, err := colorgrad.NewGradient().
 `InterpolationLinear`
 ![interpolation-linear](doc/images/interpolation-linear.png)
 
+`InterpolationSmoothstep`
+![interpolation-smoothstep](doc/images/interpolation-smoothstep.png)
+
 `InterpolationCatmullRom`
 ![interpolation-catmull-rom](doc/images/interpolation-catmull-rom.png)
 

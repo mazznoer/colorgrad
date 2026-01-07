@@ -6,6 +6,7 @@
 - New `BlendLab`
 - `Gradient`'s fields is now public
 - `GradientCore` is now public
+- New `InterpolationSmoothstep`
 
 ## v0.10.2
 
