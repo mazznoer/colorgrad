@@ -134,7 +134,7 @@ grad, err := colorgrad.NewGradient().
     Css("deeppink, gold, seagreen").
     Build()
 ```
-![img](https://raw.githubusercontent.com/mazznoer/colorgrad/master/doc/images/css-gradient-1.png)
+![img](doc/images/css-gradient-1.png)
 
 ```go
 grad, err := colorgrad.NewGradient().
@@ -142,7 +142,7 @@ grad, err := colorgrad.NewGradient().
     Interpolation(colorgrad.InterpolationCatmullRom).
     Build()
 ```
-![img](https://raw.githubusercontent.com/mazznoer/colorgrad/master/doc/images/css-gradient-2.png)
+![img](doc/images/css-gradient-2.png)
 
 ### Blending Mode
 
@@ -164,16 +164,16 @@ grad, err := colorgrad.NewGradient().
 ```
 
 `InterpolationLinear`
-![interpolation-linear](doc/images/interpolation-linear.png)
+![interpolation-linear](doc/images/interpolation-linear2.png)
 
 `InterpolationSmoothstep`
 ![interpolation-smoothstep](doc/images/interpolation-smoothstep.png)
 
 `InterpolationCatmullRom`
-![interpolation-catmull-rom](doc/images/interpolation-catmull-rom.png)
+![interpolation-catmull-rom](doc/images/interpolation-catmull-rom2.png)
 
 `InterpolationBasis`
-![interpolation-basis](doc/images/interpolation-basis.png)
+![interpolation-basis](doc/images/interpolation-basis2.png)
 
 ## Preset Gradients
 

@@ -1,6 +1,8 @@
 # Changelog
 
-## v0.11.0 (Unreleased)
+## v0.11.1 (Unreleased)
+
+## v0.11.0
 
 - New `GradientBuilder.Reset()`
 - New `BlendLab`
