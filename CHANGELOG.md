@@ -1,6 +1,8 @@
 # Changelog
 
-## v0.11.1 (Unreleased)
+## v0.11.1
+
+- Fix bug in Lab conversion
 
 ## v0.11.0
 

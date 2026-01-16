@@ -136,6 +136,23 @@ func spreadF64(arr [4]float64) (a, b, c, d float64) {
 	return
 }
 
+func Test_Lab(t *testing.T) {
+	testData := []string{
+		"#000000",
+		"#ffffff",
+		"#ff0000",
+		"#123abc",
+		"#bad455",
+	}
+	for _, s := range testData {
+		c, err := csscolorparser.Parse(s)
+		test(t, err, nil)
+		lab := col2lab(c)
+		cc := Lab(lab[0], lab[1], lab[2], lab[3])
+		test(t, s, cc.HexString())
+	}
+}
+
 // --- Helper functions
 
 func test(t *testing.T, a, b any) {
