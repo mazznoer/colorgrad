@@ -97,10 +97,10 @@ func Test_Utils(t *testing.T) {
 		col, err := csscolorparser.Parse(c.HexString())
 		test(t, err, nil)
 
-		x := Oklab(spreadF64(col2oklab(col)))
+		x := Oklab(spreadF64(col.Oklab()))
 		test(t, x.HexString(), c.HexString())
 
-		y := LinearRgb(spreadF64(col2linearRgb(col)))
+		y := LinearRgb(spreadF64(col.LinearRgb()))
 		test(t, y.HexString(), c.HexString())
 	}
 
@@ -120,10 +120,10 @@ func Test_Utils(t *testing.T) {
 		test(t, err, nil)
 		test(t, col.HexString(), s)
 
-		x := Oklab(spreadF64(col2oklab(col)))
+		x := Oklab(spreadF64(col.Oklab()))
 		test(t, x.HexString(), s)
 
-		y := LinearRgb(spreadF64(col2linearRgb(col)))
+		y := LinearRgb(spreadF64(col.LinearRgb()))
 		test(t, y.HexString(), s)
 	}
 }
@@ -147,7 +147,7 @@ func Test_Lab(t *testing.T) {
 	for _, s := range testData {
 		c, err := csscolorparser.Parse(s)
 		test(t, err, nil)
-		lab := col2lab(c)
+		lab := c.Lab()
 		cc := Lab(lab[0], lab[1], lab[2], lab[3])
 		test(t, s, cc.HexString())
 	}

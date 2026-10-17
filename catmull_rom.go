@@ -68,11 +68,11 @@ func newCatmullRomGradient(colors []Color, positions []float64, space BlendMode)
 		case BlendRgb:
 			arr = [4]float64{col.R, col.G, col.B, col.A}
 		case BlendLinearRgb:
-			arr = col2linearRgb(col)
+			arr = col.LinearRgb()
 		case BlendLab:
-			arr = col2lab(col)
+			arr = col.Lab()
 		case BlendOklab:
-			arr = col2oklab(col)
+			arr = col.Oklab()
 		}
 		a[i] = arr[0]
 		b[i] = arr[1]

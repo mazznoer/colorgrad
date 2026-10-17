@@ -37,35 +37,6 @@ func parseFloat(s string) (float64, bool) {
 	return f, err == nil
 }
 
-func toLinear(x float64) float64 {
-	if x >= 0.04045 {
-		return math.Pow((x+0.055)/1.055, 2.4)
-	}
-	return x / 12.92
-}
-
-func col2linearRgb(col Color) [4]float64 {
-	return [4]float64{
-		toLinear(col.R),
-		toLinear(col.G),
-		toLinear(col.B),
-		col.A,
-	}
-}
-
-func col2oklab(col Color) [4]float64 {
-	arr := col2linearRgb(col)
-	l := math.Cbrt(0.4121656120*arr[0] + 0.5362752080*arr[1] + 0.0514575653*arr[2])
-	m := math.Cbrt(0.2118591070*arr[0] + 0.6807189584*arr[1] + 0.1074065790*arr[2])
-	s := math.Cbrt(0.0883097947*arr[0] + 0.2818474174*arr[1] + 0.6302613616*arr[2])
-	return [4]float64{
-		0.2104542553*l + 0.7936177850*m - 0.0040720468*s,
-		1.9779984951*l - 2.4285922050*m + 0.4505937099*s,
-		0.0259040371*l + 0.7827717662*m - 0.8086757660*s,
-		col.A,
-	}
-}
-
 func col2hsv(col Color) [4]float64 {
 	v := math.Max(col.R, math.Max(col.G, col.B))
 	d := v - math.Min(col.R, math.Min(col.G, col.B))
@@ -108,11 +79,11 @@ func convertColors(colorsIn []Color, mode BlendMode) [][4]float64 {
 		case BlendRgb:
 			colors[i] = [4]float64{col.R, col.G, col.B, col.A}
 		case BlendLinearRgb:
-			colors[i] = col2linearRgb(col)
+			colors[i] = col.LinearRgb()
 		case BlendLab:
-			colors[i] = col2lab(col)
+			colors[i] = col.Lab()
 		case BlendOklab:
-			colors[i] = col2oklab(col)
+			colors[i] = col.Oklab()
 		}
 	}
 	return colors
@@ -133,50 +104,4 @@ func blendRgb(a, b Color, t float64) Color {
 		B: a.B + t*(b.B-a.B),
 		A: a.A + t*(b.A-a.A),
 	}
-}
-
-// --- Lab
-
-const (
-	d65X = 0.95047
-	d65Y = 1.0
-	d65Z = 1.08883
-
-	delta  = 6.0 / 29.0
-	delta2 = delta * delta
-	delta3 = delta2 * delta
-)
-
-func linearRGBToXYZ(r, g, b float64) [3]float64 {
-	// Inverse sRGB matrix (D65)
-	x := 0.4124564*r + 0.3575761*g + 0.1804375*b
-	y := 0.2126729*r + 0.7151522*g + 0.0721750*b
-	z := 0.0193339*r + 0.1191920*g + 0.9503041*b
-	return [3]float64{x, y, z}
-}
-
-func xyzToLab(x, y, z float64) [3]float64 {
-	labF := func(t float64) float64 {
-		if t > delta3 {
-			return math.Cbrt(t)
-		}
-		return (t / (3.0 * delta2)) + (4.0 / 29.0)
-	}
-
-	fx := labF(x / d65X)
-	fy := labF(y / d65Y)
-	fz := labF(z / d65Z)
-
-	l := 116.0*fy - 16.0
-	a := 500.0 * (fx - fy)
-	b := 200.0 * (fy - fz)
-
-	return [3]float64{l, a, b}
-}
-
-func col2lab(col Color) [4]float64 {
-	c := col2linearRgb(col)
-	x := linearRGBToXYZ(c[0], c[1], c[2])
-	l := xyzToLab(x[0], x[1], x[2])
-	return [4]float64{l[0], l[1], l[2], col.A}
 }

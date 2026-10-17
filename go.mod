@@ -1,5 +1,5 @@
 module github.com/mazznoer/colorgrad
 
-go 1.18
+go 1.23
 
-require github.com/mazznoer/csscolorparser v0.1.8
+require github.com/mazznoer/csscolorparser v0.2.0
