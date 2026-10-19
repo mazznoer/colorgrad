@@ -2,6 +2,7 @@ package colorgrad
 
 import (
 	"image/color"
+	"iter"
 	"math"
 
 	"github.com/mazznoer/csscolorparser"
@@ -123,6 +124,24 @@ func (g Gradient) Colors(count uint) []Color {
 		colors[i] = g.Core.At(g.Min + (float64(i)*d)/l).Clamp()
 	}
 	return colors
+}
+
+// Get iterator for n colors evenly spaced across gradient
+func (g Gradient) ColorsIter(count uint) iter.Seq[Color] {
+	return func(yield func(Color) bool) {
+		if count == 1 {
+			yield(g.Core.At(g.Min).Clamp())
+			return
+		}
+		d := g.Max - g.Min
+		l := float64(count) - 1
+		for i := range count {
+			c := g.Core.At(g.Min + (float64(i)*d)/l).Clamp()
+			if !yield(c) {
+				return
+			}
+		}
+	}
 }
 
 // Get the gradient domain min and max
