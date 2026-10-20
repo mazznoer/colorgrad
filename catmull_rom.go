@@ -46,7 +46,7 @@ func toCatmullRomSegments(values []float64) [][4]float64 {
 	return segments
 }
 
-type catmullRomGradient struct {
+type CatmullRomGradient struct {
 	segments  [][4][4]float64
 	positions []float64
 	min       float64
@@ -94,7 +94,7 @@ func newCatmullRomGradient(colors []Color, positions []float64, space BlendMode)
 	}
 	min := positions[0]
 	max := positions[n-1]
-	gradbase := catmullRomGradient{
+	gradbase := CatmullRomGradient{
 		segments:  segments,
 		positions: positions,
 		min:       min,
@@ -110,7 +110,7 @@ func newCatmullRomGradient(colors []Color, positions []float64, space BlendMode)
 	}
 }
 
-func (g catmullRomGradient) At(t float64) Color {
+func (g CatmullRomGradient) At(t float64) Color {
 	if math.IsNaN(t) {
 		return Color{A: 1}
 	}

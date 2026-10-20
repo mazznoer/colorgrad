@@ -6,7 +6,7 @@ import (
 
 // https://github.com/d3/d3-interpolate/blob/master/src/basis.js
 
-type basisGradient struct {
+type BasisGradient struct {
 	colors    [][4]float64
 	positions []float64
 	min       float64
@@ -16,7 +16,7 @@ type basisGradient struct {
 	last      Color
 }
 
-func (lg basisGradient) At(t float64) Color {
+func (lg BasisGradient) At(t float64) Color {
 	if t <= lg.min {
 		return lg.first
 	}
@@ -87,7 +87,7 @@ func (lg basisGradient) At(t float64) Color {
 }
 
 func newBasisGradient(colors []Color, positions []float64, mode BlendMode) Gradient {
-	gradbase := basisGradient{
+	gradbase := BasisGradient{
 		colors:    convertColors(colors, mode),
 		positions: positions,
 		min:       positions[0],

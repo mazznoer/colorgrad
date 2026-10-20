@@ -12,17 +12,17 @@ const pi2_3 = math.Pi * 2 / 3
 
 // Sinebow
 
-type sinebowGradient struct{}
+type SinebowGradient struct{}
 
 func Sinebow() Gradient {
 	return Gradient{
-		Core: sinebowGradient{},
+		Core: SinebowGradient{},
 		Min:  0,
 		Max:  1,
 	}
 }
 
-func (sg sinebowGradient) At(t float64) Color {
+func (sg SinebowGradient) At(t float64) Color {
 	t = (0.5 - t) * math.Pi
 	return Color{
 		R: math.Pow(math.Sin(t), 2),
@@ -34,17 +34,17 @@ func (sg sinebowGradient) At(t float64) Color {
 
 // Turbo
 
-type turboGradient struct{}
+type TurboGradient struct{}
 
 func Turbo() Gradient {
 	return Gradient{
-		Core: turboGradient{},
+		Core: TurboGradient{},
 		Min:  0,
 		Max:  1,
 	}
 }
 
-func (tg turboGradient) At(t float64) Color {
+func (tg TurboGradient) At(t float64) Color {
 	t = math.Max(0, math.Min(1, t))
 	r := math.Round(34.61 + t*(1172.33-t*(10793.56-t*(33300.12-t*(38394.49-t*14825.05)))))
 	g := math.Round(23.31 + t*(557.33+t*(1225.33-t*(3574.96-t*(1073.77+t*707.56)))))
@@ -59,17 +59,17 @@ func (tg turboGradient) At(t float64) Color {
 
 // Cividis
 
-type cividisGradient struct{}
+type CividisGradient struct{}
 
 func Cividis() Gradient {
 	return Gradient{
-		Core: cividisGradient{},
+		Core: CividisGradient{},
 		Min:  0,
 		Max:  1,
 	}
 }
 
-func (cg cividisGradient) At(t float64) Color {
+func (cg CividisGradient) At(t float64) Color {
 	t = math.Max(0, math.Min(1, t))
 	r := math.Round(-4.54 - t*(35.34-t*(2381.73-t*(6402.7-t*(7024.72-t*2710.57)))))
 	g := math.Round(32.49 + t*(170.73+t*(52.82-t*(131.46-t*(176.58-t*67.37)))))
@@ -115,12 +115,12 @@ func (c cubehelix) interpolate(c2 cubehelix, t float64) cubehelix {
 
 // Cubehelix gradient
 
-type cubehelixGradient struct {
+type CubehelixGradient struct {
 	start, end cubehelix
 }
 
 func CubehelixDefault() Gradient {
-	gradbase := cubehelixGradient{
+	gradbase := CubehelixGradient{
 		start: cubehelix{300, 0.5, 0.0},
 		end:   cubehelix{-240, 0.5, 1.0},
 	}
@@ -132,7 +132,7 @@ func CubehelixDefault() Gradient {
 }
 
 func Warm() Gradient {
-	gradbase := cubehelixGradient{
+	gradbase := CubehelixGradient{
 		start: cubehelix{-100, 0.75, 0.35},
 		end:   cubehelix{80, 1.50, 0.8},
 	}
@@ -144,7 +144,7 @@ func Warm() Gradient {
 }
 
 func Cool() Gradient {
-	gradbase := cubehelixGradient{
+	gradbase := CubehelixGradient{
 		start: cubehelix{260, 0.75, 0.35},
 		end:   cubehelix{80, 1.50, 0.8},
 	}
@@ -155,23 +155,23 @@ func Cool() Gradient {
 	}
 }
 
-func (cg cubehelixGradient) At(t float64) Color {
+func (cg CubehelixGradient) At(t float64) Color {
 	return cg.start.interpolate(cg.end, clamp01(t)).toColor()
 }
 
 // Rainbow
 
-type rainbowGradient struct{}
+type RainbowGradient struct{}
 
 func Rainbow() Gradient {
 	return Gradient{
-		Core: rainbowGradient{},
+		Core: RainbowGradient{},
 		Min:  0,
 		Max:  1,
 	}
 }
 
-func (rg rainbowGradient) At(t float64) Color {
+func (rg RainbowGradient) At(t float64) Color {
 	t = math.Max(0, math.Min(1, t))
 	ts := math.Abs(t - 0.5)
 	return cubehelix{

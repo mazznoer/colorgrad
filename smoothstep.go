@@ -4,7 +4,7 @@ import (
 	"math"
 )
 
-type smoothstepGradient struct {
+type SmoothstepGradient struct {
 	colors    [][4]float64
 	positions []float64
 	min       float64
@@ -14,7 +14,7 @@ type smoothstepGradient struct {
 	last      Color
 }
 
-func (sg smoothstepGradient) At(t float64) Color {
+func (sg SmoothstepGradient) At(t float64) Color {
 	if t <= sg.min {
 		return sg.first
 	}
@@ -63,7 +63,7 @@ func (sg smoothstepGradient) At(t float64) Color {
 }
 
 func newSmoothstepGradient(colors []Color, positions []float64, mode BlendMode) Gradient {
-	gradbase := smoothstepGradient{
+	gradbase := SmoothstepGradient{
 		colors:    convertColors(colors, mode),
 		positions: positions,
 		min:       positions[0],

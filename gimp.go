@@ -52,13 +52,13 @@ type gimpSegment struct {
 	coloring coloringType
 }
 
-type gimpGradient struct {
+type GimpGradient struct {
 	segments []gimpSegment
 	min      float64
 	max      float64
 }
 
-func (ggr gimpGradient) At(t float64) Color {
+func (ggr GimpGradient) At(t float64) Color {
 	if t <= ggr.min {
 		return ggr.segments[0].lcolor
 	}
@@ -275,7 +275,7 @@ func ParseGgr(r io.Reader, fg, bg Color) (Gradient, string, error) {
 		return zgrad, name, fmt.Errorf("wrong segments count, %v, %v", nseg, xseg)
 	}
 
-	gradbase := gimpGradient{
+	gradbase := GimpGradient{
 		segments: segments,
 		min:      0,
 		max:      1,

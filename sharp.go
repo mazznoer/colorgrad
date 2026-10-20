@@ -4,7 +4,7 @@ import (
 	"math"
 )
 
-type sharpGradient struct {
+type SharpGradient struct {
 	colors    []Color
 	positions []float64
 	last      int
@@ -12,7 +12,7 @@ type sharpGradient struct {
 	max       float64
 }
 
-func (sg sharpGradient) At(t float64) Color {
+func (sg SharpGradient) At(t float64) Color {
 	if t <= sg.min {
 		return sg.colors[0]
 	}
@@ -83,7 +83,7 @@ func newSharpGradient(colorsIn []Color, dmin, dmax float64, smoothness float64) 
 		}
 		i++
 	}
-	gradbase := sharpGradient{
+	gradbase := SharpGradient{
 		colors:    colors,
 		positions: positions,
 		last:      int(n*2 - 1),
