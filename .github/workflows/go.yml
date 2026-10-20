@@ -15,10 +15,10 @@ jobs:
 
     steps:
     - name: Check out code into the Go module directory
-      uses: actions/checkout@v4
+      uses: actions/checkout@v7
 
     - name: Set up Go
-      uses: actions/setup-go@v5
+      uses: actions/setup-go@v7
       with:
         go-version-file: './go.mod'
 
@@ -29,7 +29,9 @@ jobs:
       run: go vet .
 
     - name: Test
-      run: go test -v -coverprofile coverage.out && go tool cover -html coverage.out -o coverage.html
+      run: |
+        go test -v -coverprofile coverage.out && go tool cover -html coverage.out -o coverage.html
+        go test -v ./integration_test/
 
     - name: Run examples
       run: |

@@ -4,7 +4,7 @@ import (
 	"math"
 )
 
-type linearGradient struct {
+type LinearGradient struct {
 	colors    [][4]float64
 	positions []float64
 	min       float64
@@ -14,7 +14,7 @@ type linearGradient struct {
 	last      Color
 }
 
-func (lg linearGradient) At(t float64) Color {
+func (lg LinearGradient) At(t float64) Color {
 	if t <= lg.min {
 		return lg.first
 	}
@@ -62,8 +62,20 @@ func (lg linearGradient) At(t float64) Color {
 	return Color{}
 }
 
+func (lg LinearGradient) Mode() BlendMode {
+	return lg.mode
+}
+
+func (lg LinearGradient) Colors() [][4]float64 {
+	return lg.colors
+}
+
+func (lg LinearGradient) Positions() []float64 {
+	return lg.positions
+}
+
 func newLinearGradient(colors []Color, positions []float64, mode BlendMode) Gradient {
-	gradbase := linearGradient{
+	gradbase := LinearGradient{
 		colors:    convertColors(colors, mode),
 		positions: positions,
 		min:       positions[0],

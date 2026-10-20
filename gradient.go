@@ -161,6 +161,18 @@ func (g Gradient) Sharp(segment uint, smoothness float64) Gradient {
 	return newSharpGradient(colors, g.Min, g.Max, smoothness)
 }
 
+// Convert to linear gradient (in RGBA space) using adaptive sampling algorithm.
+//
+// Arguments:
+//
+//	`threshold`: [0.001 .. 0.035]. Smaller value will results in smoother color transition (more color stops).
+func (g Gradient) Linearize(threshold float64) Gradient {
+	fn := func(t float64) Color {
+		return g.At(t)
+	}
+	return linearize(fn, g.Min, g.Max, threshold)
+}
+
 type zeroGradient struct {
 }
 
