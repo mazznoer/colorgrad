@@ -10,8 +10,21 @@ import (
 
 // --- Helper functions
 
+var epsilon float64 = 1e-10
+
 func test(t *testing.T, a, b interface{}, desc ...string) {
 	if a != b {
+		t.Helper()
+		t.Errorf("left: %v, right: %v", a, b)
+
+		if len(desc) > 0 {
+			t.Errorf("%s", desc[0])
+		}
+	}
+}
+
+func testF(t *testing.T, a, b float64, desc ...string) {
+	if math.Abs(a-b) > epsilon {
 		t.Helper()
 		t.Errorf("left: %v, right: %v", a, b)
 
@@ -81,7 +94,6 @@ func testSliceF(t *testing.T, a, b []float64) {
 		t.Errorf("different length -> left: %v, right: %v", len(a), len(b))
 		return
 	}
-	epsilon := math.Nextafter(1.0, 2.0) - 1.0
 	for i, val := range a {
 		if math.Abs(val-b[i]) > epsilon {
 			t.Helper()

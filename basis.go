@@ -4,10 +4,12 @@ import (
 	"math"
 )
 
-// https://github.com/d3/d3-interpolate/blob/master/src/basis.js
-
 type BasisGradient struct {
-	colors    [][4]float64
+	// Control points padded with one "ghost" point at each end:
+	// ctrl[k+1] is color k, ctrl[0] and ctrl[len-1] are linear extrapolations.
+	// Segment i (between colors i and i+1) therefore always uses
+	// ctrl[i], ctrl[i+1], ctrl[i+2], ctrl[i+3], with no edge-case branches.
+	ctrl      [][4]float64
 	positions []float64
 	min       float64
 	max       float64
@@ -16,7 +18,11 @@ type BasisGradient struct {
 	last      Color
 }
 
-func (lg BasisGradient) At(t float64) Color {
+func (lg *BasisGradient) At(t float64) Color {
+	if math.IsNaN(t) {
+		return Color{A: 1}
+	}
+
 	if t <= lg.min {
 		return lg.first
 	}
@@ -25,52 +31,40 @@ func (lg BasisGradient) At(t float64) Color {
 		return lg.last
 	}
 
-	if math.IsNaN(t) {
-		return Color{A: 1}
-	}
-
-	low := 0
-	high := len(lg.positions)
-	n := high - 1
-
-	for low < high {
-		mid := (low + high) / 2
-		if lg.positions[mid] < t {
-			low = mid + 1
+	// Here positions[0] < t < positions[len-1], so the first index with
+	// positions[idx] >= t is guaranteed to lie in [1, len-1].
+	pos := lg.positions
+	lo, hi := 1, len(pos)-1
+	for lo < hi {
+		mid := int(uint(lo+hi) >> 1)
+		if pos[mid] < t {
+			lo = mid + 1
 		} else {
-			high = mid
+			hi = mid
 		}
 	}
 
-	if low == 0 {
-		low = 1
-	}
+	// Segment is [lo-1, lo]; pos[lo-1] < t <= pos[lo], so the divisor is > 0.
+	i := lo - 1
+	u := (t - pos[i]) / (pos[lo] - pos[i])
 
-	p1 := lg.positions[low-1]
-	p2 := lg.positions[low]
-	val0 := lg.colors[low-1]
-	val1 := lg.colors[low]
-	i := low - 1
-	t = (t - p1) / (p2 - p1)
+	// Blend weights
+	u2 := u * u
+	u3 := u2 * u
+	w0 := 1 - 3*u + 3*u2 - u3
+	w1 := 4 - 6*u2 + 3*u3
+	w2 := 1 + 3*u + 3*u2 - 3*u3
+	w3 := u3
 
-	xx := func(v1, v2 float64, j int) float64 {
-		v0 := 2*v1 - v2
-		if i > 0 {
-			v0 = lg.colors[i-1][j]
-		}
+	p0 := &lg.ctrl[i]
+	p1 := &lg.ctrl[i+1]
+	p2 := &lg.ctrl[i+2]
+	p3 := &lg.ctrl[i+3]
 
-		v3 := 2*v2 - v1
-		if i < n-1 {
-			v3 = lg.colors[i+2][j]
-		}
-
-		return basis(t, v0, v1, v2, v3)
-	}
-
-	a := xx(val0[0], val1[0], 0)
-	b := xx(val0[1], val1[1], 1)
-	c := xx(val0[2], val1[2], 2)
-	d := xx(val0[3], val1[3], 3)
+	a := (w0*p0[0] + w1*p1[0] + w2*p2[0] + w3*p3[0]) / 6
+	b := (w0*p0[1] + w1*p1[1] + w2*p2[1] + w3*p3[1]) / 6
+	c := (w0*p0[2] + w1*p1[2] + w2*p2[2] + w3*p3[2]) / 6
+	d := (w0*p0[3] + w1*p1[3] + w2*p2[3] + w3*p3[3]) / 6
 
 	switch lg.mode {
 	case BlendRgb:
@@ -87,25 +81,30 @@ func (lg BasisGradient) At(t float64) Color {
 }
 
 func newBasisGradient(colors []Color, positions []float64, mode BlendMode) Gradient {
-	gradbase := BasisGradient{
-		colors:    convertColors(colors, mode),
+	n := len(colors)
+	base := convertColors(colors, mode)
+
+	ctrl := make([][4]float64, n+2)
+	copy(ctrl[1:], base)
+
+	for j := 0; j < 4; j++ {
+		ctrl[0][j] = 2*base[0][j] - base[1][j]
+		ctrl[n+1][j] = 2*base[n-1][j] - base[n-2][j]
+	}
+
+	g := &BasisGradient{
+		ctrl:      ctrl,
 		positions: positions,
 		min:       positions[0],
-		max:       positions[len(positions)-1],
+		max:       positions[n-1],
 		mode:      mode,
 		first:     colors[0],
-		last:      colors[len(colors)-1],
+		last:      colors[n-1],
 	}
 
 	return Gradient{
-		Core: gradbase,
-		Min:  positions[0],
-		Max:  positions[len(positions)-1],
+		Core: g,
+		Min:  g.min,
+		Max:  g.max,
 	}
-}
-
-func basis(t1, v0, v1, v2, v3 float64) float64 {
-	t2 := t1 * t1
-	t3 := t2 * t1
-	return ((1-3*t1+3*t2-t3)*v0 + (4-6*t2+3*t3)*v1 + (1+3*t1+3*t2-3*t3)*v2 + t3*v3) / 6
 }
