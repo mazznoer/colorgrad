@@ -1,10 +1,19 @@
 package integration_test
 
 import (
+	"iter"
 	"testing"
 
 	"github.com/mazznoer/colorgrad"
 )
+
+func iterCount[K, V any](seq iter.Seq2[K, V]) int {
+	n := 0
+	for range seq {
+		n++
+	}
+	return n
+}
 
 func TestLinearize(t *testing.T) {
 	// Simple (2 colors)
@@ -18,11 +27,10 @@ func TestLinearize(t *testing.T) {
 		testTrue(t, err == nil)
 
 		g1 := g0.Linearize(0.005)
-		lg := g1.Core.(colorgrad.LinearGradient)
+		lg := g1.Core.(*colorgrad.LinearGradient)
 
 		test(t, lg.Mode(), colorgrad.BlendRgb)
-		test(t, len(lg.Colors()), 2)
-		test(t, len(lg.Positions()), 2)
+		test(t, iterCount(lg.Stops()), 2)
 	}
 
 	// Simple (4 colors)
@@ -36,10 +44,9 @@ func TestLinearize(t *testing.T) {
 		testTrue(t, err == nil)
 
 		g1 := g0.Linearize(0.005)
-		lg := g1.Core.(colorgrad.LinearGradient)
+		lg := g1.Core.(*colorgrad.LinearGradient)
 
-		test(t, len(lg.Colors()), 4)
-		test(t, len(lg.Positions()), 4)
+		test(t, iterCount(lg.Stops()), 4)
 	}
 
 	// Complex
@@ -53,10 +60,9 @@ func TestLinearize(t *testing.T) {
 		testTrue(t, err == nil)
 
 		g1 := g0.Linearize(0.005)
-		lg := g1.Core.(colorgrad.LinearGradient)
+		lg := g1.Core.(*colorgrad.LinearGradient)
 
-		test(t, len(lg.Colors()), 21)
-		test(t, len(lg.Positions()), 21)
+		test(t, iterCount(lg.Stops()), 21)
 
 		expected := []string{
 			"#0000ff", "#242cf0", "#3c3de0", "#5146d2", "#654fc3", "#7752b7",

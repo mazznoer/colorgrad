@@ -1,20 +1,24 @@
 package colorgrad
 
 import (
+	"iter"
 	"math"
+	"slices"
 )
 
 type LinearGradient struct {
-	colors    [][4]float64
-	positions []float64
-	min       float64
-	max       float64
-	mode      BlendMode
-	first     Color
-	last      Color
+	colors      [][4]float64
+	positions   []float64
+	min, max    float64
+	mode        BlendMode
+	first, last Color
 }
 
-func (lg LinearGradient) At(t float64) Color {
+func (lg *LinearGradient) At(t float64) Color {
+	if math.IsNaN(t) {
+		return Color{A: 1}
+	}
+
 	if t <= lg.min {
 		return lg.first
 	}
@@ -23,71 +27,63 @@ func (lg LinearGradient) At(t float64) Color {
 		return lg.last
 	}
 
-	if math.IsNaN(t) {
-		return Color{A: 1}
-	}
-
-	low := 0
-	high := len(lg.positions)
-
-	for low < high {
-		mid := (low + high) / 2
+	lo, hi := 0, len(lg.positions)
+	for lo < hi {
+		mid := int(uint(lo+hi) >> 1)
 		if lg.positions[mid] < t {
-			low = mid + 1
+			lo = mid + 1
 		} else {
-			high = mid
+			hi = mid
 		}
 	}
 
-	if low == 0 {
-		low = 1
-	}
-
-	p1 := lg.positions[low-1]
-	p2 := lg.positions[low]
+	p1 := lg.positions[lo-1]
+	p2 := lg.positions[lo]
 	t = (t - p1) / (p2 - p1)
-	a, b, c, d := linearInterpolate(lg.colors[low-1], lg.colors[low], t)
+	a, b, c, d := linearInterpolate(lg.colors[lo-1], lg.colors[lo], t)
 
 	switch lg.mode {
-	case BlendRgb:
-		return Color{R: a, G: b, B: c, A: d}
 	case BlendLinearRgb:
 		return LinearRgb(a, b, c, d)
 	case BlendLab:
 		return Lab(a, b, c, d).Clamp()
 	case BlendOklab:
 		return Oklab(a, b, c, d).Clamp()
+	default:
+		return Color{R: a, G: b, B: c, A: d}
 	}
-
-	return Color{}
 }
 
-func (lg LinearGradient) Mode() BlendMode {
+func (lg *LinearGradient) Mode() BlendMode {
 	return lg.mode
 }
 
-func (lg LinearGradient) Colors() [][4]float64 {
-	return lg.colors
-}
-
-func (lg LinearGradient) Positions() []float64 {
-	return lg.positions
+func (lg *LinearGradient) Stops() iter.Seq2[float64, [4]float64] {
+	return func(yield func(float64, [4]float64) bool) {
+		for i, t := range lg.positions {
+			if !yield(t, lg.colors[i]) {
+				return
+			}
+		}
+	}
 }
 
 func newLinearGradient(colors []Color, positions []float64, mode BlendMode) Gradient {
-	gradbase := LinearGradient{
+	pos := slices.Clone(positions)
+
+	g := &LinearGradient{
 		colors:    convertColors(colors, mode),
-		positions: positions,
-		min:       positions[0],
-		max:       positions[len(positions)-1],
+		positions: pos,
+		min:       pos[0],
+		max:       pos[len(pos)-1],
 		mode:      mode,
 		first:     colors[0],
-		last:      colors[len(colors)-1],
+		last:      colors[len(pos)-1],
 	}
 
 	return Gradient{
-		Core: gradbase,
-		Min:  positions[0],
-		Max:  positions[len(positions)-1],
+		Core: g,
+		Min:  g.min,
+		Max:  g.max,
 	}
 }
