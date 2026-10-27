@@ -1,5 +1,15 @@
 # Changelog
 
+## v0.12.0
+
+- New `Gradient.ColorsIter()`
+- New `Gradient.Linearize()`
+- Expose all gradient types:
+    - `LinearGradient`
+    - `BasisGradient`
+    - `SmoothstepGradient`
+    - etc.
+
 ## v0.11.1
 
 - Fix bug in Lab conversion
