@@ -2,6 +2,7 @@ package colorgrad
 
 import (
 	"math"
+	"slices"
 )
 
 // Adapted from https://qroph.github.io/2018/07/30/smooth-paths-using-catmull-rom-splines.html
@@ -47,15 +48,14 @@ func toCatmullRomSegments(values []float64) [][4]float64 {
 }
 
 type CatmullRomGradient struct {
-	segments  [][4][4]float64
-	positions []float64
-	min       float64
-	max       float64
-	mode      BlendMode
-	first     Color
-	last      Color
+	segments    [][4][4]float64
+	positions   []float64
+	min, max    float64
+	mode        BlendMode
+	first, last Color
 }
 
+// colors & positions is guaranteed to have the same length (minimum 2)
 func newCatmullRomGradient(colors []Color, positions []float64, space BlendMode) Gradient {
 	n := len(colors)
 	a := make([]float64, n)
@@ -92,25 +92,24 @@ func newCatmullRomGradient(colors []Color, positions []float64, space BlendMode)
 			s4[i],
 		}
 	}
-	min := positions[0]
-	max := positions[n-1]
-	gradbase := CatmullRomGradient{
+	pos := slices.Clone(positions)
+	g := &CatmullRomGradient{
 		segments:  segments,
-		positions: positions,
-		min:       min,
-		max:       max,
+		positions: pos,
+		min:       pos[0],
+		max:       pos[n-1],
 		mode:      space,
 		first:     colors[0],
-		last:      colors[len(colors)-1],
+		last:      colors[n-1],
 	}
 	return Gradient{
-		Core: gradbase,
-		Min:  min,
-		Max:  max,
+		Core: g,
+		Min:  g.min,
+		Max:  g.max,
 	}
 }
 
-func (g CatmullRomGradient) At(t float64) Color {
+func (g *CatmullRomGradient) At(t float64) Color {
 	if math.IsNaN(t) {
 		return Color{A: 1}
 	}
@@ -123,28 +122,23 @@ func (g CatmullRomGradient) At(t float64) Color {
 		return g.last
 	}
 
-	low := 0
-	high := len(g.positions)
-
-	for low < high {
-		mid := (low + high) / 2
+	lo, hi := 0, len(g.positions)
+	for lo < hi {
+		mid := int(uint(lo+hi) >> 1)
 		if g.positions[mid] < t {
-			low = mid + 1
+			lo = mid + 1
 		} else {
-			high = mid
+			hi = mid
 		}
 	}
 
-	if low == 0 {
-		low = 1
-	}
+	pos0 := g.positions[lo-1]
+	pos1 := g.positions[lo]
 
-	pos0 := g.positions[low-1]
-	pos1 := g.positions[low]
-	seg_a := g.segments[low-1][0]
-	seg_b := g.segments[low-1][1]
-	seg_c := g.segments[low-1][2]
-	seg_d := g.segments[low-1][3]
+	seg_a := g.segments[lo-1][0]
+	seg_b := g.segments[lo-1][1]
+	seg_c := g.segments[lo-1][2]
+	seg_d := g.segments[lo-1][3]
 
 	t1 := (t - pos0) / (pos1 - pos0)
 	t2 := t1 * t1
@@ -156,15 +150,13 @@ func (g CatmullRomGradient) At(t float64) Color {
 	d := seg_d[0]*t3 + seg_d[1]*t2 + seg_d[2]*t1 + seg_d[3]
 
 	switch g.mode {
-	case BlendRgb:
-		return Color{R: a, G: b, B: c, A: d}
 	case BlendLinearRgb:
 		return LinearRgb(a, b, c, d)
 	case BlendLab:
 		return Lab(a, b, c, d).Clamp()
 	case BlendOklab:
 		return Oklab(a, b, c, d).Clamp()
+	default:
+		return Color{R: a, G: b, B: c, A: d}
 	}
-
-	return Color{}
 }

@@ -2,6 +2,7 @@ package colorgrad
 
 import (
 	"math"
+	"slices"
 )
 
 type BasisGradient struct {
@@ -9,35 +10,32 @@ type BasisGradient struct {
 	// ctrl[k+1] is color k, ctrl[0] and ctrl[len-1] are linear extrapolations.
 	// Segment i (between colors i and i+1) therefore always uses
 	// ctrl[i], ctrl[i+1], ctrl[i+2], ctrl[i+3], with no edge-case branches.
-	ctrl      [][4]float64
-	positions []float64
-	min       float64
-	max       float64
-	mode      BlendMode
-	first     Color
-	last      Color
+	ctrl        [][4]float64
+	positions   []float64
+	min, max    float64
+	mode        BlendMode
+	first, last Color
 }
 
-func (lg *BasisGradient) At(t float64) Color {
+func (g *BasisGradient) At(t float64) Color {
 	if math.IsNaN(t) {
 		return Color{A: 1}
 	}
 
-	if t <= lg.min {
-		return lg.first
+	if t <= g.min {
+		return g.first
 	}
 
-	if t >= lg.max {
-		return lg.last
+	if t >= g.max {
+		return g.last
 	}
 
 	// Here positions[0] < t < positions[len-1], so the first index with
 	// positions[idx] >= t is guaranteed to lie in [1, len-1].
-	pos := lg.positions
-	lo, hi := 1, len(pos)-1
+	lo, hi := 1, len(g.positions)-1
 	for lo < hi {
 		mid := int(uint(lo+hi) >> 1)
-		if pos[mid] < t {
+		if g.positions[mid] < t {
 			lo = mid + 1
 		} else {
 			hi = mid
@@ -46,7 +44,7 @@ func (lg *BasisGradient) At(t float64) Color {
 
 	// Segment is [lo-1, lo]; pos[lo-1] < t <= pos[lo], so the divisor is > 0.
 	i := lo - 1
-	u := (t - pos[i]) / (pos[lo] - pos[i])
+	u := (t - g.positions[i]) / (g.positions[lo] - g.positions[i])
 
 	// Blend weights
 	u2 := u * u
@@ -56,31 +54,30 @@ func (lg *BasisGradient) At(t float64) Color {
 	w2 := 1 + 3*u + 3*u2 - 3*u3
 	w3 := u3
 
-	p0 := &lg.ctrl[i]
-	p1 := &lg.ctrl[i+1]
-	p2 := &lg.ctrl[i+2]
-	p3 := &lg.ctrl[i+3]
+	p0 := &g.ctrl[i]
+	p1 := &g.ctrl[i+1]
+	p2 := &g.ctrl[i+2]
+	p3 := &g.ctrl[i+3]
 
 	a := (w0*p0[0] + w1*p1[0] + w2*p2[0] + w3*p3[0]) / 6
 	b := (w0*p0[1] + w1*p1[1] + w2*p2[1] + w3*p3[1]) / 6
 	c := (w0*p0[2] + w1*p1[2] + w2*p2[2] + w3*p3[2]) / 6
 	d := (w0*p0[3] + w1*p1[3] + w2*p2[3] + w3*p3[3]) / 6
 
-	switch lg.mode {
-	case BlendRgb:
-		return Color{R: a, G: b, B: c, A: d}
+	switch g.mode {
 	case BlendLinearRgb:
 		return LinearRgb(a, b, c, d)
 	case BlendLab:
 		return Lab(a, b, c, d).Clamp()
 	case BlendOklab:
 		return Oklab(a, b, c, d).Clamp()
+	default:
+		return Color{R: a, G: b, B: c, A: d}
 	}
-
-	return Color{}
 }
 
 func newBasisGradient(colors []Color, positions []float64, mode BlendMode) Gradient {
+	pos := slices.Clone(positions)
 	n := len(colors)
 	base := convertColors(colors, mode)
 
@@ -94,9 +91,9 @@ func newBasisGradient(colors []Color, positions []float64, mode BlendMode) Gradi
 
 	g := &BasisGradient{
 		ctrl:      ctrl,
-		positions: positions,
-		min:       positions[0],
-		max:       positions[n-1],
+		positions: pos,
+		min:       pos[0],
+		max:       pos[n-1],
 		mode:      mode,
 		first:     colors[0],
 		last:      colors[n-1],
